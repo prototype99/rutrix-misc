@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>  
+
+  <RV2R_Settings_Tab>Rut's Stuff</RV2R_Settings_Tab> 
+  
+  <RV2R_Settings_SizedEncumberance>Alternate encumbrance scaling</RV2R_Settings_SizedEncumberance>  
+  <RV2R_Settings_SizedEncumberance_Tip>Enable to scale encumberance by total weight of all prey. Disable to scale encumberance by count of prey, Can cause problems for smaller preds.</RV2R_Settings_SizedEncumberance_Tip>  
+  <RV2R_Settings_EncumberanceModifier>Encumbrance multiplier</RV2R_Settings_EncumberanceModifier>  
+  <RV2R_Settings_EncumberanceModifier_Tip>How much holding prey encumbers predators. Setting too high can easily incapacitate preds.</RV2R_Settings_EncumberanceModifier_Tip>  
+
+  <RV2R_Settings_EndoSickness>Endo sickness strength</RV2R_Settings_EndoSickness>  
+  <RV2R_Settings_EndoSickness_Tip>How quickly (if at all) a pawn should get "endo sick" while safely inside of a pred. It's not dangerous, and even puts them in a good mood, at the cost of being loopy and disorientated for about a day or two.\n\nIndirectly nerfs endo storage as a way to keep medics and such safe, among other things.</RV2R_Settings_EndoSickness_Tip>  
+  <RV2R_Settings_AgeRegression>Age regression strength</RV2R_Settings_AgeRegression>
+  <RV2R_Settings_AgeRegression_Tip>How quickly, in days spent to days gained, prey regress in age while unbirthed. They'll never regress to below biological adulthood, which varies by race. Set to 0 to disable, and to 1 to prevent but not reverse aging.\n\n(Remember that Rimworld has 60 days in a year.)</RV2R_Settings_AgeRegression_Tip>
+  
+  <RV2R_Settings_EndoCapture>Endo capture</RV2R_Settings_EndoCapture>  
+  <RV2R_Settings_EndoCapture_Tip>Enabled, hostiles are captured and imprisoned if endo-vored by a colonist or colony animal while downed. Works great with heal-voring incapacitated raiders, and enabling means predatory trained animals have a way to help with recruitment.\n\n(Animals trained in predation will heal-vore hostiles if they can't fatal vore them.)</RV2R_Settings_EndoCapture_Tip>
+  <RV2R_Settings_EndoCapture_Insectoids>Capture insectoids</RV2R_Settings_EndoCapture_Insectoids>  
+  <RV2R_Settings_EndoCapture_Insectoids_Tip>Members of the Sorne Geneline are pacified if endo-captured, ready to be tamed when released. Not at all balanced.</RV2R_Settings_EndoCapture_Insectoids_Tip>
+  
+  <RV2R_Settings_AnimalRandomNomChance>Playful predation average hours</RV2R_Settings_AnimalRandomNomChance>
+  <RV2R_Settings_AnimalRandomNomChance_Tip>How often, in hours on average, an animal trained to be playfully predatory will endo vore others. They're request vore to colonists, but they'll just nom anything else.</RV2R_Settings_AnimalRandomNomChance_Tip>
+  <RV2R_Settings_AnimalRandomNomFatal>Not-so-playful predation</RV2R_Settings_AnimalRandomNomFatal>
+  <RV2R_Settings_AnimalRandomNomFatal_Tip>...You, uh, might want to leave this off.</RV2R_Settings_AnimalRandomNomFatal_Tip>
+  
+  <RV2_Settings_EndoBondChance>Endo bond chance</RV2_Settings_EndoBondChance>
+  <RV2_Settings_EndoBondChance_Tip>When an animal and a humanoid are engaged in endo vore, they have a chance to form a bond every rare tick. Wild animals can end up bonded too, so keep that in mind when you take that wolf home with you.\n\nYou really should keep this low.</RV2_Settings_EndoBondChance_Tip>
+  <RV2_Settings_EndoBondPredOnly>Predator bonding</RV2_Settings_EndoBondPredOnly>
+  <RV2_Settings_EndoBondPredOnly_Tip>Normaly, endo bonds happen only when the pred is humanoid. Enabling means humanoid pawns can bond while endo prey for an animal.\n\nYou might wanna leave this off.</RV2_Settings_EndoBondPredOnly_Tip>
+
+</LanguageData>

@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <TrainableDef>
+    <defName>PlayVore</defName>
+    <label>play-predding</label>
+    <description>Encourage this animal to occasionaly endo-vore your colonists and animals.</description>
+    <icon>UI/Icons/Trainables/PlayPredator</icon>
+    <listPriority>1900</listPriority>
+    <difficulty>50</difficulty>
+    <requiredTrainability>None</requiredTrainability>
+    <steps>2</steps>
+    <minBodySize>0.45</minBodySize>
+    <defaultTrainable>true</defaultTrainable>
+  </TrainableDef>
+  <TrainableDef>
+    <defName>EnemyVore</defName>
+    <label>predation</label>
+    <description>Train this animal to devour nearby downed hostiles.</description>
+    <icon>UI/Icons/Trainables/Predator</icon>
+    <listPriority>700</listPriority>
+    <difficulty>150</difficulty>
+    <requiredTrainability>Intermediate</requiredTrainability>
+    <steps>3</steps>
+    <minBodySize>0.45</minBodySize>
+    <defaultTrainable>true</defaultTrainable>
+    <prerequisites>
+      <li>Obedience</li>
+    </prerequisites>
+  </TrainableDef>
+  <TrainableDef>
+    <defName>HealVore</defName>
+    <label>endo rescue</label>
+    <description>Train this animal to heal vore nearby downed colonists and friendlies. Requires analeptic enzymes.</description>
+    <icon>UI/Icons/Trainables/HealPredator</icon>
+    <listPriority>500</listPriority>
+    <difficulty>250</difficulty>
+    <requiredTrainability>Intermediate</requiredTrainability>
+    <steps>4</steps>
+    <minBodySize>0.45</minBodySize>
+    <defaultTrainable>true</defaultTrainable>
+    <prerequisites>
+      <li>Obedience</li>
+    </prerequisites>
+  </TrainableDef>
+</Defs>
