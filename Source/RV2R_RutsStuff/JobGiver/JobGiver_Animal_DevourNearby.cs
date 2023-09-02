@@ -30,6 +30,7 @@ namespace RV2R_RutsStuff
             {
                 Pawn pawn3 = (Pawn)t;
                 return pawn3.Downed
+                    && !pawn3.IsMechanoid()
                     && !pawn3.IsPrisonerOfColony
                     && pawn.CanReserve(pawn3, 1, -1, null, false)
                     && !pawn3.IsForbidden(pawn)
