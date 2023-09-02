@@ -58,7 +58,7 @@ namespace RV2R_RutsStuff
                 return voreJob;
             }
             if (!RV2_Rut_Settings.rutsStuff.EndoCapture
-             || (pawn2.IsInsectoid() && RV2_Rut_Settings.rutsStuff.InsectoidCapture))
+             || (pawn2.IsInsectoid() && !RV2_Rut_Settings.rutsStuff.InsectoidCapture))
             {
                 RV2Log.Message("Predator " + pawn.LabelShort + " can't fatal vore or capture enemy", "Jobs");
                 return null;
