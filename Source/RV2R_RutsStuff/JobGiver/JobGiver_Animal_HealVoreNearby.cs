@@ -24,6 +24,7 @@ namespace RV2R_RutsStuff
             {
                 Pawn pawn3 = (Pawn)t;
                 return pawn3.Downed
+                    && !pawn3.IsMechanoid()
                     && (pawn3.Faction == pawn.Faction || pawn3.Faction.PlayerRelationKind != FactionRelationKind.Hostile)
                     && (!pawn3.InBed() || (pawn3.health.summaryHealth.SummaryHealthPercent <= 0.6f && !pawn3.health.HasHediffsNeedingTendByPlayer()))
                     && pawn.CanReserve(pawn3, 1, -1, null, false)
