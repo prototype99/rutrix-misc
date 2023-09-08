@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<Defs>
+  <ThoughtDef ParentName="RV2_VoreThoughtSituationBase">
+    <defName>RV2_EndoSick</defName>
+    <workerClass>ThoughtWorker_Hediff</workerClass>
+    <hediff>RV2_EndoRecovery</hediff>
+    <stages>
+      <li>
+        <visible>false</visible>
+      </li>
+      <li>
+        <label>lightly endo sick</label>
+        <description>I feel a little dizzy, but comfortable and warm.</description>
+        <baseMoodEffect>2</baseMoodEffect>
+      </li>
+      <li>
+        <label>endo sick</label>
+        <description>I'm dizzy and tired, but really relaxed. I kinda feel... comfortably numb.</description>
+        <baseMoodEffect>4</baseMoodEffect>
+      </li>
+      <li>
+        <label>heavily endo sick</label>
+        <description>I can't think straight, and I'm... really tired... but I-... feel good.</description>
+        <baseMoodEffect>8</baseMoodEffect>
+      </li>
+      <li>
+        <label>severly endo sick</label>
+        <description>I'm... exausted, but... oh, this feels nice...</description>
+        <baseMoodEffect>14</baseMoodEffect>
+      </li>
+      <li>
+        <label>severly endo sick</label>
+        <description>I... just gonna... nap...</description>
+        <baseMoodEffect>18</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+</Defs>
