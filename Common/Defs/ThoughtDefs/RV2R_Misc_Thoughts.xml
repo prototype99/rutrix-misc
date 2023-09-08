@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <Defs>
-  <ThoughtDef ParentName="RV2_VoreThoughtSituationBase">
+  <ThoughtDef>
     <defName>RV2_EndoSick</defName>
     <workerClass>ThoughtWorker_Hediff</workerClass>
     <hediff>RV2_EndoRecovery</hediff>
