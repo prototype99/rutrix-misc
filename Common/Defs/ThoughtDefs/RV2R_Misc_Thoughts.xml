@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
 
-<Defs>
   <ThoughtDef>
-    <defName>RV2_EndoSick</defName>
+    <defName>RV2R_EndoSick</defName>
     <workerClass>ThoughtWorker_Hediff</workerClass>
-    <hediff>RV2_EndoRecovery</hediff>
+    <hediff>RV2R_EndoRecovery</hediff>
+    <validWhileDespawned>true</validWhileDespawned>
     <stages>
       <li>
         <visible>false</visible>
@@ -22,18 +21,17 @@
       <li>
         <label>heavily endo sick</label>
         <description>I can't think straight, and I'm... really tired... but I-... feel good.</description>
-        <baseMoodEffect>8</baseMoodEffect>
+        <baseMoodEffect>6</baseMoodEffect>
       </li>
       <li>
         <label>severly endo sick</label>
         <description>I'm... exausted, but... oh, this feels nice...</description>
-        <baseMoodEffect>14</baseMoodEffect>
+        <baseMoodEffect>10</baseMoodEffect>
       </li>
       <li>
         <label>severly endo sick</label>
-        <description>I... just gonna... nap...</description>
-        <baseMoodEffect>18</baseMoodEffect>
+        <description>I... just need... nap...</description>
+        <baseMoodEffect>16</baseMoodEffect>
       </li>
     </stages>
   </ThoughtDef>
-</Defs>
