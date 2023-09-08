@@ -47,7 +47,7 @@ namespace RV2R_RutsStuff
                 return null;
             }
             VorePathDef vorePathDef = validPaths.RandomElement<VorePathDef>();
-            RV2Log.Message("Endo rescue! " + vorePathDef.label, "Jobs");
+            RV2Log.Message(pawn2.LabelShort + "'s getting endo rescued by " + pawn.LabelShort + " via " + vorePathDef.label, "Jobs");
             VoreJob voreJob = VoreJobMaker.MakeJob(VoreJobDefOf.RV2_VoreInitAsPredator, pawn2);
             voreJob.targetA = pawn2;
             voreJob.VorePath = vorePathDef;

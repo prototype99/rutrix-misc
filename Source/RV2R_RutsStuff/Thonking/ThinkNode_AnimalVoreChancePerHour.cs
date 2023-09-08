@@ -26,7 +26,7 @@ namespace RV2R_RutsStuff
                     VoreTracker voreTracker = pawnData2.VoreTracker;
                     if (voreTracker != null)
                         foreach (VoreTrackerRecord rec in voreTracker.VoreTrackerRecords)
-                            preyMod += 0.25f;
+                            preyMod += RV2_Rut_Settings.rutsStuff.PlayVoreModifier;
                 }
             }
 

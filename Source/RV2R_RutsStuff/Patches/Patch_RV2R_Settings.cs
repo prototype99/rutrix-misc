@@ -37,7 +37,7 @@ namespace RV2R_RutsStuff
         public static class Patch_RV2Settings_DefsLoaded
         {
             [HarmonyPostfix]
-            private static void AddRJWSettings()
+            private static void AddRutSettings()
             {
                 RV2_Rut_Settings.rutsStuff.DefsLoaded();
             }
@@ -47,7 +47,7 @@ namespace RV2R_RutsStuff
         public static class Patch_RV2Settings_Reset
         {
             [HarmonyPostfix]
-            private static void AddRJWSettings()
+            private static void AddRutSettings()
             {
                 RV2_Rut_Settings.rutsStuff.Reset();
             }
@@ -57,7 +57,7 @@ namespace RV2R_RutsStuff
         public static class Patch_RV2Mod_WriteSettings
         {
             [HarmonyPostfix]
-            private static void AddRJWSettings()
+            private static void AddRutSettings()
             {
                 RV2_RutsStuff_Mod.mod.WriteSettings();
             }
@@ -67,7 +67,7 @@ namespace RV2R_RutsStuff
         public static class Patch_Window_Settings
         {
             [HarmonyPostfix]
-            private static void AddRJWSettings()
+            private static void AddRutSettings()
             {
                 Window_Settings.AddTab(new SettingsTab_RutsStuff("RV2R_Settings_Tab".Translate(), null, null));
             }

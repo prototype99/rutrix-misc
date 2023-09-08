@@ -12,9 +12,9 @@ namespace RV2R_RutsStuff
         [HarmonyPostfix]
         private static void EndoJail(ref VoreTrackerRecord record)
         {
-            //Hediff firstHediffOfDef = record.Predator.health.hediffSet.GetFirstHediffOfDef(Common.Encumbrance, false);
-            //if (firstHediffOfDef == null)
-            //    record.Predator.health.AddHediff(Common.Encumbrance, null, null, null);
+            Hediff firstHediffOfDef = record.Predator.health.hediffSet.GetFirstHediffOfDef(RV2R_Common.Encumbrance, false);
+            if (firstHediffOfDef == null)
+                record.Predator.health.AddHediff(RV2R_Common.Encumbrance, null, null, null);
 
             if (RV2_Rut_Settings.rutsStuff.EndoCapture
              && record.Prey.Downed

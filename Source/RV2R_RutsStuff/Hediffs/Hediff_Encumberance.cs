@@ -27,10 +27,13 @@ namespace RV2R_RutsStuff
                             foreach (VoreTrackerRecord voreTrackerRecord in voreTracker.VoreTrackerRecords)
                             {
                                 float preyMod = 1f;
-                                if (voreTrackerRecord.CurrentVoreStage.def.partName == "tail")
-                                    preyMod = 0.55f;
-                                if (voreTrackerRecord.CurrentVoreStage.def.partGoal == "Amalgamate" || voreTrackerRecord.CurrentVoreStage.def.partGoal == "Assimilate")
-                                    preyMod = 0.45f;
+                                if (voreTrackerRecord.CurrentVoreStage.def.partName == "tail"
+                                 || voreTrackerRecord.VoreType.defName == "Cock"
+                                 || voreTrackerRecord.VoreType.defName == "Udder"
+                                 || voreTrackerRecord.VoreType.defName == "Membrane"
+                                 || voreTrackerRecord.VoreGoal.defName == "Amalgamate"
+                                 || voreTrackerRecord.VoreGoal.defName == "Assimilate")
+                                    preyMod = 0.75f;
 
                                 totalWeight += voreTrackerRecord.Prey.BodySize * preyMod;
                                 totalPrey += 1;
@@ -53,18 +56,24 @@ namespace RV2R_RutsStuff
                     }
                 }
                 if (RV2_Rut_Settings.rutsStuff.SizedEncumberance)
-                    this.severityInt = Math.Min(totalWeight / this.pawn.BodySize / 3f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, 1f);
+                    this.severityInt = Math.Min(totalWeight / this.pawn.BodySize / 4f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, 1f);
                 else
-                    this.severityInt = Math.Min(totalPrey / 5f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, 1f);
+                    this.severityInt = Math.Min(totalPrey / 4f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, 1f);
 
                 return this.severityInt;
+            }
+        }
+        public override void Tick()
+        {
+            base.Tick();
+            if (this.Severity > 0.05f && this.ageTicks % (RV2Mod.Settings.debug.HediffLabelRefreshInterval * 2) == 0)
+            {
+                this.pawn.health.Notify_HediffChanged(this);
             }
         }
 
         public override bool Visible => false;
 
         public List<VoreTrackerRecord> ConnectedVoreRecords = new List<VoreTrackerRecord>();
-
-        private string label;
     }
 }
