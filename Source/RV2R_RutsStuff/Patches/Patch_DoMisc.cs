@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using RimVore2;
 using RimWorld;
 using System;
@@ -62,11 +62,11 @@ namespace RV2R_RutsStuff
                         foreach (Hediff hediff in __instance.Prey.health.hediffSet.hediffs.Where((Hediff diff) => diff.def.chronic))
                         {
                             float ratio = __instance.Prey.ageTracker.AdultMinAgeTicks / __instance.Prey.ageTracker.AgeBiologicalTicks;
-                            if (ratio < 0.5f)
+                            if (ratio > 0.5f)
                             {
                                 if (hediff.TryGetComp<HediffComp_SeverityPerDay>() != null)
                                 {
-                                    hediff.Severity = Math.Max(hediff.Severity - 0.002f * (1f - ratio), hediff.def.minSeverity > 0f ? hediff.def.minSeverity : 0f);
+                                    hediff.Severity = Math.Max(hediff.Severity - 0.002f * (ratio/2f), hediff.def.minSeverity > 0f ? hediff.def.minSeverity : 0f);
                                     if (hediff.Severity <= 0f)
                                     {
                                         message = new Message("HealingCureHediff".Translate(__instance.Prey, hediff.def.label), MessageTypeDefOf.PositiveEvent, new LookTargets(__instance.Prey));
@@ -74,7 +74,7 @@ namespace RV2R_RutsStuff
                                         __instance.Prey.health.RemoveHediff(__instance.Prey.health.hediffSet.GetFirstHediffOfDef(hediff.def, false));
                                     }
                                 }
-                                else if (Rand.Chance(0.005f * (1f - ratio)))
+                                else if (Rand.Chance(0.0005f * (ratio / 2f)))
                                 {
                                     message = new Message("HealingCureHediff".Translate(__instance.Prey, hediff.def.label), MessageTypeDefOf.PositiveEvent, new LookTargets(__instance.Prey));
                                     Messages.Message(message, true);
@@ -96,11 +96,11 @@ namespace RV2R_RutsStuff
                                 float ratio = voreTrackerRecord.Prey.ageTracker.AdultMinAgeTicks / voreTrackerRecord.Prey.ageTracker.AgeBiologicalTicks;
                                 foreach (Hediff hediff in voreTrackerRecord.Prey.health.hediffSet.hediffs.Where((Hediff diff) => diff.def.chronic))
                                 {
-                                    if (ratio < 0.5f)
+                                    if (ratio > 0.5f)
                                     {
                                         if (hediff.TryGetComp<HediffComp_SeverityPerDay>() != null)
                                         {
-                                            hediff.Severity = Math.Max(hediff.Severity - 0.01f * (1f - ratio), hediff.def.minSeverity > 0f ? hediff.def.minSeverity : 0f);
+                                            hediff.Severity = Math.Max(hediff.Severity - 0.002f * (ratio / 2f), hediff.def.minSeverity > 0f ? hediff.def.minSeverity : 0f);
                                             if (hediff.Severity <= 0f)
                                             {
                                                 message = new Message("HealingCureHediff".Translate(voreTrackerRecord.Prey, hediff.def.label), MessageTypeDefOf.PositiveEvent, new LookTargets(voreTrackerRecord.Prey));
@@ -108,7 +108,7 @@ namespace RV2R_RutsStuff
                                                 voreTrackerRecord.Prey.health.RemoveHediff(voreTrackerRecord.Prey.health.hediffSet.GetFirstHediffOfDef(hediff.def, false));
                                             }
                                         }
-                                        else if (Rand.Chance(0.005f * (1f - ratio)))
+                                        else if (Rand.Chance(0.0005f * (ratio / 2f)))
                                         {
                                             message = new Message("HealingCureHediff".Translate(voreTrackerRecord.Prey, hediff.def.label), MessageTypeDefOf.PositiveEvent, new LookTargets(voreTrackerRecord.Prey));
                                             Messages.Message(message, true);
