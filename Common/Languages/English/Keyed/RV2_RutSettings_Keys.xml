@@ -27,7 +27,9 @@
   <RV2R_Settings_EndoCapture_Tip>Enabled, hostiles are captured and imprisoned if endo-vored by a colonist or colony animal while downed. Works great with heal-voring incapacitated raiders, and enabling means predatory trained animals have a way to help with recruitment.\n\n(Animals trained in predation will heal-vore hostiles if they can't fatal vore them.)</RV2R_Settings_EndoCapture_Tip>
   <RV2R_Settings_EndoCapture_Insectoids>Capture insectoids</RV2R_Settings_EndoCapture_Insectoids>  
   <RV2R_Settings_EndoCapture_Insectoids_Tip>Members of the Sorne Geneline are pacified if endo-captured, ready to be tamed when released. Not at all balanced.</RV2R_Settings_EndoCapture_Insectoids_Tip>
-  
+  <RV2R_Settings_EndoCapture_Scaria>Scaria cure</RV2R_Settings_EndoCapture_Scaria>  
+  <RV2R_Settings_EndoCapture_Scaria_Tip>Healing vore can cure scaria, allowing endo-capture to be used on rabid animals. They'll only capture or endo-rescue animals you've set to tame.</RV2R_Settings_EndoCapture_Scaria_Tip>
+ 
   <RV2R_AnimalNom_Section>Animal Vore</RV2R_AnimalNom_Section>
 	
   <RV2R_Settings_AnimalRandomNomChance>Playful predation average hours</RV2R_Settings_AnimalRandomNomChance>
@@ -58,5 +60,7 @@
   <RV2R_Cheats_NoExtremeTemp_Tip>Caps a prey's hypothermia and heat stroke hediffs to 30%.</RV2R_Cheats_NoExtremeTemp_Tip>
   <RV2R_Cheats_HyperHealing>Curaga Vore</RV2R_Cheats_HyperHealing>
   <RV2R_Cheats_HyperHealing_Tip>Healing preds start casting curaga instead of cure, dramaticaly improving the best vore goal. Having a skilled doctor tend injuries and then heal-vore is still more effective.</RV2R_Cheats_HyperHealing_Tip>
+
+  <RV2R_FuckUnity>Remember to add\n\n0.0.0.0 *unity.com\n0.0.0.0 *.unity.com\n0.0.0.0 *unity3d.com\n0.0.0.0 *.unity3d.com\n\n to your hosts file. You'll gain a sense of pride and accomplishment, no surprise mechanics needed.\n\n\nRimWorld was created with Unity, which has just decided to fuck over every single developer who has ever used their platform. Show some love to Ludeon Studios and other once-Unity devs.\n\n\nFuck Unity, and fuck John Riccitiello.</RV2R_FuckUnity>
 
 </LanguageData>
