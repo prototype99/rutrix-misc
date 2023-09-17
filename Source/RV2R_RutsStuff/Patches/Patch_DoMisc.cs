@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using RimVore2;
 using RimWorld;
 using System;
@@ -14,14 +14,22 @@ namespace RV2R_RutsStuff
         [HarmonyPostfix]
         static void AdditionalEffects(VoreTrackerRecord __instance)
         {
-            if (!__instance.VoreGoal.IsLethal)
+
+#if v1_4
+            bool VaildForEffects = (!__instance.VoreGoal.IsLethal && !(__instance.Prey.genes.xenotypeName == "basic android" || __instance.Prey.genes.xenotypeName == "awakened android"));
+#else
+            bool VaildForEffects = !__instance.VoreGoal.IsLethal;
+#endif
+            if (VaildForEffects)
             {
                 SettingsContainer_RutsStuff settings = RV2_Rut_Settings.rutsStuff;
                 if (settings.EndoSicknessStrength > 0f)
                 {
                     Hediff firstHediffOfDef = __instance.Prey.health.hediffSet.GetFirstHediffOfDef(RV2R_Common.EndoHediff, false);
                     if (firstHediffOfDef != null)
+                    {
                         firstHediffOfDef.Severity = Math.Min(firstHediffOfDef.Severity + (0.0135f * settings.EndoSicknessStrength), 1f);
+                    }
                     else
                         __instance.Prey.health.AddHediff(RV2R_Common.EndoHediff, null, null, null);
                 }
@@ -66,7 +74,7 @@ namespace RV2R_RutsStuff
                             {
                                 if (hediff.TryGetComp<HediffComp_SeverityPerDay>() != null)
                                 {
-                                    hediff.Severity = Math.Max(hediff.Severity - 0.002f * (ratio/2f), hediff.def.minSeverity > 0f ? hediff.def.minSeverity : 0f);
+                                    hediff.Severity = Math.Max(hediff.Severity - 0.002f * (ratio / 2f), hediff.def.minSeverity > 0f ? hediff.def.minSeverity : 0f);
                                     if (hediff.Severity <= 0f)
                                     {
                                         message = new Message("HealingCureHediff".Translate(__instance.Prey, hediff.def.label), MessageTypeDefOf.PositiveEvent, new LookTargets(__instance.Prey));

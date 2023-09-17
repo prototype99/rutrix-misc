@@ -30,11 +30,9 @@ namespace RV2R_RutsStuff
                     && (pawn3.health.summaryHealth.SummaryHealthPercent <= 0.6f || pawn3.health.InPainShock)
                     && pawn.CanReserve(pawn3, 1, -1, null, false)
                     && !pawn3.IsForbidden(pawn)
-                    && (pawn.Map.designationManager.DesignationOn(pawn3) == null || pawn.Map.designationManager.DesignationOn(pawn3, DesignationDefOf.Tame) != null)
-                    && !GenAI.InDangerousCombat(pawn)
-                    && !GenAI.EnemyIsNear(pawn3, 20f)
-                    && !pawn.ShouldBeSlaughtered()
-                    && !pawn3.ShouldBeSlaughtered();
+                    && !RV2R_Utilities.IsNearHostile(pawn, 25f)
+                    && !RV2R_Utilities.IsBusy(pawn, pawn3)
+                    && RV2R_Utilities.ShouldFriendlyTarget(pawn, pawn3);
             };
             Pawn pawn2 = (Pawn)GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForGroup(ThingRequestGroup.Pawn), PathEndMode.OnCell, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false, false, false), this.radius, predicate, null, 0, -1, false, RegionType.Set_Passable, false);
             if (pawn2 == null)

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Verse;
 using Verse.AI;
-using Verse.AI.Group;
 using static RV2R_RutsStuff.Patch_RV2R_Settings;
 
 namespace RV2R_RutsStuff
@@ -25,14 +24,17 @@ namespace RV2R_RutsStuff
             if (!pawn.CanParticipateInVore(out string reason))
                 return null;
 
+            if (GenAI.InDangerousCombat(pawn))
+                return null;
+
             Pawn target = null;
 
             if (RV2_Rut_Settings.rutsStuff.VornyBonds && pawn.relations.GetDirectRelationsCount(PawnRelationDefOf.Bond) > 0)
             {
                 Pawn bond = pawn.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Bond);
                 if (bond != null
-                 && (pawn.GetLord() == null && bond.GetLord() == null)
-                 && !GenAI.EnemyIsNear(bond, 25f)
+                 && !RV2R_Utilities.IsNearHostile(pawn, 25f)
+                 && !RV2R_Utilities.IsBusy(pawn, bond)
                  && pawn.Position.DistanceTo(bond.Position) < 25f
                  && pawn.CanReserve(bond, 1, -1, null, false)
                  && bond.CanParticipateInVore(out reason)
@@ -46,22 +48,17 @@ namespace RV2R_RutsStuff
                 {
                     Pawn pawn3 = (Pawn)t;
                     return pawn3 != pawn
+                        && !pawn3.Drafted
+                        && !GenAI.InDangerousCombat(pawn3)
                         && (pawn3.Faction == pawn.Faction || pawn3.Faction.PlayerRelationKind != FactionRelationKind.Hostile)
                         && pawn.CanReserve(pawn3, 1, -1, null, false)
                         && !pawn3.IsForbidden(pawn)
-                        && !GenAI.EnemyIsNear(pawn3, 25f)
-                        && !pawn.ShouldBeSlaughtered()
-                        && !pawn3.ShouldBeSlaughtered()
+                        && !RV2R_Utilities.IsNearHostile(pawn, 25f)
+                        && !RV2R_Utilities.IsBusy(pawn, pawn3)
                         && pawn3.CanParticipateInVore(out reason)
                         && pawn.CanEndoVore(pawn3, out reason, false);
                 };
-                Pawn pawn2 = (Pawn)GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForGroup(ThingRequestGroup.Pawn), PathEndMode.OnCell, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false, false, false), this.radius, predicate, null, 0, -1, false, RegionType.Set_Passable, false);
-                if (pawn2 == null
-                 || pawn.GetLord() != null
-                 || pawn2.GetLord() != null)
-                    return null;
-                else
-                    target = pawn2;
+                target = (Pawn)GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForGroup(ThingRequestGroup.Pawn), PathEndMode.OnCell, TraverseParms.For(pawn, Danger.Some, TraverseMode.ByPawn, false, false, false), this.radius, predicate, null, 0, -1, false, RegionType.Set_Passable, false);
             }
             if (target == null)
                 return null;

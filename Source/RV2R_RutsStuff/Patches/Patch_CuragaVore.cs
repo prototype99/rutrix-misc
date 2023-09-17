@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using RimVore2;
 using static RV2R_RutsStuff.Patch_RV2R_Settings;
-using static UnityEngine.GraphicsBuffer;
 
 namespace RV2R_RutsStuff
 {

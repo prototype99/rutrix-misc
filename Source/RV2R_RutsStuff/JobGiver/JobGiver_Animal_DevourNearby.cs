@@ -34,7 +34,7 @@ namespace RV2R_RutsStuff
                     && pawn.CanReserve(pawn3, 1, -1, null, false)
                     && !pawn3.IsForbidden(pawn)
                     && !pawn.ShouldBeSlaughtered()
-                    && pawn.Map.designationManager.DesignationOn(pawn3) == null
+                    && !RV2R_Utilities.IsNearHostile(pawn, 25f)
                     && pawn3.Faction != pawn.Faction
                     && (pawn3.Faction == null || pawn3.Faction.PlayerRelationKind == FactionRelationKind.Hostile);
             };
@@ -58,7 +58,8 @@ namespace RV2R_RutsStuff
                 return voreJob;
             }
             if (!RV2_Rut_Settings.rutsStuff.EndoCapture
-             || (pawn2.IsInsectoid() && !RV2_Rut_Settings.rutsStuff.InsectoidCapture))
+             || (pawn2.IsInsectoid() && (!RV2_Rut_Settings.rutsStuff.InsectoidCapture || pawn.Map.designationManager.DesignationOn(pawn2, DesignationDefOf.Tame) == null))
+             || (pawn2.IsAnimal() && (pawn.Map.designationManager.DesignationOn(pawn2, DesignationDefOf.Tame) == null || !RV2_Rut_Settings.rutsStuff.ScariaCapture)))
             {
                 RV2Log.Message("Predator " + pawn.LabelShort + " can't fatal vore or capture enemy", "Jobs");
                 return null;
