@@ -38,7 +38,7 @@ namespace RV2R_RutsStuff
                     && !pawn3.IsForbidden(pawn)
                     && !pawn.ShouldBeSlaughtered()
                     && pawn3.CanParticipateInVore(out reason)
-                    && pawn.CanEndoVore(pawn3, out reason, false)
+                    && pawn.CanVore(pawn3, out reason)
                     && !GenAI.EnemyIsNear(pawn, 25f)
                     && pawn3.Faction != pawn.Faction
                     && (pawn3.Faction == null || pawn3.Faction.PlayerRelationKind == FactionRelationKind.Hostile);

@@ -38,7 +38,7 @@ namespace RV2R_RutsStuff
                  && pawn.Position.DistanceTo(bond.Position) < 25f
                  && pawn.CanReserve(bond, 1, -1, null, false)
                  && bond.CanParticipateInVore(out reason)
-                 && pawn.CanEndoVore(bond, out reason, false)
+                 && pawn.CanVore(bond, out reason)
                  && Rand.Chance(0.2f))
                     target = bond;
             }
@@ -56,7 +56,7 @@ namespace RV2R_RutsStuff
                         && !GenAI.EnemyIsNear(pawn, 25f)
                         && !RV2R_Utilities.IsBusy(pawn, pawn3)
                         && pawn3.CanParticipateInVore(out reason)
-                        && pawn.CanEndoVore(pawn3, out reason, false);
+                        && pawn.CanVore(pawn3, out reason);
                 };
                 target = (Pawn)GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForGroup(ThingRequestGroup.Pawn), PathEndMode.OnCell, TraverseParms.For(pawn, Danger.Some, TraverseMode.ByPawn, false, false, false), this.radius, predicate, null, 0, -1, false, RegionType.Set_Passable, false);
             }
