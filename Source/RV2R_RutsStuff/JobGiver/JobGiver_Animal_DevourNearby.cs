@@ -22,6 +22,9 @@ namespace RV2R_RutsStuff
 
         protected override Job TryGiveJob(Pawn pawn)
         {
+            if (!pawn.CanParticipateInVore(out string reason))
+                return null;
+
             if (GenAI.InDangerousCombat(pawn))
                 return null;
 
@@ -34,7 +37,9 @@ namespace RV2R_RutsStuff
                     && pawn.CanReserve(pawn3, 1, -1, null, false)
                     && !pawn3.IsForbidden(pawn)
                     && !pawn.ShouldBeSlaughtered()
-                    && !RV2R_Utilities.IsNearHostile(pawn, 25f)
+                    && pawn3.CanParticipateInVore(out reason)
+                    && pawn.CanEndoVore(pawn3, out reason, false)
+                    && !GenAI.EnemyIsNear(pawn, 25f)
                     && pawn3.Faction != pawn.Faction
                     && (pawn3.Faction == null || pawn3.Faction.PlayerRelationKind == FactionRelationKind.Hostile);
             };

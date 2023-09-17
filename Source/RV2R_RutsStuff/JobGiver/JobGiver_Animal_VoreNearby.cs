@@ -33,7 +33,7 @@ namespace RV2R_RutsStuff
             {
                 Pawn bond = pawn.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Bond);
                 if (bond != null
-                 && !RV2R_Utilities.IsNearHostile(pawn, 25f)
+                 && !GenAI.EnemyIsNear(pawn, 25f)
                  && !RV2R_Utilities.IsBusy(pawn, bond)
                  && pawn.Position.DistanceTo(bond.Position) < 25f
                  && pawn.CanReserve(bond, 1, -1, null, false)
@@ -53,7 +53,7 @@ namespace RV2R_RutsStuff
                         && (pawn3.Faction == pawn.Faction || pawn3.Faction.PlayerRelationKind != FactionRelationKind.Hostile)
                         && pawn.CanReserve(pawn3, 1, -1, null, false)
                         && !pawn3.IsForbidden(pawn)
-                        && !RV2R_Utilities.IsNearHostile(pawn, 25f)
+                        && !GenAI.EnemyIsNear(pawn, 25f)
                         && !RV2R_Utilities.IsBusy(pawn, pawn3)
                         && pawn3.CanParticipateInVore(out reason)
                         && pawn.CanEndoVore(pawn3, out reason, false);

@@ -20,6 +20,12 @@ namespace RV2R_RutsStuff
 
         protected override Job TryGiveJob(Pawn pawn)
         {
+            if (!pawn.CanParticipateInVore(out string reason))
+                return null;
+
+            if (GenAI.InDangerousCombat(pawn))
+                return null;
+
             Predicate<Thing> predicate = delegate (Thing t)
             {
                 Pawn pawn3 = (Pawn)t;
@@ -30,7 +36,9 @@ namespace RV2R_RutsStuff
                     && (pawn3.health.summaryHealth.SummaryHealthPercent <= 0.6f || pawn3.health.InPainShock)
                     && pawn.CanReserve(pawn3, 1, -1, null, false)
                     && !pawn3.IsForbidden(pawn)
-                    && !RV2R_Utilities.IsNearHostile(pawn, 25f)
+                    && pawn3.CanParticipateInVore(out reason)
+                    && pawn.CanEndoVore(pawn3, out reason, false)
+                    && !GenAI.EnemyIsNear(pawn, 25f)
                     && !RV2R_Utilities.IsBusy(pawn, pawn3)
                     && RV2R_Utilities.ShouldFriendlyTarget(pawn, pawn3);
             };

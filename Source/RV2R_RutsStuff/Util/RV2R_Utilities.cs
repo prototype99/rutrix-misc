@@ -9,20 +9,6 @@ namespace RV2R_RutsStuff
 {
     internal static class RV2R_Utilities
     {
-        static public bool IsNearHostile(Pawn self, float range)
-        {
-            if (GenAI.InDangerousCombat(self))
-                return true;
-            List<Pawn> list = self.Map.mapPawns.AllPawnsSpawned.FindAll((Pawn p)
-                => self != p
-                && self.Position.DistanceTo(p.Position) < range
-                && (p.HostileTo(self) || p.MentalState.ForceHostileTo(self)) && !p.Downed);
-
-            if (list.NullOrEmpty()) return false;
-
-            return true;
-        }
-
         static public bool IsBusy(Pawn pawn, Pawn target, bool respect = false)
         {
 
