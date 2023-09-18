@@ -15,10 +15,12 @@ namespace RV2R_RutsStuff
         static void AdditionalEffects(VoreTrackerRecord __instance)
         {
 
-#if v1_4
-            bool VaildForEffects = (!__instance.VoreGoal.IsLethal && !(__instance.Prey.genes.xenotypeName == "basic android" || __instance.Prey.genes.xenotypeName == "awakened android"));
+#if v1_3
+            bool VaildForEffects = !__instance.VoreGoal.IsLethal;          
 #else
-            bool VaildForEffects = !__instance.VoreGoal.IsLethal;
+            bool VaildForEffects = (!__instance.VoreGoal.IsLethal &&
+                 !(__instance.Prey.genes.xenotypeName == "basic android" || __instance.Prey.genes.xenotypeName == "awakened android" || !(__instance.Predator.genes.xenotypeName == "basic android" || __instance.Predator.genes.xenotypeName == "awakened android")));
+            // I appologize to your androids, but support for them's gonna be some work; just trying to make them not explode
 #endif
             if (VaildForEffects)
             {
@@ -29,6 +31,13 @@ namespace RV2R_RutsStuff
                     if (firstHediffOfDef != null)
                     {
                         firstHediffOfDef.Severity = Math.Min(firstHediffOfDef.Severity + (0.0135f * settings.EndoSicknessStrength), 1f);
+                        if (settings.EndoPacify && firstHediffOfDef.Severity >= 0.95f)
+                        {
+                            if (__instance.StruggleManager.shouldStruggle) 
+                                __instance.StruggleManager.shouldStruggle = false;
+                            if (RV2R_Utilities.IsColonyHostile(__instance.Predator, __instance.Prey))
+                                __instance.Prey.guest.SetGuestStatus(__instance.Predator.Faction, GuestStatus.Prisoner);
+                        }
                     }
                     else
                         __instance.Prey.health.AddHediff(RV2R_Common.EndoHediff, null, null, null);

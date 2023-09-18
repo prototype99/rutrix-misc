@@ -9,8 +9,10 @@ namespace RV2R_RutsStuff
 
         private BoolSmartSetting sizedEncumberance;
         private FloatSmartSetting encumberanceModifier;
+        private FloatSmartSetting encumberanceCap;
 
         private FloatSmartSetting endoSicknessStrength;
+        private BoolSmartSetting endoPacify;
         private FloatSmartSetting regressionStrength;
         private BoolSmartSetting chronicCure;
 
@@ -35,8 +37,10 @@ namespace RV2R_RutsStuff
 
         public bool SizedEncumberance => this.sizedEncumberance.value;
         public float EncumberanceModifier => this.encumberanceModifier.value / 100f;
+        public float EncumberanceCap => this.encumberanceCap.value / 100f;
 
         public float EndoSicknessStrength => this.endoSicknessStrength.value / 100f;
+        public bool EndoPacify => this.endoPacify.value;
         public float RegressionStrength => this.regressionStrength.value / 100f;
         public bool ChronicCure => this.chronicCure.value;
 
@@ -65,9 +69,13 @@ namespace RV2R_RutsStuff
                 this.sizedEncumberance = new BoolSmartSetting("RV2R_Settings_SizedEncumberance", true, true, "RV2R_Settings_SizedEncumberance_Tip");
             if (this.encumberanceModifier == null || this.encumberanceModifier.IsInvalid())
                 this.encumberanceModifier = new FloatSmartSetting("RV2R_Settings_EncumberanceModifier", 100f, 100f, 0f, 400f, "RV2R_Settings_EncumberanceModifier_Tip", "0", "%");
+            if (this.encumberanceCap == null || this.encumberanceCap.IsInvalid())
+                this.encumberanceCap = new FloatSmartSetting("RV2R_Settings_EncumberanceCap", 100f, 100f, 0f, 100f, "RV2R_Settings_EncumberanceCap_Tip", "0", "%");
 
             if (this.endoSicknessStrength == null || this.endoSicknessStrength.IsInvalid())
                 this.endoSicknessStrength = new FloatSmartSetting("RV2R_Settings_EndoSickness", 100f, 100f, 0f, 400f, "RV2R_Settings_EndoSickness_Tip", "0", "%");
+            if (this.endoPacify == null || this.endoPacify.IsInvalid())
+                this.endoPacify = new BoolSmartSetting("RV2R_Settings_EndoSicknessPacification", true, true, "RV2R_Settings_EndoSicknessPacification_Tip");
             if (this.regressionStrength == null || this.regressionStrength.IsInvalid())
                 this.regressionStrength = new FloatSmartSetting("RV2R_Settings_AgeRegression", 5f, 5f, 0f, 60f, "RV2R_Settings_AgeRegression_Tip", "0.0");
             if (this.chronicCure == null || this.chronicCure.IsInvalid())
@@ -119,7 +127,9 @@ namespace RV2R_RutsStuff
         {
             this.sizedEncumberance = null;
             this.encumberanceModifier = null;
+            this.encumberanceCap = null;
             this.endoSicknessStrength = null;
+            this.endoPacify = null;
             this.regressionStrength = null;
             this.chronicCure = null;
             this.endoCapture = null;
@@ -149,10 +159,12 @@ namespace RV2R_RutsStuff
             listing_Standard.Gap(12f);
             this.sizedEncumberance.DoSetting(listing_Standard);
             this.encumberanceModifier.DoSetting(listing_Standard);
+            this.encumberanceCap.DoSetting(listing_Standard);
             listing_Standard.Gap(18f);
             listing_Standard.Label("RV2R_Tick_Section".Translate());
             listing_Standard.Gap(12f);
             this.endoSicknessStrength.DoSetting(listing_Standard);
+            this.endoPacify.DoSetting(listing_Standard);
             this.regressionStrength.DoSetting(listing_Standard);
             this.chronicCure.DoSetting(listing_Standard);
             listing_Standard.Gap(18f);
@@ -193,7 +205,9 @@ namespace RV2R_RutsStuff
 
             Scribe_Deep.Look<BoolSmartSetting>(ref this.sizedEncumberance, "sizedEncumberance", new object[0]);
             Scribe_Deep.Look<FloatSmartSetting>(ref this.encumberanceModifier, "encumberanceModifier", new object[0]);
+            Scribe_Deep.Look<FloatSmartSetting>(ref this.encumberanceCap, "encumberanceCap", new object[0]);
             Scribe_Deep.Look<FloatSmartSetting>(ref this.endoSicknessStrength, "endoSicknessStrength", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.endoPacify, "endoPacify", new object[0]);
             Scribe_Deep.Look<FloatSmartSetting>(ref this.regressionStrength, "regressionStrength", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.chronicCure, "chronicCure", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.endoCapture, "endoCapture", new object[0]);
