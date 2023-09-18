@@ -8,14 +8,17 @@
   <RV2R_Settings_SizedEncumberance>Size-based encumbrance scaling</RV2R_Settings_SizedEncumberance>  
   <RV2R_Settings_SizedEncumberance_Tip>Enable to scale encumberance by total weight of all prey. Disable to scale encumberance by count of prey, Can cause problems for smaller preds.</RV2R_Settings_SizedEncumberance_Tip>  
   <RV2R_Settings_EncumberanceModifier>Encumbrance multiplier</RV2R_Settings_EncumberanceModifier>  
-  <RV2R_Settings_EncumberanceModifier_Tip>How heavy prey are. Setting too high can easily incapacitate preds. Prey held in extremiedies or absorbed in some way are easier to hold.</RV2R_Settings_EncumberanceModifier_Tip>  
+  <RV2R_Settings_EncumberanceModifier_Tip>How heavy prey are. Setting too high can easily incapacitate preds. Prey held in extremiedies or absorbed in some way are easier to hold.</RV2R_Settings_EncumberanceModifier_Tip>    
+  <RV2R_Settings_EncumberanceCap>Encumbrance cap</RV2R_Settings_EncumberanceCap>  
+  <RV2R_Settings_EncumberanceCap_Tip>How high the "Weighed Down" hediff is allowed to get to. Can be used to quickly get overburdedened preds back up to let some prey out. One prey, assuming no modifiers and same size, is 25%.\n\nAt 25%, moving reduction is -17.5%.\nAt 50%, it's -40%.\nAt 75%, it's -65%.\nAt 100%, it's -150%.</RV2R_Settings_EncumberanceCap_Tip>  
+
 
   <RV2R_Tick_Section>Endo Stuff</RV2R_Tick_Section>
 
   <RV2R_Settings_EndoSickness>Endo sickness strength</RV2R_Settings_EndoSickness>  
   <RV2R_Settings_EndoSickness_Tip>How quickly (if at all) a pawn should get "endo sick" while safely inside of a pred. At default, it's 1% severity per "vore tick". It's not dangerous, and even puts them in a good mood, at the cost of being loopy and disorientated for about a day or two.\n\nIndirectly nerfs endo storage as a way to keep medics and such safe and makes struggling harder, among other things.</RV2R_Settings_EndoSickness_Tip>  
   <RV2R_Settings_EndoSicknessPacification>Endo pacification</RV2R_Settings_EndoSicknessPacification>  
-  <RV2R_Settings_EndoSicknessPacification_Tip>Prey that are too endo sick can no longer struggle.</RV2R_Settings_EndoSicknessPacification_Tip>  
+  <RV2R_Settings_EndoSicknessPacification_Tip>Prey that are too endo sick can no longer struggle, and will be captured if hostile.</RV2R_Settings_EndoSicknessPacification_Tip>
   <RV2R_Settings_AgeRegression>Age regression strength</RV2R_Settings_AgeRegression>
   <RV2R_Settings_AgeRegression_Tip>How quickly, in days spent to days gained, prey regress in age while unbirthed. They'll never regress to below biological adulthood, which varies by race. Set to 0 to disable, and to 1 to prevent but not reverse aging.\n\n(Remember that Rimworld has 60 days in a year.)</RV2R_Settings_AgeRegression_Tip>
   <RV2R_Settings_AgeRegressionCure>Chronic regression</RV2R_Settings_AgeRegressionCure>
