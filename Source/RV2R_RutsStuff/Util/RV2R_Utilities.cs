@@ -15,6 +15,9 @@ namespace RV2R_RutsStuff
             if (pawn.GetLord()?.LordJob is LordJob_FormAndSendCaravan || target.GetLord()?.LordJob is LordJob_FormAndSendCaravan)
                 return true;
 
+            if (pawn.IsBurning() || target.IsBurning()) 
+                return true;
+
             if (!pawn.IsHumanoid() && pawn.Faction != null && pawn.Faction.IsPlayer)
             {
                 if (respect && pawn.playerSettings != null && pawn.playerSettings.RespectedMaster != null
@@ -28,11 +31,24 @@ namespace RV2R_RutsStuff
             return false;
         }
 
+        static public bool IsColonyHostile(Pawn pawn, Pawn target)
+        {
+            if (pawn.Faction != null && pawn.Faction.IsPlayer)
+            {
+                if (target.Faction != null && target.Faction.HostileTo(Faction.OfPlayer))
+                {
+                    if (!target.IsPrisonerOfColony)
+                        return true;
+                }
+            }
+            return false;
+        }
         static public bool ShouldFriendlyTarget(Pawn pawn, Pawn target)
         {
             if (pawn.Faction != null
              && (target.Faction != null && pawn.Faction == target.Faction)
-               || (target.Faction != null && target.Faction.AllyOrNeutralTo(pawn.Faction)
+               || ((target.Faction != null && target.Faction.AllyOrNeutralTo(pawn.Faction))
+               || (target.IsHumanoid() && target.GuestStatus != null)
                || (!target.IsHumanoid() && pawn.Map.designationManager.DesignationOn(target, DesignationDefOf.Tame) != null)))
                 return true;
 
