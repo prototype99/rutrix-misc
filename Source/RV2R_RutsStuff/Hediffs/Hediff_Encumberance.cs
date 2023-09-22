@@ -16,7 +16,7 @@ namespace RV2R_RutsStuff
                 float totalWeight = 0f;
                 int totalPrey = 0;
                 PawnData pawnData = null;
-                float quirkMod = this.pawn.QuirkManager(true).CapModOffsetModifierFor(PawnCapacityDefOf.Moving, null);
+                float quirkMod = this.pawn.QuirkManager(false)?.CapModOffsetModifierFor(PawnCapacityDefOf.Moving, null)??1f;
                 if (this.pawn.IsActivePredator())
                 {
                     PawnData pawnData2 = this.pawn.PawnData(true);
