@@ -12,7 +12,7 @@ namespace RV2R_RutsStuff
             if (RV2_Rut_Settings.rutsStuff.CuragaVore)
             {
                 //RV2Log.Message(record.Predator.LabelShort + " casting curaga", "OngoingVore");
-                rollStrength *= 10f;
+                rollStrength *= 3f;
             }
 
             return true;

@@ -58,7 +58,7 @@ namespace RV2R_RutsStuff
                 if (RV2_Rut_Settings.rutsStuff.SizedEncumberance)
                     this.severityInt = Math.Min(totalWeight / this.pawn.BodySize / 4f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, RV2_Rut_Settings.rutsStuff.EncumberanceCap);
                 else
-                    this.severityInt = Math.Min(totalPrey / 4f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, RV2_Rut_Settings.rutsStuff.EncumberanceCap);
+                    this.severityInt = Math.Min(totalPrey / 4f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, (RV2_Rut_Settings.rutsStuff.EncumberanceCap));
 
                 return this.severityInt;
             }

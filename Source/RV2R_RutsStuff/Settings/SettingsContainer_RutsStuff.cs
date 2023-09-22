@@ -22,7 +22,7 @@ namespace RV2R_RutsStuff
 
         private FloatSmartSetting playVoreChance;
         private FloatSmartSetting playVoreModifier;
-        private BoolSmartSetting playVoreIndescriminate;
+        //   private BoolSmartSetting playVoreIndescriminate;
         private BoolSmartSetting fatalPlayVore;
 
         private FloatSmartSetting endoBondChance;
@@ -50,7 +50,7 @@ namespace RV2R_RutsStuff
 
         public float PlayVoreChance => this.playVoreChance.value;
         public float PlayVoreModifier => this.playVoreModifier.value;
-        public bool PlayVoreIndescriminate => this.playVoreIndescriminate.value;
+        // public bool PlayVoreIndescriminate => this.playVoreIndescriminate.value;
         public bool FatalPlayVore => this.fatalPlayVore.value;
 
         public float EndoBondChance => this.endoBondChance.value;
@@ -92,8 +92,8 @@ namespace RV2R_RutsStuff
                 this.playVoreChance = new FloatSmartSetting("RV2R_Settings_AnimalRandomNomChance", 24f, 24f, 6f, 168f, "RV2R_Settings_AnimalRandomNomChance_Tip", "0.0");
             if (this.playVoreModifier == null || this.playVoreModifier.IsInvalid())
                 this.playVoreModifier = new FloatSmartSetting("RV2R_Settings_AnimalRandomNomChanceModifier", 25f, 25f, 0f, 400f, "RV2R_Settings_AnimalRandomNomChanceModifier_Tip", "0", "%");
-            if (this.playVoreIndescriminate == null || this.playVoreIndescriminate.IsInvalid())
-                this.playVoreIndescriminate = new BoolSmartSetting("RV2R_Settings_AnimalRandomNomIndiscriminate", false, false, "RV2R_Settings_AnimalRandomNomIndiscriminate_Tip");
+            // if (this.playVoreIndescriminate == null || this.playVoreIndescriminate.IsInvalid())
+            //     this.playVoreIndescriminate = new BoolSmartSetting("RV2R_Settings_AnimalRandomNomIndiscriminate", false, false, "RV2R_Settings_AnimalRandomNomIndiscriminate_Tip");
             if (this.fatalPlayVore == null || this.fatalPlayVore.IsInvalid())
                 this.fatalPlayVore = new BoolSmartSetting("RV2R_Settings_AnimalRandomNomFatal", false, false, "RV2R_Settings_AnimalRandomNomFatal_Tip");
 
@@ -137,7 +137,7 @@ namespace RV2R_RutsStuff
             this.scariaCapture = null;
             this.playVoreChance = null;
             this.playVoreModifier = null;
-            this.playVoreIndescriminate = null;
+            //this.playVoreIndescriminate = null;
             this.fatalPlayVore = null;
             this.endoBondChance = null;
             this.preyOnlyEndoBond = null;
@@ -178,7 +178,7 @@ namespace RV2R_RutsStuff
             listing_Standard.Gap(12f);
             this.playVoreChance.DoSetting(listing_Standard);
             this.playVoreModifier.DoSetting(listing_Standard);
-            this.playVoreIndescriminate.DoSetting(listing_Standard);
+            //   this.playVoreIndescriminate.DoSetting(listing_Standard);
             this.fatalPlayVore.DoSetting(listing_Standard);
             listing_Standard.Gap(18f);
             listing_Standard.Label("RV2R_Bonds_Section".Translate());
@@ -214,7 +214,7 @@ namespace RV2R_RutsStuff
             Scribe_Deep.Look<BoolSmartSetting>(ref this.insectoidCapture, "insectoidCapture", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.scariaCapture, "scariaCapture", new object[0]);
             Scribe_Deep.Look<FloatSmartSetting>(ref this.playVoreChance, "playVoreChance", new object[0]);
-            Scribe_Deep.Look<BoolSmartSetting>(ref this.playVoreIndescriminate, "playVoreIndescriminate", new object[0]);
+            //    Scribe_Deep.Look<BoolSmartSetting>(ref this.playVoreIndescriminate, "playVoreIndescriminate", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.fatalPlayVore, "fatalPlayVore", new object[0]);
             Scribe_Deep.Look<FloatSmartSetting>(ref this.endoBondChance, "endoBondChance", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.preyOnlyEndoBond, "preyOnlyEndoBond", new object[0]);

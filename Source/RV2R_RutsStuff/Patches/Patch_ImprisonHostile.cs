@@ -12,13 +12,8 @@ namespace RV2R_RutsStuff
         [HarmonyPostfix]
         private static void EndoJail(ref VoreTrackerRecord record)
         {
-#if v1_3   
-            bool doEffects = true;
-#else
-            bool doEffects = !(record.Predator.genes.xenotypeName == "basic android" || record.Predator.genes.xenotypeName == "awakened android" || record.Prey.genes.xenotypeName == "basic android" || record.Prey.genes.xenotypeName == "awakened android");
-            // I appologize to your androids, but support for them's gonna be some work; just trying to make them not explode
-#endif
-            if (!doEffects) return;
+
+            if (RV2R_Utilities.ShouldBandaid(record.Predator, record.Prey)) return;
 
             Hediff firstHediffOfDef = record.Predator.health.hediffSet.GetFirstHediffOfDef(RV2R_Common.Encumbrance, false) ?? null;
             if (firstHediffOfDef == null)

@@ -38,7 +38,7 @@ namespace RV2R_RutsStuff
                     && !pawn3.IsForbidden(pawn)
                     && pawn3.CanParticipateInVore(out reason)
                     && pawn.CanEndoVore(pawn3, out reason, false)
-                    && !GenAI.EnemyIsNear(pawn, 25f)
+                    && !GenAI.EnemyIsNear(pawn, radius)
                     && !RV2R_Utilities.IsBusy(pawn, pawn3)
                     && RV2R_Utilities.ShouldFriendlyTarget(pawn, pawn3);
             };

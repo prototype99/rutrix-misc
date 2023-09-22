@@ -35,7 +35,7 @@ namespace RV2R_RutsStuff
                 if (bond != null
                  && !GenAI.EnemyIsNear(pawn, 25f)
                  && !RV2R_Utilities.IsBusy(pawn, bond)
-                 && pawn.Position.DistanceTo(bond.Position) < 25f
+                 && pawn.Position.DistanceTo(bond.Position) < radius
                  && pawn.CanReserve(bond, 1, -1, null, false)
                  && bond.CanParticipateInVore(out reason)
                  && pawn.CanVore(bond, out reason)
@@ -53,7 +53,7 @@ namespace RV2R_RutsStuff
                         && (pawn3.Faction == pawn.Faction || pawn3.Faction.PlayerRelationKind != FactionRelationKind.Hostile)
                         && pawn.CanReserve(pawn3, 1, -1, null, false)
                         && !pawn3.IsForbidden(pawn)
-                        && !GenAI.EnemyIsNear(pawn, 25f)
+                        && !GenAI.EnemyIsNear(pawn, radius)
                         && !RV2R_Utilities.IsBusy(pawn, pawn3)
                         && pawn3.CanParticipateInVore(out reason)
                         && pawn.CanVore(pawn3, out reason);

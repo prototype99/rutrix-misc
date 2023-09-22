@@ -15,14 +15,7 @@ namespace RV2R_RutsStuff
         static void AdditionalEffects(VoreTrackerRecord __instance)
         {
 
-#if v1_3
-            bool VaildForEffects = !__instance.VoreGoal.IsLethal;          
-#else
-            bool VaildForEffects = (!__instance.VoreGoal.IsLethal &&
-                 !(__instance.Prey.genes.xenotypeName == "basic android" || __instance.Prey.genes.xenotypeName == "awakened android" || !(__instance.Predator.genes.xenotypeName == "basic android" || __instance.Predator.genes.xenotypeName == "awakened android")));
-            // I appologize to your androids, but support for them's gonna be some work; just trying to make them not explode
-#endif
-            if (VaildForEffects)
+            if (!__instance.VoreGoal.IsLethal && !RV2R_Utilities.ShouldBandaid(__instance.Predator, __instance.Prey))
             {
                 SettingsContainer_RutsStuff settings = RV2_Rut_Settings.rutsStuff;
                 if (settings.EndoSicknessStrength > 0f)

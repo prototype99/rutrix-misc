@@ -1,6 +1,5 @@
 ﻿using RimVore2;
 using RimWorld;
-using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
@@ -15,7 +14,7 @@ namespace RV2R_RutsStuff
             if (pawn.GetLord()?.LordJob is LordJob_FormAndSendCaravan || target.GetLord()?.LordJob is LordJob_FormAndSendCaravan)
                 return true;
 
-            if (pawn.IsBurning() || target.IsBurning()) 
+            if (pawn.IsBurning() || target.IsBurning())
                 return true;
 
             if (!pawn.IsHumanoid() && pawn.Faction != null && pawn.Faction.IsPlayer)
@@ -53,6 +52,25 @@ namespace RV2R_RutsStuff
                 return true;
 
             return false;
+        }
+
+        static public bool ShouldBandaid(Pawn pred, Pawn prey)
+        {
+#if v1_3
+            return false;
+#else
+            if (pred.genes != null && pred.genes.Xenotype != null)
+            {
+                if (pred.genes.xenotypeName == "basic android" || pred.genes.xenotypeName == "awakened android")
+                    return true;
+            }
+            if (prey.genes != null && prey.genes.Xenotype != null)
+            {
+                if (prey.genes.xenotypeName == "basic android" || prey.genes.xenotypeName == "awakened android")
+                    return true;
+            }
+            return false;
+#endif
         }
     }
 }
