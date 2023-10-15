@@ -16,9 +16,21 @@ namespace RV2R_RutsStuff
         private FloatSmartSetting regressionStrength;
         private BoolSmartSetting chronicCure;
 
+        // private FloatSmartSetting endoPets;
+        // private BoolSmartSetting endoPetsJoin;
+
         private BoolSmartSetting endoCapture;
         private BoolSmartSetting insectoidCapture;
         private BoolSmartSetting scariaCapture;
+        // private BoolSmartSetting endoRecruitment;
+
+        //private FloatSmartSetting fodderChance;
+        //private BoolSmartSetting fodderAnimalsAllowed;
+        //private BoolSmartSetting fodderForce;
+        //private BoolSmartSetting fodderPenAnimals;
+        //private BoolSmartSetting fodderAnimals;
+        //private BoolSmartSetting fodderGuests;
+        //private BoolSmartSetting fodderColonists;
 
         private FloatSmartSetting playVoreChance;
         private FloatSmartSetting playVoreModifier;
@@ -69,8 +81,8 @@ namespace RV2R_RutsStuff
                 this.sizedEncumberance = new BoolSmartSetting("RV2R_Settings_SizedEncumberance", true, true, "RV2R_Settings_SizedEncumberance_Tip");
             if (this.encumberanceModifier == null || this.encumberanceModifier.IsInvalid())
                 this.encumberanceModifier = new FloatSmartSetting("RV2R_Settings_EncumberanceModifier", 100f, 100f, 0f, 400f, "RV2R_Settings_EncumberanceModifier_Tip", "0", "%");
-            if (this.encumberanceCap == null || this.encumberanceCap.IsInvalid())
-                this.encumberanceCap = new FloatSmartSetting("RV2R_Settings_EncumberanceCap", 100f, 100f, 0f, 100f, "RV2R_Settings_EncumberanceCap_Tip", "0", "%");
+            //   if (this.encumberanceCap == null || this.encumberanceCap.IsInvalid())
+            //       this.encumberanceCap = new FloatSmartSetting("RV2R_Settings_EncumberanceCap", 100f, 100f, 0f, 100f, "RV2R_Settings_EncumberanceCap_Tip", "0", "%");
 
             if (this.endoSicknessStrength == null || this.endoSicknessStrength.IsInvalid())
                 this.endoSicknessStrength = new FloatSmartSetting("RV2R_Settings_EndoSickness", 100f, 100f, 0f, 400f, "RV2R_Settings_EndoSickness_Tip", "0", "%");
@@ -127,7 +139,7 @@ namespace RV2R_RutsStuff
         {
             this.sizedEncumberance = null;
             this.encumberanceModifier = null;
-            this.encumberanceCap = null;
+            //   this.encumberanceCap = null;
             this.endoSicknessStrength = null;
             this.endoPacify = null;
             this.regressionStrength = null;
@@ -159,7 +171,7 @@ namespace RV2R_RutsStuff
             listing_Standard.Gap(12f);
             this.sizedEncumberance.DoSetting(listing_Standard);
             this.encumberanceModifier.DoSetting(listing_Standard);
-            this.encumberanceCap.DoSetting(listing_Standard);
+            //   this.encumberanceCap.DoSetting(listing_Standard);
             listing_Standard.Gap(18f);
             listing_Standard.Label("RV2R_Tick_Section".Translate());
             listing_Standard.Gap(12f);
@@ -205,7 +217,7 @@ namespace RV2R_RutsStuff
 
             Scribe_Deep.Look<BoolSmartSetting>(ref this.sizedEncumberance, "sizedEncumberance", new object[0]);
             Scribe_Deep.Look<FloatSmartSetting>(ref this.encumberanceModifier, "encumberanceModifier", new object[0]);
-            Scribe_Deep.Look<FloatSmartSetting>(ref this.encumberanceCap, "encumberanceCap", new object[0]);
+            //   Scribe_Deep.Look<FloatSmartSetting>(ref this.encumberanceCap, "encumberanceCap", new object[0]);
             Scribe_Deep.Look<FloatSmartSetting>(ref this.endoSicknessStrength, "endoSicknessStrength", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.endoPacify, "endoPacify", new object[0]);
             Scribe_Deep.Look<FloatSmartSetting>(ref this.regressionStrength, "regressionStrength", new object[0]);

@@ -16,10 +16,10 @@ namespace RV2R_RutsStuff
                 float totalWeight = 0f;
                 int totalPrey = 0;
                 PawnData pawnData = null;
-                float quirkMod = this.pawn.QuirkManager(false)?.CapModOffsetModifierFor(PawnCapacityDefOf.Moving, null)??1f;
+                float quirkMod = this.pawn.QuirkManager(false)?.CapModOffsetModifierFor(PawnCapacityDefOf.Moving, null) ?? 1f;
                 if (this.pawn.IsActivePredator())
                 {
-                    PawnData pawnData2 = this.pawn.PawnData(true);
+                    PawnData pawnData2 = this.pawn.PawnData(false);
                     if (pawnData2 != null)
                     {
                         VoreTracker voreTracker = pawnData2.VoreTracker;
@@ -40,26 +40,29 @@ namespace RV2R_RutsStuff
 
                                 if (voreTrackerRecord.Prey.IsActivePredator())
                                 {
-                                    pawnData = voreTrackerRecord.Prey.PawnData(true);
+                                    pawnData = voreTrackerRecord.Prey.PawnData(false);
                                 }
                                 if (pawnData != null)
                                 {
-                                    VoreTracker voreTracker2 = voreTrackerRecord.Prey.PawnData(true).VoreTracker;
+                                    VoreTracker voreTracker2 = voreTrackerRecord.Prey.PawnData(false).VoreTracker;
                                     if (voreTracker2 != null)
                                         foreach (VoreTrackerRecord voreTrackerRecord2 in voreTracker2.VoreTrackerRecords)
                                         {
-                                            totalWeight += voreTrackerRecord2.Prey.BodySize * preyMod;
+                                            totalWeight += voreTrackerRecord2.Prey.BodySize;
                                             totalPrey += 1;
                                         }
                                 }
                             }
                     }
                 }
-                if (RV2_Rut_Settings.rutsStuff.SizedEncumberance)
-                    this.severityInt = Math.Min(totalWeight / this.pawn.BodySize / 4f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, RV2_Rut_Settings.rutsStuff.EncumberanceCap);
-                else
-                    this.severityInt = Math.Min(totalPrey / 4f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, (RV2_Rut_Settings.rutsStuff.EncumberanceCap));
-
+                this.severityInt = 0f;
+                if (totalWeight > 0f && totalPrey > 0)
+                {
+                    if (RV2_Rut_Settings.rutsStuff.SizedEncumberance)
+                        this.severityInt = Math.Min(totalWeight / Math.Max(this.pawn.BodySize,0.01f) / 4f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, 1f);
+                    else
+                        this.severityInt = Math.Min(totalPrey / 4f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, 1f);
+                }
                 return this.severityInt;
             }
         }

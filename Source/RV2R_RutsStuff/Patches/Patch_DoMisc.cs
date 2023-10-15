@@ -93,7 +93,7 @@ namespace RV2R_RutsStuff
                             }
                         }
                     }
-                    PawnData pawnData = __instance.Prey.PawnData(true);
+                    PawnData pawnData = __instance.Prey.PawnData(false);
                     if (pawnData != null && pawnData.VoreTracker != null)
                     {
                         VoreTracker voreTracker = pawnData.VoreTracker;
