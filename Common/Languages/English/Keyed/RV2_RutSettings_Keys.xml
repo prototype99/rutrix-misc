@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>  
 
+  <RV2R_Pet>{0} has become {1}'s vore pet.</RV2R_Pet>
+  <RV2R_PetJoined>{0}, having become {1}'s vore pet, has decided to join your colony.</RV2R_PetJoined>
+  
   <RV2R_Settings_Tab>Rut's Stuff</RV2R_Settings_Tab> 
   
   <RV2R_Encumberance_Section>Encumbrance</RV2R_Encumberance_Section>
@@ -9,9 +12,12 @@
   <RV2R_Settings_SizedEncumberance_Tip>Enable to scale encumberance by total weight of all prey. Disable to scale encumberance by count of prey, Can cause problems for smaller preds.</RV2R_Settings_SizedEncumberance_Tip>  
   <RV2R_Settings_EncumberanceModifier>Encumbrance multiplier</RV2R_Settings_EncumberanceModifier>  
   <RV2R_Settings_EncumberanceModifier_Tip>How heavy prey are. Setting too high can easily incapacitate preds. Prey held in extremiedies or absorbed in some way are easier to hold.</RV2R_Settings_EncumberanceModifier_Tip>    
+  <RV2R_Settings_EncumberanceVisible>Visible "Weighed down" hediff</RV2R_Settings_EncumberanceVisible>  
+  <RV2R_Settings_EncumberanceVisible_Tip>Makes the "weighed down" hediff used for encumbrance visible. This dosn't change it's functonality, it just makes it visible to the player./n/nNote that it will always be shown when hovering over a pawn's moving capacity stat if it is affecting it.</RV2R_Settings_EncumberanceVisible_Tip> 
   <RV2R_Settings_EncumberanceCap>Encumbrance cap</RV2R_Settings_EncumberanceCap>  
   <RV2R_Settings_EncumberanceCap_Tip>How high the "Weighed Down" hediff is allowed to get to. Can be used to quickly get overburdedened preds back up to let some prey out. One prey, assuming no modifiers and same size, is 25%.\n\nAt 25%, moving reduction is -17.5%.\nAt 50%, it's -40%.\nAt 75%, it's -65%.\nAt 100%, it's -150%.</RV2R_Settings_EncumberanceCap_Tip>  
 
+  <RV2R_Settings_EncumberanceTurnOff>Due to how the encumbrance scaling works, disabling size-based encumbrance scaling will not revert to RimVore-2's methods for encumbrance, instead using a method that aproximates it. To revert, set encumbrance multiplier to 0% and remove Patches/Patch_Hediffs_Vore_CapmodRemoval.xml from this submod's Common folder.</RV2R_Settings_EncumberanceTurnOff>  
 
   <RV2R_Tick_Section>Endo Stuff</RV2R_Tick_Section>
 
@@ -23,6 +29,12 @@
   <RV2R_Settings_AgeRegression_Tip>How quickly, in days spent to days gained, prey regress in age while unbirthed. They'll never regress to below biological adulthood, which varies by race. Set to 0 to disable, and to 1 to prevent but not reverse aging.\n\n(Remember that Rimworld has 60 days in a year.)</RV2R_Settings_AgeRegression_Tip>
   <RV2R_Settings_AgeRegressionCure>Chronic regression</RV2R_Settings_AgeRegressionCure>
   <RV2R_Settings_AgeRegressionCure_Tip>Age-regressed prey have a small chance to be cured of chronic illnesses while unbirthed. Odds increase the younger they get.</RV2R_Settings_AgeRegressionCure_Tip>
+  <RV2R_Settings_Pets>Endo pets</RV2R_Settings_Pets>
+  <RV2R_Settings_Pets_Tip>Predators and prey who willingly spend this many days straight in a vore stage gain a special relationship, providing a permanate opinion boost. Can be abused, but pets and their preds will get upset if something happens to the other. Pets can only have one pred, but preds can have multiple pets.</RV2R_Settings_Pets_Tip>
+  <RV2R_Settings_PetRecruitment>Pets join</RV2R_Settings_PetRecruitment>
+  <RV2R_Settings_PetRecruitment_Tip>Prey will join your faction if they become a pet of one of your pawns. Can very easily be abused.</RV2R_Settings_PetRecruitment_Tip>
+  <RV2R_Settings_EndoThoughts>Relationship Thoughts</RV2R_Settings_EndoThoughts>
+  <RV2R_Settings_EndoThoughts_Tip>Lets preds and prey gain positive thoughts if they're in a relationship or bonded, based on their opinion of each other.n\n\At most, it's +5 mood for spouses, +5 mood for holding 2 bonded animals, and +5 mood for belly pets.</RV2R_Settings_EndoThoughts_Tip>
 
   <RV2R_Capture_Section>Capturing</RV2R_Capture_Section>
 	
@@ -32,7 +44,9 @@
   <RV2R_Settings_EndoCapture_Insectoids_Tip>Members of the Sorne Geneline are pacified if endo-captured, ready to be tamed when released. Not at all balanced.</RV2R_Settings_EndoCapture_Insectoids_Tip>
   <RV2R_Settings_EndoCapture_Scaria>Scaria cure</RV2R_Settings_EndoCapture_Scaria>  
   <RV2R_Settings_EndoCapture_Scaria_Tip>Healing vore can cure scaria, allowing endo-capture to be used on rabid animals. They'll only capture or endo-rescue animals you've set to tame.</RV2R_Settings_EndoCapture_Scaria_Tip>
- 
+  <RV2R_Settings_EndoCapture_Recruitment>Endo recruitment</RV2R_Settings_EndoCapture_Recruitment>  
+  <RV2R_Settings_EndoCapture_Recruitment_Tip>Prisoners set to "Reduce Resistance" or "Recruit" will have their resistance slowly lower while willingly endo-vored. Having a warden chat them up is still faster, and this won't sway the unwavering.</RV2R_Settings_EndoCapture_Recruitment_Tip>
+  
   <RV2R_AnimalNom_Section>Animal Vore</RV2R_AnimalNom_Section>
 	
   <RV2R_Settings_AnimalRandomNomChance>Playful predation average hours</RV2R_Settings_AnimalRandomNomChance>
@@ -64,6 +78,6 @@
   <RV2R_Cheats_HyperHealing>Curaga Vore</RV2R_Cheats_HyperHealing>
   <RV2R_Cheats_HyperHealing_Tip>Healing preds start casting curaga instead of cure, dramaticaly improving the best vore goal. Having a skilled doctor tend injuries and then heal-vore is still more effective.</RV2R_Cheats_HyperHealing_Tip>
 
-  <RV2R_FuckUnity>Remember to add\n\n0.0.0.0 *unity.com\n0.0.0.0 *.unity.com\n0.0.0.0 *unity3d.com\n0.0.0.0 *.unity3d.com\n\n to your hosts file. You'll gain a sense of pride and accomplishment, no surprise mechanics needed.\n\n\nRimWorld was created with Unity, which has just decided to fuck over every single developer who has ever used their platform. Studios using Unity, many of them independent, have had to delay or cancel projects due to Unity's decisions. Show some love to Ludeon Studios and other Unity devs, they could use it right now.\n\n\nFuck Unity.</RV2R_FuckUnity>
+  <RV2R_FuckUnity>Remember to add\n\n0.0.0.0 *unity.com\n0.0.0.0 *.unity.com\n0.0.0.0 *unity3d.com\n0.0.0.0 *.unity3d.com\n\n to your hosts file. You'll gain a sense of pride and accomplishment, no surprise mechanics needed.\n\n\nRimWorld was created with Unity, which has decided to fuck over every single developer who has ever used their platform. Show some love to Ludeon Studios and other once-Unity devs.\n\n\nFuck Unity.</RV2R_FuckUnity>
 
 </LanguageData>
