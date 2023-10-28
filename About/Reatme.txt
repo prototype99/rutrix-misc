@@ -1,0 +1,100 @@
+
+	This submod adds a lot of miscellaneous additions to RimVore-2, most of which are configurable.
+
+	Animals get 3 new trainables- 
+		Playful predation - 2 steps, low difficulty, no trainability required
+			Allows the animal to engage in vore on their own. They request to eat colonists, and just eat animals.
+			Disabling training also disables their ability to play pred.
+
+		Predation - 3 steps, moderate difficulty, intermediate trainability required
+			Allows the animal to vore downed raiders and wildlife. They will ignore anyone reserved by another pawn (such as a capture order, or being hunted).
+			You can use designations to prevent them from eating raiders you're interested in.
+
+		Endo-rescue - 4 steps, moderatly high difficulty, intermediate trainability required
+			Allows the animal to heal-vore downed colonists and visitors. They'll also heal-vore those who's wounds have been tended to if they're badly hurt.
+	
+	These trainables won't do much if the animal can't engage in the proper vore goals.
+	The mod Xenobionic Patcher can allow you to install vore enablers in your animals, among other things.
+		https://steamcommunity.com/sharedfiles/filedetails/?id=1911273785 
+	
+
+
+	Here's each setting catagory, and what each setting does, in detail...
+
+	Encumbrance -
+		This submod replaces RV2's encumbrance system with one that takes into account relative sizes of predator and prey.
+
+		Size-based encumbrance scaling - Toggles encumbering predators by total size of prey or by total count. Prey-of-prey are also included in this count.
+
+		Encumbrance multiplier - Sets how heavy prey are. Setting to 0% effectivly disables all encumbrance.
+
+		Visible "Weighed down" hediff - The "weighted down" that applies the movement reduction can be made invisible.
+						It will still affect pawns, and can always be seen by hoving over their Moving capacity in their health tab.
+
+		Due to how the encumbrance scaling works, disabling size-based encumbrance scaling will not revert to RimVore-2's methods for encumbrance, instead using a method that aproximates it.
+		This can cause problems if, for instance, a pawn of yours has 15 muffalo stored in their stomach. RV2 only counts the first 4; this submod counts them all.
+		To revert, set encumbrance multiplier to 0% and remove Patches/Patch_Hediffs_Vore_CapmodRemoval.xml from this submod's Common folder(RV2_Misc/Common/Patches/Patch_Hediffs_Vore_CapmodRemoval.xml).
+
+	Endo Stuff -
+		Endo sickness strength - "Endo sickness" is a mostly harmless hediff that makes pawns loopy, but comfortably numb.
+					 It helps keep prey in a good mood, while nerfing endo storage indirectly and adding a bit of fun mental imagery.
+					 Every vore-tick (100 game ticks (about 3 seconds real time)), it will advance by this setting's severity for any prey that has been endo-vored.
+
+		Endo pacification - When endo sickness reaches 95% severity, pawns can no longer struggle. Hostile pawns are also made prisoners.
+
+		Age regression strength - Lets pawns regress in age while safely contained within a womb. Pawns lose age every vore-tick, with the setting being "every day, lose X days of age".
+					  Pawns won't revert past their biological adulthood; 18 years for humans, though nearly every species and race are adults at different ages.
+
+		Chronic regression - Age-regressing pawns can be cured of chronic conditions, like a bad back or even carcinomas.
+				     The odds are low, rising as they get younger, and they need to be young enough before it can happen at all.
+
+		Relationship thoughts - Positive mood boosts for endophilicly holding lovers, bonded animals, or voraphilic pets. Occurs for both predator and prey.
+
+		Endo pets - Gives a predator and prey a special opinion-boosting relationship if they spend the set amount of days together in a single vore stage. Best(or rather, only) done with storage vore.
+			    Prey can only have their one pred, but preds can have multiple prey. They will be upset if something happens to their endo-buddy.
+
+		Pets join - If a prey becomes a pet, they'll join your faction. Remember; vore is overpowered. Please show some restraint. Some, you don't have to show much.
+
+	Capturing -
+		Endo capture - Hostiles that are in pain-shock or unconsious are captured if endo-vored. Works best with healing vore.
+
+		Capture insectoids - Hostile insects, like those spawned as infestation events, are removed from their faction if endo-captured, allowing you to tame them.
+
+		Scaria cure - Manhunting animals infected with scaria are cured when endo-captured, allowing you to tame them.
+
+		Endo recruitment - Slowly lowers prisoner resistance when they are willingly endo'ed. Requires the prisoner to be set to "reduce resistance" or "recruit".
+				   Does not affect the unwavering.
+
+
+		Your colony animals trained in predation will endo-capture if they can heal-vore, and cannot fatal-vore.
+		They'll also only endo-capture/rescue insectoids and wildlife that you designate to tame.
+
+	Animal Vore -
+		Playful predation average hours - The hours-on-average an animal trained in playful predation will engage in vore. 24 means they will, for every 24 hours idle, do one nom.
+
+		Playful predation modifier - A percentage on the hours-on-average, multiplied by the number of prey the animal has, added to their average hours.
+					     Lowers how often an animal will play-prey if they have multiple prey already.
+					     (eg: if average hours is 24 and mod is 50%; with 0 prey, 24 hours on average, with 1 prey, 36 hours on average, 2, 48 hours, ect.)
+
+		Not-so-playful predation - Play predding is endo only. This option disables that.
+
+	Bonds -
+		Bonding is a base game mechanic, occuring rarly when animals and humanoids interact. 
+		Bonds provide a mood boost and easier training, but both animal and master get upset if something happens to the other.
+
+		Endo bond chance - The chance, per vore-tick, for an animal and a humanoid involved in endo-vore to form a bond. Works on wild animals, and will tame them.
+
+		Predator bonding - Endo bonding will only work if the animal is prey, unless this setting is true.
+
+		Dom-bonding - Endo bonding will only work for non-forced vore, unless this setting is true.
+
+		Voraphile bonds - Makes bonded animals choose their bond for play predding more often, and makes bonds always accept vore proposals.
+
+	Cheaty stuff - 
+		No bleed out - Caps the Bloodloss hediff to 90%. Prey can still be killed by it indirectly, due to it lowering consciousness. Great for healing vore.
+
+		Staunch bleeding - Lowers the bleeding rate of a prey's wounds gradualy while endo-vored. Does not tend wounds.
+
+		No extreme temps - Caps both the heat stroke and hypothermia hediffs to 30%. Any stronger, and they start affecting consciousness, and inficting frostbite.
+
+		Curaga Vore - Triples the effectiveness of healing vore. Note that healing vore still won't tend wounds as well as a doctor with decent medicine.
