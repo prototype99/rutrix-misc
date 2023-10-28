@@ -106,7 +106,7 @@ namespace RV2R_RutsStuff
             if (this.endoThoughts == null || this.endoThoughts.IsInvalid())
                 this.endoThoughts = new BoolSmartSetting("RV2R_Settings_EndoThoughts", true, true, "RV2R_Settings_EndoThoughts_Tip");
             if (this.endoPets == null || this.endoPets.IsInvalid())
-                this.endoPets = new FloatSmartSetting("RV2R_Settings_Pets", 30f, 0f, 0f, 60f, "RV2R_Settings_Pets_Tip", "0.0");
+                this.endoPets = new FloatSmartSetting("RV2R_Settings_Pets", 30f, 30f, 0f, 60f, "RV2R_Settings_Pets_Tip", "0.0");
             if (this.endoPetsJoin == null || this.endoPetsJoin.IsInvalid())
                 this.endoPetsJoin = new BoolSmartSetting("RV2R_Settings_PetRecruitment", true, true, "RV2R_Settings_PetRecruitment_Tip");
 
@@ -122,7 +122,7 @@ namespace RV2R_RutsStuff
             if (this.playVoreChance == null || this.playVoreChance.IsInvalid())
                 this.playVoreChance = new FloatSmartSetting("RV2R_Settings_AnimalRandomNomChance", 24f, 24f, 6f, 168f, "RV2R_Settings_AnimalRandomNomChance_Tip", "0.0");
             if (this.playVoreModifier == null || this.playVoreModifier.IsInvalid())
-                this.playVoreModifier = new FloatSmartSetting("RV2R_Settings_AnimalRandomNomChanceModifier", 25f, 25f, 0f, 400f, "RV2R_Settings_AnimalRandomNomChanceModifier_Tip", "0", "%");
+                this.playVoreModifier = new FloatSmartSetting("RV2R_Settings_AnimalRandomNomChanceModifier", 50f, 50f, 0f, 800f, "RV2R_Settings_AnimalRandomNomChanceModifier_Tip", "0", "%");
             // if (this.playVoreIndescriminate == null || this.playVoreIndescriminate.IsInvalid())
             //     this.playVoreIndescriminate = new BoolSmartSetting("RV2R_Settings_AnimalRandomNomIndiscriminate", false, false, "RV2R_Settings_AnimalRandomNomIndiscriminate_Tip");
             if (this.fatalPlayVore == null || this.fatalPlayVore.IsInvalid())

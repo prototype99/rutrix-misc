@@ -46,7 +46,7 @@ namespace RV2R_RutsStuff
                 if (settings.StopBleeding)
                     foreach (Hediff hediff in __instance.Prey.health.hediffSet.hediffs.Where((Hediff diff) => diff.Bleeding))
                     {
-                        hediff.def.injuryProps.bleedRate *= 0.75f;
+                        hediff.def.injuryProps.bleedRate *= 0.95f;
                         __instance.Prey.health.Notify_HediffChanged(hediff);
                     }
 
@@ -59,7 +59,7 @@ namespace RV2R_RutsStuff
                     if (hyper != null)
                         hyper.Severity = Math.Min(hyper.Severity, 0.29f);
                 }
-                if (settings.EndoPets > 0f && __instance.Prey.IsHumanoid() && __instance.CurrentVoreStage.PassedRareTicks >= Math.Floor(GenDate.TicksPerDay / 100 * settings.EndoPets))
+                if (settings.EndoPets > 0f && __instance.Predator.IsHumanoid() && __instance.Prey.IsHumanoid() && __instance.CurrentVoreStage.PassedRareTicks >= Math.Floor(GenDate.TicksPerDay / 100 * settings.EndoPets))
                 {
                     if (__instance.Prey.relations.GetDirectRelationsCount(RV2R_Common.PetPrey) == 0)
                     {
