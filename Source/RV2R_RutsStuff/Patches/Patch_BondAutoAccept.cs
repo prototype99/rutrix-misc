@@ -18,6 +18,13 @@ namespace RV2R_RutsStuff
                 return false;
             }
 
+            if (target.relations.GetFirstDirectRelationPawn(RV2R_Common.PetPrey) == initiator || target.relations.GetFirstDirectRelationPawn(RV2R_Common.PetPred) == initiator)
+            {
+                RV2Log.Message("Recipiant " + target.LabelShort + " auto accepting proposal due to being endo pet/pred", "Proposals");
+                __result = true;
+                return false;
+            }
+
             return true;
         }
     }

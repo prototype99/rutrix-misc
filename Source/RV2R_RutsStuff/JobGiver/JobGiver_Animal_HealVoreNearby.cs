@@ -33,7 +33,7 @@ namespace RV2R_RutsStuff
                     && !pawn3.IsMechanoid()
                     && (pawn3.Faction == pawn.Faction || pawn3.Faction.PlayerRelationKind != FactionRelationKind.Hostile)
                     && (!pawn3.InBed() || (pawn3.health.summaryHealth.SummaryHealthPercent <= 0.6f && !pawn3.health.HasHediffsNeedingTendByPlayer()))
-                    && (pawn3.health.summaryHealth.SummaryHealthPercent <= 0.6f || pawn3.health.InPainShock)
+                    && ((pawn3.IsAnimal() && pawn3.health.summaryHealth.SummaryHealthPercent <= 0.4f) || pawn3.health.InPainShock)
                     && pawn.CanReserve(pawn3, 1, -1, null, false)
                     && !pawn3.IsForbidden(pawn)
                     && pawn3.CanParticipateInVore(out reason)

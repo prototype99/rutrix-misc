@@ -26,7 +26,7 @@ namespace RV2R_RutsStuff
                         firstHediffOfDef.Severity = Math.Min(firstHediffOfDef.Severity + (0.0135f * settings.EndoSicknessStrength), 1f);
                         if (settings.EndoPacify && firstHediffOfDef.Severity >= 0.95f)
                         {
-                            if (__instance.StruggleManager.shouldStruggle) 
+                            if (__instance.StruggleManager.shouldStruggle)
                                 __instance.StruggleManager.shouldStruggle = false;
                             if (RV2R_Utilities.IsColonyHostile(__instance.Predator, __instance.Prey))
                                 __instance.Prey.guest.SetGuestStatus(__instance.Predator.Faction, GuestStatus.Prisoner);
@@ -42,14 +42,14 @@ namespace RV2R_RutsStuff
                     if (bleedOut != null)
                         bleedOut.Severity = Math.Min(bleedOut.Severity, 0.9f);
                 }
+
                 if (settings.StopBleeding)
-                {
                     foreach (Hediff hediff in __instance.Prey.health.hediffSet.hediffs.Where((Hediff diff) => diff.Bleeding))
                     {
                         hediff.def.injuryProps.bleedRate *= 0.75f;
                         __instance.Prey.health.Notify_HediffChanged(hediff);
                     }
-                }
+
                 if (settings.NoBadTemp)
                 {
                     Hediff hypo = __instance.Prey.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Hypothermia, false);
@@ -59,7 +59,31 @@ namespace RV2R_RutsStuff
                     if (hyper != null)
                         hyper.Severity = Math.Min(hyper.Severity, 0.29f);
                 }
-
+                if (settings.EndoPets > 0f && __instance.Prey.IsHumanoid() && __instance.CurrentVoreStage.PassedRareTicks >= Math.Floor(GenDate.TicksPerDay / 100 * settings.EndoPets))
+                {
+                    if (__instance.Prey.relations.GetDirectRelationsCount(RV2R_Common.PetPrey) == 0)
+                    {
+                        if (settings.EndoPetsJoin && __instance.Predator.Faction.IsPlayer && (__instance.Prey.Faction == null || !__instance.Prey.Faction.IsPlayer))
+                        {
+                            InteractionWorker_RecruitAttempt.DoRecruit(__instance.Predator, __instance.Prey, false);
+                            Messages.Message(new Message("RV2R_PetJoined".Translate(__instance.Prey.LabelShort, __instance.Predator.LabelShort), MessageTypeDefOf.PositiveEvent, new LookTargets(__instance.Prey)), true);
+                        }
+                        Messages.Message(new Message("RV2R_Pet".Translate(__instance.Prey.LabelShort, __instance.Predator.LabelShort), MessageTypeDefOf.PositiveEvent, new LookTargets(__instance.Prey)), true);
+                        __instance.Predator.relations.AddDirectRelation(RV2R_Common.PetPred, __instance.Prey);
+                        __instance.Prey.relations.AddDirectRelation(RV2R_Common.PetPrey, __instance.Predator);
+                    }
+                }
+#if v1_3
+                if (settings.EndoRecruitment && (!__instance.IsForced && __instance.Prey.IsPrisonerOfColony && __instance.Prey.GuestStatus == GuestStatus.Prisoner))
+                    if (__instance.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.ReduceResistance
+                     || __instance.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.AttemptRecruit)
+                        __instance.Prey.guest.resistance = Math.Max(0.0f, __instance.Prey.guest.resistance -= Rand.Range(0.00f, 0.01f));
+#else
+                if (settings.EndoRecruitment && (!__instance.IsForced && __instance.Prey.IsPrisonerOfColony && __instance.Prey.GuestStatus == GuestStatus.Prisoner) && __instance.Prey.guest.Recruitable)
+                    if (__instance.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.ReduceResistance
+                     || __instance.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.AttemptRecruit)
+                        __instance.Prey.guest.resistance = Math.Max(0.0f, __instance.Prey.guest.resistance -= Rand.Range(0.00f, 0.01f));
+#endif
                 if (settings.RegressionStrength > 0f
                  && __instance.CurrentVoreStage.def.displayPartName == "womb"
                  && __instance.Prey.ageTracker.AgeBiologicalTicks > __instance.Prey.ageTracker.AdultMinAgeTicks)
@@ -150,7 +174,6 @@ namespace RV2R_RutsStuff
                      && (validSetup || !settings.PreyOnlyEndoBond)
                      && (!__instance.IsForced || !settings.WillingOnlyEndoBond)
                      && animal.relations.GetDirectRelationsCount(PawnRelationDefOf.Bond, null) == 0)
-                    {
                         if (Rand.Chance(settings.EndoBondChance))
                         {
                             if (animal.Faction == null)
@@ -160,7 +183,7 @@ namespace RV2R_RutsStuff
                             animal.training.Train(TrainableDefOf.Tameness, humanoid, true);
                             animal.training.Train(TrainableDefOf.Obedience, humanoid, true);
                         }
-                    }
+
                 }
             }
         }

@@ -9,6 +9,7 @@ namespace RV2R_RutsStuff
 
         private BoolSmartSetting sizedEncumberance;
         private FloatSmartSetting encumberanceModifier;
+        private BoolSmartSetting visibleEncumberance;
         private FloatSmartSetting encumberanceCap;
 
         private FloatSmartSetting endoSicknessStrength;
@@ -16,13 +17,14 @@ namespace RV2R_RutsStuff
         private FloatSmartSetting regressionStrength;
         private BoolSmartSetting chronicCure;
 
-        // private FloatSmartSetting endoPets;
-        // private BoolSmartSetting endoPetsJoin;
+        private BoolSmartSetting endoThoughts;
+        private FloatSmartSetting endoPets;
+        private BoolSmartSetting endoPetsJoin;
 
         private BoolSmartSetting endoCapture;
         private BoolSmartSetting insectoidCapture;
         private BoolSmartSetting scariaCapture;
-        // private BoolSmartSetting endoRecruitment;
+        private BoolSmartSetting endoRecruitment;
 
         //private FloatSmartSetting fodderChance;
         //private BoolSmartSetting fodderAnimalsAllowed;
@@ -49,6 +51,7 @@ namespace RV2R_RutsStuff
 
         public bool SizedEncumberance => this.sizedEncumberance.value;
         public float EncumberanceModifier => this.encumberanceModifier.value / 100f;
+        public bool VisibleEncumberance => this.visibleEncumberance.value;
         public float EncumberanceCap => this.encumberanceCap.value / 100f;
 
         public float EndoSicknessStrength => this.endoSicknessStrength.value / 100f;
@@ -56,9 +59,14 @@ namespace RV2R_RutsStuff
         public float RegressionStrength => this.regressionStrength.value / 100f;
         public bool ChronicCure => this.chronicCure.value;
 
+        public bool EndoThoughts => this.endoThoughts.value;
+        public float EndoPets => this.endoPets.value;
+        public bool EndoPetsJoin => this.endoPetsJoin.value;
+
         public bool EndoCapture => this.endoCapture.value;
         public bool InsectoidCapture => this.insectoidCapture.value;
         public bool ScariaCapture => this.scariaCapture.value;
+        public bool EndoRecruitment => this.endoRecruitment.value;
 
         public float PlayVoreChance => this.playVoreChance.value;
         public float PlayVoreModifier => this.playVoreModifier.value;
@@ -81,6 +89,8 @@ namespace RV2R_RutsStuff
                 this.sizedEncumberance = new BoolSmartSetting("RV2R_Settings_SizedEncumberance", true, true, "RV2R_Settings_SizedEncumberance_Tip");
             if (this.encumberanceModifier == null || this.encumberanceModifier.IsInvalid())
                 this.encumberanceModifier = new FloatSmartSetting("RV2R_Settings_EncumberanceModifier", 100f, 100f, 0f, 400f, "RV2R_Settings_EncumberanceModifier_Tip", "0", "%");
+            if (this.visibleEncumberance == null || this.visibleEncumberance.IsInvalid())
+                this.visibleEncumberance = new BoolSmartSetting("RV2R_Settings_EncumberanceVisible", true, true, "RV2R_Settings_EncumberanceVisible_Tip");
             //   if (this.encumberanceCap == null || this.encumberanceCap.IsInvalid())
             //       this.encumberanceCap = new FloatSmartSetting("RV2R_Settings_EncumberanceCap", 100f, 100f, 0f, 100f, "RV2R_Settings_EncumberanceCap_Tip", "0", "%");
 
@@ -93,12 +103,21 @@ namespace RV2R_RutsStuff
             if (this.chronicCure == null || this.chronicCure.IsInvalid())
                 this.chronicCure = new BoolSmartSetting("RV2R_Settings_AgeRegressionCure", true, true, "RV2R_Settings_AgeRegressionCure_Tip");
 
+            if (this.endoThoughts == null || this.endoThoughts.IsInvalid())
+                this.endoThoughts = new BoolSmartSetting("RV2R_Settings_EndoThoughts", true, true, "RV2R_Settings_EndoThoughts_Tip");
+            if (this.endoPets == null || this.endoPets.IsInvalid())
+                this.endoPets = new FloatSmartSetting("RV2R_Settings_Pets", 30f, 0f, 0f, 60f, "RV2R_Settings_Pets_Tip", "0.0");
+            if (this.endoPetsJoin == null || this.endoPetsJoin.IsInvalid())
+                this.endoPetsJoin = new BoolSmartSetting("RV2R_Settings_PetRecruitment", true, true, "RV2R_Settings_PetRecruitment_Tip");
+
             if (this.endoCapture == null || this.endoCapture.IsInvalid())
                 this.endoCapture = new BoolSmartSetting("RV2R_Settings_EndoCapture", true, true, "RV2R_Settings_EndoCapture_Tip");
             if (this.insectoidCapture == null || this.insectoidCapture.IsInvalid())
                 this.insectoidCapture = new BoolSmartSetting("RV2R_Settings_EndoCapture_Insectoids", false, false, "RV2R_Settings_EndoCapture_Insectoids_Tip");
             if (this.scariaCapture == null || this.scariaCapture.IsInvalid())
                 this.scariaCapture = new BoolSmartSetting("RV2R_Settings_EndoCapture_Scaria", false, false, "RV2R_Settings_EndoCapture_Scaria_Tip");
+            if (this.endoRecruitment == null || this.endoRecruitment.IsInvalid())
+                this.endoRecruitment = new BoolSmartSetting("RV2R_Settings_EndoCapture_Recruitment", false, false, "RV2R_Settings_EndoCapture_Recruitment_Tip");
 
             if (this.playVoreChance == null || this.playVoreChance.IsInvalid())
                 this.playVoreChance = new FloatSmartSetting("RV2R_Settings_AnimalRandomNomChance", 24f, 24f, 6f, 168f, "RV2R_Settings_AnimalRandomNomChance_Tip", "0.0");
@@ -139,14 +158,19 @@ namespace RV2R_RutsStuff
         {
             this.sizedEncumberance = null;
             this.encumberanceModifier = null;
+            this.visibleEncumberance = null;
             //   this.encumberanceCap = null;
             this.endoSicknessStrength = null;
             this.endoPacify = null;
             this.regressionStrength = null;
             this.chronicCure = null;
+            this.endoThoughts = null;
+            this.endoPets = null;
+            this.endoPetsJoin = null;
             this.endoCapture = null;
             this.insectoidCapture = null;
             this.scariaCapture = null;
+            this.endoRecruitment = null;
             this.playVoreChance = null;
             this.playVoreModifier = null;
             //this.playVoreIndescriminate = null;
@@ -171,6 +195,9 @@ namespace RV2R_RutsStuff
             listing_Standard.Gap(12f);
             this.sizedEncumberance.DoSetting(listing_Standard);
             this.encumberanceModifier.DoSetting(listing_Standard);
+            this.visibleEncumberance.DoSetting(listing_Standard);
+            listing_Standard.Gap(6f);
+            listing_Standard.Label("RV2R_Settings_EncumberanceTurnOff".Translate());
             //   this.encumberanceCap.DoSetting(listing_Standard);
             listing_Standard.Gap(18f);
             listing_Standard.Label("RV2R_Tick_Section".Translate());
@@ -179,12 +206,17 @@ namespace RV2R_RutsStuff
             this.endoPacify.DoSetting(listing_Standard);
             this.regressionStrength.DoSetting(listing_Standard);
             this.chronicCure.DoSetting(listing_Standard);
+            listing_Standard.Gap(8f);
+            this.endoThoughts.DoSetting(listing_Standard);
+            this.endoPets.DoSetting(listing_Standard);
+            this.endoPetsJoin.DoSetting(listing_Standard);
             listing_Standard.Gap(18f);
             listing_Standard.Label("RV2R_Capture_Section".Translate());
             listing_Standard.Gap(12f);
             this.endoCapture.DoSetting(listing_Standard);
             this.insectoidCapture.DoSetting(listing_Standard);
             this.scariaCapture.DoSetting(listing_Standard);
+            this.endoRecruitment.DoSetting(listing_Standard);
             listing_Standard.Gap(18f);
             listing_Standard.Label("RV2R_AnimalNom_Section".Translate());
             listing_Standard.Gap(12f);
@@ -206,7 +238,7 @@ namespace RV2R_RutsStuff
             this.stopBleeding.DoSetting(listing_Standard);
             this.noBadTemp.DoSetting(listing_Standard);
             this.curagaVore.DoSetting(listing_Standard);
-            listing_Standard.Gap(72f);
+            listing_Standard.Gap(108f);
             listing_Standard.Label("RV2R_FuckUnity".Translate());
             listing_Standard.EndScrollView(ref this.height, ref this.heightStale);
         }
@@ -217,14 +249,19 @@ namespace RV2R_RutsStuff
 
             Scribe_Deep.Look<BoolSmartSetting>(ref this.sizedEncumberance, "sizedEncumberance", new object[0]);
             Scribe_Deep.Look<FloatSmartSetting>(ref this.encumberanceModifier, "encumberanceModifier", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.visibleEncumberance, "visibleEncumberance", new object[0]);
             //   Scribe_Deep.Look<FloatSmartSetting>(ref this.encumberanceCap, "encumberanceCap", new object[0]);
             Scribe_Deep.Look<FloatSmartSetting>(ref this.endoSicknessStrength, "endoSicknessStrength", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.endoPacify, "endoPacify", new object[0]);
             Scribe_Deep.Look<FloatSmartSetting>(ref this.regressionStrength, "regressionStrength", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.chronicCure, "chronicCure", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.endoThoughts, "endoThoughts", new object[0]);
+            Scribe_Deep.Look<FloatSmartSetting>(ref this.endoPets, "endoPets", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.endoPetsJoin, "endoPetsJoin", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.endoCapture, "endoCapture", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.insectoidCapture, "insectoidCapture", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.scariaCapture, "scariaCapture", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.endoRecruitment, "endoRecruitment", new object[0]);
             Scribe_Deep.Look<FloatSmartSetting>(ref this.playVoreChance, "playVoreChance", new object[0]);
             //    Scribe_Deep.Look<BoolSmartSetting>(ref this.playVoreIndescriminate, "playVoreIndescriminate", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.fatalPlayVore, "fatalPlayVore", new object[0]);

@@ -33,7 +33,8 @@ namespace RV2R_RutsStuff
             {
                 Pawn bond = pawn.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Bond);
                 if (bond != null
-                 && !GenAI.EnemyIsNear(pawn, 25f)
+                 && !bond.Drafted
+                && !GenAI.EnemyIsNear(pawn, 25f)
                  && !RV2R_Utilities.IsBusy(pawn, bond)
                  && pawn.Position.DistanceTo(bond.Position) < radius
                  && pawn.CanReserve(bond, 1, -1, null, false)
@@ -50,7 +51,7 @@ namespace RV2R_RutsStuff
                     return pawn3 != pawn
                         && !pawn3.Drafted
                         && !GenAI.InDangerousCombat(pawn3)
-                        && (pawn3.Faction == pawn.Faction || pawn3.Faction.PlayerRelationKind != FactionRelationKind.Hostile)
+                        && !pawn3.HostileTo(pawn)
                         && pawn.CanReserve(pawn3, 1, -1, null, false)
                         && !pawn3.IsForbidden(pawn)
                         && !GenAI.EnemyIsNear(pawn, radius)

@@ -54,7 +54,7 @@ namespace RV2R_RutsStuff
             return false;
         }
 
-        static public bool ShouldBandaid(Pawn pred, Pawn prey)
+        static public bool ShouldBandaid(Pawn pred, Pawn prey) // I'm working on it
         {
 #if v1_3
             return false;

@@ -1,4 +1,4 @@
-using RimVore2;
+﻿using RimVore2;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -13,6 +13,9 @@ namespace RV2R_RutsStuff
         {
             get
             {
+                if (RV2_Rut_Settings.rutsStuff.EncumberanceModifier <= 0.0f)
+                    return 0f;
+
                 this.severityInt = 0f;
                 float totalWeight = 0f;
                 int totalPrey = 0;
@@ -21,14 +24,14 @@ namespace RV2R_RutsStuff
                 if (this.pawn.IsActivePredator())
                 {
                     PawnData pawnData2 = this.pawn.PawnData(false);
-                    RV2Log.Message("Encumberance: checking " + this.pawn.ToString(), "Encumberance");
+                    //RV2Log.Message("Encumberance: checking " + this.pawn.ToString(), "Encumberance");
                     if (pawnData2 != null)
                     {
                         VoreTracker voreTracker = pawnData2.VoreTracker;
                         if (voreTracker != null)
                             foreach (VoreTrackerRecord voreTrackerRecord in voreTracker.VoreTrackerRecords)
                             {
-                                RV2Log.Message("Encumberance: found prey " + voreTrackerRecord.Prey.ToString(), "Encumberance");
+                                //RV2Log.Message("Encumberance: found prey " + voreTrackerRecord.Prey.ToString(), "Encumberance");
                                 float preyMod = 1f;
                                 if (voreTrackerRecord.CurrentVoreStage.def.partName == "tail"
                                  || voreTrackerRecord.VoreType.defName == "Cock"
@@ -40,7 +43,7 @@ namespace RV2R_RutsStuff
 
                                 totalWeight += voreTrackerRecord.Prey.BodySize * preyMod;
                                 totalPrey += 1;
-                                RV2Log.Message("Encumberance: added " + (voreTrackerRecord.Prey.BodySize * preyMod).ToString(), "Encumberance");
+                                //RV2Log.Message("Encumberance: added " + (voreTrackerRecord.Prey.BodySize * preyMod).ToString(), "Encumberance");
                                 if (voreTrackerRecord.Prey.IsActivePredator())
                                 {
                                     pawnData = voreTrackerRecord.Prey.PawnData(false);
@@ -50,11 +53,11 @@ namespace RV2R_RutsStuff
                                     VoreTracker voreTracker2 = voreTrackerRecord.Prey.PawnData(false).VoreTracker;
                                     if (voreTracker2 != null)
                                     {
-                                        RV2Log.Message("Encumberance: prey " + (voreTrackerRecord.Prey.ToString()).ToString() + " has prey, checking", "Encumberance");
+                                        //RV2Log.Message("Encumberance: prey " + (voreTrackerRecord.Prey.ToString()).ToString() + " has prey, checking", "Encumberance");
                                         foreach (VoreTrackerRecord voreTrackerRecord2 in voreTracker2.VoreTrackerRecords.Except(voreTrackerRecord))
                                         {
-                                            RV2Log.Message("Encumberance: found prey " + voreTrackerRecord2.Prey.ToString() + " in prey " + voreTrackerRecord2.Predator.ToString(), "Encumberance");
-                                            RV2Log.Message("Encumberance: added " + (voreTrackerRecord2.Prey.BodySize).ToString(), "Encumberance");
+                                            //RV2Log.Message("Encumberance: found prey " + voreTrackerRecord2.Prey.ToString() + " in prey " + voreTrackerRecord2.Predator.ToString(), "Encumberance");
+                                            //RV2Log.Message("Encumberance: added " + (voreTrackerRecord2.Prey.BodySize).ToString(), "Encumberance");
                                             totalWeight += voreTrackerRecord2.Prey.BodySize;
                                             totalPrey += 1;
                                         }
@@ -62,24 +65,24 @@ namespace RV2R_RutsStuff
                                 }
                             }
 
-                        RV2Log.Message("Encumberance: found total weight " + totalWeight.ToString(), "Encumberance");
-                        RV2Log.Message("Encumberance: found total prey " + totalPrey.ToString(), "Encumberance");
+                        //RV2Log.Message("Encumberance: found total weight " + totalWeight.ToString(), "Encumberance");
+                        //RV2Log.Message("Encumberance: found total prey " + totalPrey.ToString(), "Encumberance");
                     }
                 }
                 if (totalWeight > 0f && totalPrey > 0)
                 {
                     if (RV2_Rut_Settings.rutsStuff.SizedEncumberance)
                     {
-                        RV2Log.Message("Encumberance: doing fancy weight for " + this.pawn.ToString() + ":  (preyweight)" + totalWeight.ToString() + " / (predsize)" + this.pawn.BodySize + " / 4 * (settings,quirks)" + (RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod).ToString(), "Encumberance");
+                        //RV2Log.Message("Encumberance: doing fancy weight for " + this.pawn.ToString() + ":  (preyweight)" + totalWeight.ToString() + " / (predsize)" + this.pawn.BodySize + " / 4 * (settings,quirks)" + (RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod).ToString(), "Encumberance");
                         this.severityInt = Math.Min(totalWeight / Math.Max(this.pawn.BodySize, 0.01f) / 4f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, 1f);
                     }
                     else
                     {
-                        RV2Log.Message("Encumberance: doing simple weight for " + this.pawn.ToString() + ":  (totalprey)" + totalPrey.ToString() + "/ 4 * (settings,quirks)" + (RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod).ToString(), "Encumberance");
+                        //RV2Log.Message("Encumberance: doing simple weight for " + this.pawn.ToString() + ":  (totalprey)" + totalPrey.ToString() + "/ 4 * (settings,quirks)" + (RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod).ToString(), "Encumberance");
                         this.severityInt = Math.Min(totalPrey / 4f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, 1f);
                     }
 
-                    RV2Log.Message("Encumberance: severity set to " + this.severityInt.ToString(), "Encumberance");
+                    //RV2Log.Message("Encumberance: severity set to " + this.severityInt.ToString(), "Encumberance");
                 }
                 return this.severityInt;
             }
@@ -93,7 +96,15 @@ namespace RV2R_RutsStuff
             }
         }
 
-        public override bool Visible => false;
+        public override bool Visible
+        {
+            get
+            {
+                if (this.Severity > 0.05f && RV2_Rut_Settings.rutsStuff.VisibleEncumberance)
+                    return true;
+                return false;
+            }
+        }
 
         public List<VoreTrackerRecord> ConnectedVoreRecords = new List<VoreTrackerRecord>();
     }

@@ -28,50 +28,53 @@ namespace RV2R_RutsStuff
             if (GenAI.InDangerousCombat(pawn))
                 return null;
 
+            if (!RV2_Rut_Settings.rutsStuff.EndoCapture)
+                return null;
+
             Predicate<Thing> predicate = delegate (Thing t)
             {
-                Pawn pawn3 = (Pawn)t;
-                return pawn3.Downed
-                    && !pawn3.IsMechanoid()
-                    && !pawn3.IsPrisonerOfColony
-                    && pawn.CanReserve(pawn3, 1, -1, null, false)
-                    && !pawn3.IsForbidden(pawn)
+                Pawn target = (Pawn)t;
+                return target.Downed
+                    && !target.IsMechanoid()
+                    && !target.IsPrisonerOfColony
+                    && pawn.CanReserve(target, 1, -1, null, false)
+                    && !target.IsForbidden(pawn)
                     && !pawn.ShouldBeSlaughtered()
-                    && pawn3.CanParticipateInVore(out reason)
-                    && pawn.CanVore(pawn3, out reason)
+                    && target.CanParticipateInVore(out reason)
+                    && pawn.CanVore(target, out reason)
                     && !GenAI.EnemyIsNear(pawn, radius)
-                    && pawn3.Faction != pawn.Faction
-                    && (pawn3.Faction == null || pawn3.Faction.PlayerRelationKind == FactionRelationKind.Hostile);
+                    && target.Faction != pawn.Faction
+                    && (target.HostileTo(pawn));
             };
-            Pawn pawn2 = (Pawn)GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForGroup(ThingRequestGroup.Pawn), PathEndMode.OnCell, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false, false, false), this.radius, predicate, null, 0, -1, false, RegionType.Set_Passable, false);
-            if (pawn2 == null)
+            Pawn prey = (Pawn)GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForGroup(ThingRequestGroup.Pawn), PathEndMode.OnCell, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false, false, false), this.radius, predicate, null, 0, -1, false, RegionType.Set_Passable, false);
+            if (prey == null)
                 return null;
 
             List<VoreGoalDef> list = DefDatabase<VoreGoalDef>.AllDefsListForReading.Where((VoreGoalDef goal) => goal.IsLethal).ToList();
 
-            IEnumerable<VorePathDef> interaction = VoreInteractionManager.Retrieve(new VoreInteractionRequest(pawn, pawn2, VoreRole.Predator, true, false, false, null, null, null, null, list, null, null, null)).ValidPaths;
+            IEnumerable<VorePathDef> interaction = VoreInteractionManager.Retrieve(new VoreInteractionRequest(pawn, prey, VoreRole.Predator, true, false, false, null, null, null, null, list, null, null, null)).ValidPaths;
 
             if (!interaction.EnumerableNullOrEmpty<VorePathDef>())
             {
                 VorePathDef vorePathDef = interaction.RandomElement<VorePathDef>();
                 RV2Log.Message("Eating hostile " + vorePathDef.label + " via " + vorePathDef.ToString(), "Jobs");
-                VoreJob voreJob = VoreJobMaker.MakeJob(VoreJobDefOf.RV2_VoreInitAsPredator, pawn2);
-                voreJob.targetA = pawn2;
+                VoreJob voreJob = VoreJobMaker.MakeJob(VoreJobDefOf.RV2_VoreInitAsPredator, prey);
+                voreJob.targetA = prey;
                 voreJob.VorePath = vorePathDef;
                 voreJob.Initiator = pawn;
                 voreJob.count = 1;
                 return voreJob;
             }
             if (!RV2_Rut_Settings.rutsStuff.EndoCapture
-             || (pawn2.IsInsectoid() && (!RV2_Rut_Settings.rutsStuff.InsectoidCapture || pawn.Map.designationManager.DesignationOn(pawn2, DesignationDefOf.Tame) == null))
-             || (pawn2.IsAnimal() && (pawn.Map.designationManager.DesignationOn(pawn2, DesignationDefOf.Tame) == null || !RV2_Rut_Settings.rutsStuff.ScariaCapture)))
+             || (!prey.IsHumanoid() && prey.IsInsectoid() && (!RV2_Rut_Settings.rutsStuff.InsectoidCapture || pawn.Map.designationManager.DesignationOn(prey, DesignationDefOf.Tame) == null))
+             || (prey.IsAnimal() && (pawn.Map.designationManager.DesignationOn(prey, DesignationDefOf.Tame) == null || (pawn.MentalState?.def == MentalStateDefOf.ManhunterPermanent && !RV2_Rut_Settings.rutsStuff.ScariaCapture))))
             {
                 RV2Log.Message("Predator " + pawn.LabelShort + " can't fatal vore or capture enemy", "Jobs");
                 return null;
             }
             RV2Log.Message("Predator " + pawn.LabelShort + " can't fatal vore enemy; checking for healing instead", "Jobs");
             list = new List<VoreGoalDef> { VoreGoalDefOf.Heal };
-            interaction = VoreInteractionManager.Retrieve(new VoreInteractionRequest(pawn, pawn2, VoreRole.Predator, true, false, false, null, null, null, null, list, null, null, null)).ValidPaths;
+            interaction = VoreInteractionManager.Retrieve(new VoreInteractionRequest(pawn, prey, VoreRole.Predator, true, false, false, null, null, null, null, list, null, null, null)).ValidPaths;
             if (interaction.EnumerableNullOrEmpty<VorePathDef>())
             {
                 RV2Log.Message("Predator " + pawn.LabelShort + " can't heal vore enemy, no predation", "Jobs");
@@ -79,8 +82,8 @@ namespace RV2R_RutsStuff
             }
             VorePathDef vorePathDef2 = interaction.RandomElement<VorePathDef>();
             RV2Log.Message("Capturing hostile " + vorePathDef2.label + " via " + vorePathDef2.ToString(), "Jobs");
-            VoreJob voreJob2 = VoreJobMaker.MakeJob(VoreJobDefOf.RV2_VoreInitAsPredator, pawn2);
-            voreJob2.targetA = pawn2;
+            VoreJob voreJob2 = VoreJobMaker.MakeJob(VoreJobDefOf.RV2_VoreInitAsPredator, prey);
+            voreJob2.targetA = prey;
             voreJob2.VorePath = vorePathDef2;
             voreJob2.Initiator = pawn;
             voreJob2.count = 1;

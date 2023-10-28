@@ -1,10 +1,4 @@
 ﻿using RimVore2;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 using Verse.AI;
 using static RV2R_RutsStuff.Patch_RV2R_Settings;
@@ -18,9 +12,13 @@ namespace RV2R_RutsStuff
         {
             float preyMod = 1f;
 
+            if (Pawn.training != null && Pawn.training.GetWanted(RV2R_Common.PlayVore))
+                return -1f;
+            //if (RV2_Rut_Settings.rutsStuff.PlayVoreNamedBoost && !Pawn.Name?.Numerical)
+            //  mtbHours /= 2f;
             if (Pawn.IsActivePredator())
             {
-                PawnData pawnData2 = Pawn.PawnData(true);
+                PawnData pawnData2 = Pawn.PawnData(false);
                 if (pawnData2 != null)
                 {
                     VoreTracker voreTracker = pawnData2.VoreTracker;

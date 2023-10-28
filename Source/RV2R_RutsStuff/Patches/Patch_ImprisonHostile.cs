@@ -30,6 +30,8 @@ namespace RV2R_RutsStuff
                         record.Prey.health.RemoveHediff(record.Prey.health.hediffSet.GetFirstHediffOfDef(rabies.def, false));
                 }
 
+                Faction blackHive = Find.FactionManager.FirstFactionOfDef(FactionDef.Named("AA_BlackHive")) ?? null;  //This is how VAE does it, so /shrug
+
                 if (RV2_Rut_Settings.rutsStuff.EndoCapture
                  && record.Prey.Downed
                  && record.Predator.Faction != null
@@ -42,7 +44,8 @@ namespace RV2R_RutsStuff
                         record.Prey.guest.SetGuestStatus(record.Predator.Faction, GuestStatus.Prisoner);
                     if (RV2_Rut_Settings.rutsStuff.InsectoidCapture
                      && record.Prey.IsInsectoid()
-                     && record.Prey.Faction.def == FactionDefOf.Insect)
+                     && (record.Prey.Faction.def == FactionDefOf.Insect
+                        || (blackHive != null && record.Prey.Faction == blackHive)))
                         record.Prey.SetFaction(null, null);
                 }
             }
