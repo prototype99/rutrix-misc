@@ -198,12 +198,12 @@
   <RimVore2.QuirkDef>
     <defName>RV2R_GoalPreference_Prey_Drain_Neutral</defName>
     <label>Phagic ambivalence</label>
-    <description>$pName doesn't really care one way or the other about getting churned up.</description>
+    <description>[PAWN_label] doesn't really care one way or the other about getting churned up.</description>
     <hidden>true</hidden>
     <rarity>Common</rarity>
   </RimVore2.QuirkDef>
   <RimVore2.QuirkDef>
-    <defName>GoalPreference_Prey_Drain_Dislikes</defName>
+    <defName>RV2R_GoalPreference_Prey_Drain_Dislikes</defName>
     <label>Phagic aversion</label>
     <description>[PAWN_label] dislikes being a safe snack. Maybe it's trust, maybe it's not wanting to feel that weak.</description>
     <hidden>false</hidden>
