@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <RimVore2.QuirkDef>
+    <defName>RV2R_Enablers_Core_Goal_Drain</defName>
+    <label>Parasitic enzymes</label>
+    <description>[PAWN_label] has specialized parasitic enzymes allowing for the non-fatal draining of prey.</description>
+    <rarity>Rare</rarity>
+    <comps>
+      <li Class="RimVore2.QuirkComp_VoreEnabler">
+        <selector>
+          <voreGoal>RV2R_Drain</voreGoal>
+        </selector>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  
+  <RimVore2.QuirkPoolDef>
+    <defName>RV2R_GoalPreference_Predator_Drain</defName>
+    <label>Predatory goal preference (drain)</label>
+    <category>Goal Preference</category>
+    <description>These quirks determine how much a pawn likes non-fataly draining prey. At the extremes, the pawn will either never or always try to drain prey.</description>
+    <generationOrder>2</generationOrder>
+    <poolType>PickOne</poolType>
+    <quirks>
+      <li>RV2R_GoalPreference_Predator_Drain_Obsessed</li>
+      <li>RV2R_GoalPreference_Predator_Drain_Likes</li>
+      <li>RV2R_GoalPreference_Predator_Drain_Neutral</li>
+      <li>RV2R_GoalPreference_Predator_Drain_Dislikes</li>
+      <li>RV2R_GoalPreference_Predator_Drain_Refuses</li>
+    </quirks>
+    <blockingQuirks>
+      <li>PredatorDisposition_Refuses</li>
+    </blockingQuirks>
+  </RimVore2.QuirkPoolDef>
+
+  <RimVore2.QuirkDef>
+    <defName>RV2R_GoalPreference_Predator_Drain_Obsessed</defName>
+    <label>Obsessive parasite</label>
+    <description>As an obsessive parasite, [PAWN_label] loves harmlessly churning up prey. Nothing like getting to enjoy a meal more than once!</description>
+    <rarity>Rare</rarity>
+    <comps>
+      <li Class="RimVore2.QuirkComp_VoreTargetSelectorModifier">
+        <selectors>
+          <voreGoal>RV2R_Drain</voreGoal>
+          <role>Predator</role>
+        </selectors>
+        <modifierValue>99</modifierValue>
+      </li>
+      <li Class="RimVore2.QuirkComp_PostVoreMemory">
+        <keywords>
+          <li>PawnIsPredator</li>
+          <li>VoreGoal_Drain</li>
+        </keywords>
+        <memory>RV2R_GoalPreferenceQuirkSatisfaction_Drain_Predator_VeryGood</memory>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>RV2R_GoalPreference_Predator_Drain_Likes</defName>
+    <label>Predatory parasite</label>
+    <description>As a predatory parasite, [PAWN_label] likes to churn up prey. A full belly with no consequences is always good.</description>
+    <rarity>Uncommon</rarity>
+    <comps>
+      <li Class="RimVore2.QuirkComp_VoreTargetSelectorModifier">
+        <selectors>
+          <voreGoal>RV2R_Drain</voreGoal>
+          <role>Predator</role>
+        </selectors>
+        <modifierValue>2</modifierValue>
+      </li>
+      <li Class="RimVore2.QuirkComp_PostVoreMemory">
+        <keywords>
+          <li>PawnIsPredator</li>
+          <li>VoreGoal_Drain</li>
+        </keywords>
+        <memory>RV2R_GoalPreferenceQuirkSatisfaction_Drain_Predator_Good</memory>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>RV2R_GoalPreference_Predator_Drain_Neutral</defName>
+    <label>Parisitic ambivalence</label>
+    <description>[PAWN_label] doesn't really care one way or the other about churning up prey.</description>
+    <hidden>true</hidden>
+    <rarity>Common</rarity>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>RV2R_GoalPreference_Predator_Drain_Dislikes</defName>
+    <label>Parisitic aversion</label>
+    <description>[PAWN_label] dislikes churning up prey. They either don't trust themselves, or just don't like seeing friends as reusable meals.</description>
+    <hidden>false</hidden>
+    <rarity>Uncommon</rarity>
+    <comps>
+      <li Class="RimVore2.QuirkComp_VoreTargetSelectorModifier">
+        <selectors>
+          <voreGoal>RV2R_Drain</voreGoal>
+          <role>Predator</role>
+        </selectors>
+        <modifierValue>-2</modifierValue>
+      </li>
+      <li Class="RimVore2.QuirkComp_PostVoreMemory">
+        <keywords>
+          <li>PawnIsPredator</li>
+          <li>VoreGoal_Drain</li>
+        </keywords>
+        <memory>RV2R_GoalPreferenceQuirkSatisfaction_Drain_Predator_Bad</memory>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>RV2R_GoalPreference_Predator_Drain_Refuses</defName>
+    <label>Parisitic disgust</label>
+    <description>[PAWN_label] hates churning up prey. Food shouldn't hold a grudge.</description>
+    <hidden>false</hidden>
+    <rarity>Rare</rarity>
+    <comps>
+      <li Class="RimVore2.QuirkComp_VoreTargetSelectorModifier">
+        <selectors>
+          <voreGoal>RV2R_Drain</voreGoal>
+          <role>Predator</role>
+        </selectors>
+        <modifierValue>-99</modifierValue>
+      </li>
+      <li Class="RimVore2.QuirkComp_PostVoreMemory">
+        <keywords>
+          <li>PawnIsPredator</li>
+          <li>VoreGoal_Drain</li>
+        </keywords>
+        <memory>RV2R_GoalPreferenceQuirkSatisfaction_Drain_Predator_VeryBad</memory>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef> 
+  
+  <RimVore2.QuirkPoolDef>
+    <defName>RV2R_GoalPreference_Prey_Drain</defName>
+    <label>Preyish goal preference (drain)</label>
+    <category>Goal Preference</category>
+    <description>These quirks determine how much a pawn likes being non-fataly drained. At the extremes, the pawn will either never or always agree to be drained.</description>
+    <generationOrder>2</generationOrder>
+    <poolType>PickOne</poolType>
+    <quirks>
+      <li>RV2R_GoalPreference_Prey_Drain_Obsessed</li>
+      <li>RV2R_GoalPreference_Prey_Drain_Likes</li>
+      <li>RV2R_GoalPreference_Prey_Drain_Neutral</li>
+      <li>RV2R_GoalPreference_Prey_Drain_Dislikes</li>
+      <li>RV2R_GoalPreference_Prey_Drain_Refuses</li>
+    </quirks>
+    <blockingQuirks>
+      <li>PreyDisposition_Refuses</li>
+    </blockingQuirks>
+  </RimVore2.QuirkPoolDef>
+
+  <RimVore2.QuirkDef>
+    <defName>RV2R_GoalPreference_Prey_Drain_Obsessed</defName>
+    <label>Obsessive phagophile</label>
+    <description>As an obsessive phagophile, [PAWN_label] loves being a reusable snack for preds. Keep an eye out for them at dinnertime!</description>
+    <rarity>Rare</rarity>
+    <comps>
+      <li Class="RimVore2.QuirkComp_VoreTargetSelectorModifier">
+        <selectors>
+          <voreGoal>RV2R_Drain</voreGoal>
+          <role>Prey</role>
+        </selectors>
+        <modifierValue>99</modifierValue>
+      </li>
+      <li Class="RimVore2.QuirkComp_PostVoreMemory">
+        <keywords>
+          <li>PawnIsPrey</li>
+          <li>VoreGoal_Drain</li>
+        </keywords>
+        <memory>RV2R_GoalPreferenceQuirkSatisfaction_Drain_Prey_VeryGood</memory>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>RV2R_GoalPreference_Prey_Drain_Likes</defName>
+    <label>Phagophile</label>
+    <description>[PAWN_label] likes to be churned up. No better way to help out your friends!</description>
+    <rarity>Uncommon</rarity>
+    <comps>
+      <li Class="RimVore2.QuirkComp_VoreTargetSelectorModifier">
+        <selectors>
+          <voreGoal>RV2R_Drain</voreGoal>
+          <role>Prey</role>
+        </selectors>
+        <modifierValue>2</modifierValue>
+      </li>
+      <li Class="RimVore2.QuirkComp_PostVoreMemory">
+        <keywords>
+          <li>PawnIsPrey</li>
+          <li>VoreGoal_Drain</li>
+        </keywords>
+        <memory>RV2R_GoalPreferenceQuirkSatisfaction_Drain_Prey_Good</memory>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>RV2R_GoalPreference_Prey_Drain_Neutral</defName>
+    <label>Phagic ambivalence</label>
+    <description>$pName doesn't really care one way or the other about getting churned up.</description>
+    <hidden>true</hidden>
+    <rarity>Common</rarity>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>GoalPreference_Prey_Drain_Dislikes</defName>
+    <label>Phagic aversion</label>
+    <description>[PAWN_label] dislikes being a safe snack. Maybe it's trust, maybe it's not wanting to feel that weak.</description>
+    <hidden>false</hidden>
+    <rarity>Uncommon</rarity>
+    <comps>
+      <li Class="RimVore2.QuirkComp_VoreTargetSelectorModifier">
+        <selectors>
+          <voreGoal>RV2R_Drain</voreGoal>
+          <role>Prey</role>
+        </selectors>
+        <modifierValue>-2</modifierValue>
+      </li>
+      <li Class="RimVore2.QuirkComp_PostVoreMemory">
+        <keywords>
+          <li>PawnIsPrey</li>
+          <li>VoreGoal_Drain</li>
+        </keywords>
+        <memory>RV2R_GoalPreferenceQuirkSatisfaction_Drain_Prey_Bad</memory>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>RV2R_GoalPreference_Prey_Drain_Refuses</defName>
+    <label>Phagophobia</label>
+    <description>Of all the things [PAWN_label] considers themselves, "reusable food" is not it.</description>
+    <hidden>false</hidden>
+    <rarity>Rare</rarity>
+    <comps>
+      <li Class="RimVore2.QuirkComp_VoreTargetSelectorModifier">
+        <selectors>
+          <voreGoal>RV2R_Drain</voreGoal>
+          <role>Prey</role>
+        </selectors>
+        <modifierValue>-99</modifierValue>
+      </li>
+      <li Class="RimVore2.QuirkComp_PostVoreMemory">
+        <keywords>
+          <li>PawnIsPrey</li>
+          <li>VoreGoal_Drain</li>
+        </keywords>
+        <memory>RV2R_GoalPreferenceQuirkSatisfaction_Drain_Prey_VeryBad</memory>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  
+</Defs>
