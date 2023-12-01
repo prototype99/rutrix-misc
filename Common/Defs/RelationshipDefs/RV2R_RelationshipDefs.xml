@@ -9,7 +9,7 @@
     <opinionOffset>15</opinionOffset>
     <diedThought>RV2R_Relation_PredDied</diedThought>
     <killedThought>RV2R_KilledMyPred</killedThought>
-    <lostThought>RV2R_PredLost</lostThought>
+    <lostThought>RV2R_Relation_PredLost</lostThought>
     <soldThoughts>
       <li>RV2R_SoldPred</li>
     </soldThoughts>
@@ -23,7 +23,7 @@
     <opinionOffset>15</opinionOffset>
     <diedThought>RV2R_Relation_PreyDied</diedThought>
     <killedThought>RV2R_KilledMyPrey</killedThought>
-    <lostThought>RV2R_PreyLost</lostThought>
+    <lostThought>RV2R_Relation_PreyLost</lostThought>
     <soldThoughts>
       <li>RV2R_SoldPrey</li>
     </soldThoughts>
