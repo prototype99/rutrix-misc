@@ -1,5 +1,7 @@
 ﻿using RimVore2;
 using RimWorld;
+using System.Collections.Generic;
+using UnityEngine;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
@@ -12,6 +14,9 @@ namespace RV2R_RutsStuff
         {
 
             if (pawn.GetLord()?.LordJob is LordJob_FormAndSendCaravan || target.GetLord()?.LordJob is LordJob_FormAndSendCaravan)
+                return true;
+
+            if (pawn.Drafted || target.Drafted)
                 return true;
 
             if (pawn.IsBurning() || target.IsBurning())
@@ -33,15 +38,59 @@ namespace RV2R_RutsStuff
         static public bool IsColonyHostile(Pawn pawn, Pawn target)
         {
             if (pawn.Faction != null && pawn.Faction.IsPlayer)
-            {
                 if (target.Faction != null && target.Faction.HostileTo(Faction.OfPlayer))
-                {
                     if (!target.IsPrisonerOfColony)
                         return true;
-                }
-            }
+
             return false;
         }
+
+        static public float GetFodderWeight(Pawn pawn, Pawn target, bool check)
+        {
+            float weight = 0f;
+
+            if (check && target.IsColonist && Rand.Chance(0.5f)) // 50% chance for any player faction pawn to be spared
+                return 0f;
+
+            if (target.IsPrisonerInPrisonCell())
+                return 6f;
+
+            if (target.IsAnimal())
+            {
+                if (check)
+                {
+                    List<Pawn> colonySpecies = target.Map.mapPawns.SpawnedColonyAnimals.FindAll((Pawn p) => p.def == target.def && p.gender == target.gender && !target.IsReserved());
+                    if (colonySpecies.Count > 2)
+                        weight = 1f;
+                    else
+                        return 0f;
+                }
+                else
+                {
+                    int learnedTrainables = 0;
+                    foreach (TrainableDef trainable in DefDatabase<TrainableDef>.AllDefsListForReading)
+                        if (target.training.HasLearned(trainable))
+                            learnedTrainables++;
+
+                    float idealness = Mathf.Abs(target.BodySize * 2f / pawn.BodySize);
+                    if (idealness > 1f)
+                        idealness = Mathf.Pow(idealness, -1f); // Gives highest weight to prey that are half a predator's size; makes foxxo want to nom chickm and bunbun
+
+                    weight = (2f * idealness) / learnedTrainables;
+                }
+            }
+
+            if (target.IsHumanoid())
+            {
+                if (pawn.IsAnimal())
+                    weight = (1f / (target.IsColonist ? 2f : 1f));
+                else
+                    weight = (100 - pawn.relations.OpinionOf(target)) / 50 / (target.IsColonist ? 1.5f : 1f); // Don't eat people you like
+            }
+
+            return weight;
+        }
+
         static public bool ShouldFriendlyTarget(Pawn pawn, Pawn target)
         {
             if (pawn.Faction != null
@@ -51,6 +100,31 @@ namespace RV2R_RutsStuff
                || (!target.IsHumanoid() && pawn.Map.designationManager.DesignationOn(target, DesignationDefOf.Tame) != null)))
                 return true;
 
+            return false;
+        }
+        static public bool IsInTargetMidsection(Pawn pawn, Pawn target, bool isLethal)
+        {
+            if (target.IsActivePredator())
+            {
+                PawnData pawnData = target.PawnData(false);
+                if (pawnData != null)
+                {
+                    VoreTracker voreTracker = pawnData.VoreTracker;
+                    if (voreTracker != null)
+                        foreach (VoreTrackerRecord voreTrackerRecord in voreTracker.VoreTrackerRecords)
+                        {
+                            if (voreTrackerRecord.Prey == pawn
+                               && voreTrackerRecord.VoreGoal.IsLethal == isLethal
+                               && (voreTrackerRecord.CurrentVoreStage.def.partName.ToLower() == "stomach"
+                                || voreTrackerRecord.CurrentVoreStage.def.displayPartName.ToLower() == "intestines"
+                                || voreTrackerRecord.CurrentVoreStage.def.displayPartName.ToLower() == "womb"))
+                            {
+                                return true;
+                            }
+
+                        }
+                }
+            }
             return false;
         }
 

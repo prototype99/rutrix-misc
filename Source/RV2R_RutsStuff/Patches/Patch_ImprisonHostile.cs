@@ -1,6 +1,10 @@
 ﻿using HarmonyLib;
 using RimVore2;
 using RimWorld;
+using System;
+using System.Collections.Generic;
+
+using System.Linq;
 using Verse;
 using static RV2R_RutsStuff.Patch_RV2R_Settings;
 
@@ -10,45 +14,63 @@ namespace RV2R_RutsStuff
     internal class Patch_ImprisonHostile
     {
         [HarmonyPostfix]
-        private static void EndoJail(ref VoreTrackerRecord record)
+        public static void EndoJail(ref VoreTrackerRecord record)
         {
 
-            if (RV2R_Utilities.ShouldBandaid(record.Predator, record.Prey)) return;
+            if (RV2R_Utilities.ShouldBandaid(record.Predator, record.Prey))
+                return;
 
-            Hediff firstHediffOfDef = record.Predator.health.hediffSet.GetFirstHediffOfDef(RV2R_Common.Encumbrance, false) ?? null;
-            if (firstHediffOfDef == null)
-                record.Predator.health.AddHediff(RV2R_Common.Encumbrance, null, null, null);
-
-            if (!record.VoreGoal.IsLethal)
+            try
             {
-                if (RV2_Rut_Settings.rutsStuff.ScariaCapture)
-                {
-                    Hediff rabies = record.Prey.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Scaria, false) ?? null;
-                    if (record.Prey.IsAnimal()
-                     && record.Prey.Faction == null
-                     && rabies != null)
-                        record.Prey.health.RemoveHediff(record.Prey.health.hediffSet.GetFirstHediffOfDef(rabies.def, false));
-                }
+                Hediff firstHediffOfDef = record.Predator.health.hediffSet.GetFirstHediffOfDef(RV2R_Common.Encumbrance, false) ?? null;
+                if (firstHediffOfDef == null)
+                    record.Predator.health.AddHediff(RV2R_Common.Encumbrance, null, null, null);
 
-                Faction blackHive = Find.FactionManager.FirstFactionOfDef(FactionDef.Named("AA_BlackHive")) ?? null;  //This is how VAE does it, so /shrug
+                Hediff grappleHediff = record.Predator.health.hediffSet.GetFirstHediffOfDef(RV2_Common.GrappledHediff, false) ?? null;
 
-                if (RV2_Rut_Settings.rutsStuff.EndoCapture
-                 && record.Prey.Downed
-                 && record.Predator.Faction != null
-                 && record.Predator.Faction.IsPlayer
-                 && record.Prey.Faction != null
-                 && record.Prey.Faction.HostileTo(record.Predator.Faction)
-                 && !record.Prey.IsPrisonerOfColony)
-                {
-                    if (record.Prey.IsHumanoid())
-                        record.Prey.guest.SetGuestStatus(record.Predator.Faction, GuestStatus.Prisoner);
-                    if (RV2_Rut_Settings.rutsStuff.InsectoidCapture
-                     && record.Prey.IsInsectoid()
-                     && (record.Prey.Faction.def == FactionDefOf.Insect
-                        || (blackHive != null && record.Prey.Faction == blackHive)))
-                        record.Prey.SetFaction(null, null);
-                }
+                if (record.VoreGoal.IsLethal)
+                    return;
+
+                if (!RV2_Rut_Settings.rutsStuff.EndoCapture)
+                    return;
+
+                if (record.Predator.Faction == null || !record.Predator.Faction.IsPlayer)
+                    return;
+
+                if (record.Prey.IsAnimal() && RV2_Rut_Settings.rutsStuff.ScariaCapture)
+                    HandleRabids(record);
+
+                if ((grappleHediff != null && !record.Prey.health.InPainShock) || !record.Prey.Downed) // So grappled pawns won't be captured
+                    return;
+
+                if (!RV2R_Utilities.IsColonyHostile(record.Predator, record.Prey))
+                    return;
+
+                if (record.Prey.IsInsectoid() && !record.Prey.IsHumanoid()) // Needs to be set up like this because of Apini; they're made of insect meat
+                    HandleInsectoids(record);
+                else if (record.Prey.IsHumanoid())
+                    record.Prey.guest.SetGuestStatus(record.Predator.Faction, GuestStatus.Prisoner);
             }
+            catch (Exception e)
+            {
+                Log.Warning("RV-2R: Something went wrong when trying to handle record creation : " + e);
+                return;
+            }
+        }
+        private static void HandleInsectoids(VoreTrackerRecord record)
+        {
+            List<Faction> bugFactions = new List<Faction> { Faction.OfInsects };
+            if (ModsConfig.ActiveModsInLoadOrder.Any(m => m.PackageId.ToLower() == "sarg.alphaanimals"))
+                bugFactions.Add(Find.FactionManager.FirstFactionOfDef(FactionDef.Named("AA_BlackHive")) ?? null);
+            if (bugFactions.Contains(record.Prey.Faction))
+                record.Prey.SetFaction(null, null);
+        }
+        private static void HandleRabids(VoreTrackerRecord record)
+        {
+            Hediff rabies = record.Prey.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Scaria, false) ?? null;
+            if (record.Prey.Faction == null
+             && rabies != null)
+                record.Prey.health.RemoveHediff(record.Prey.health.hediffSet.GetFirstHediffOfDef(rabies.def, false));
         }
     }
 }

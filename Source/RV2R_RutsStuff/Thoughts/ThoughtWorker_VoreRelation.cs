@@ -49,20 +49,17 @@ namespace RV2R_RutsStuff
             {
                 Pawn predator = p.GetVoreRecord().Predator;
                 if (this.def.defName == "RV2R_LoverPrey")
-                {
                     if (predator == LovePartnerRelationUtility.ExistingMostLikedLovePartner(p, false))
                         return p.relations.OpinionOf(predator) > 0;
-                }
+
                 if (this.def.defName == "RV2R_PetPrey")
-                {
                     if (p.relations.GetDirectRelation(RV2R_Common.PetPrey, predator) != null)
                         return p.relations.OpinionOf(predator) > 0;
-                }
+
                 if (this.def.defName == "RV2R_BondPrey")
-                {
                     if (p.relations.GetDirectRelation(PawnRelationDefOf.Bond, predator) != null)
                         return true;
-                }
+
             }
             return false;
         }

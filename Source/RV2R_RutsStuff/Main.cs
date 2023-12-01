@@ -15,7 +15,7 @@ namespace RV2R_RutsStuff
 
         public const string ModName = "RV2R_RutsStuff";
 
-        public const string Version = "0.8";
+        public const string Version = "0.888";
 
     }
 }

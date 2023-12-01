@@ -26,41 +26,53 @@ namespace RV2R_RutsStuff
             if (GenAI.InDangerousCombat(pawn))
                 return null;
 
-            Predicate<Thing> predicate = delegate (Thing t)
-            {
-                Pawn pawn3 = (Pawn)t;
-                return pawn3.Downed
-                    && !pawn3.IsMechanoid()
-                    && (pawn3.Faction == pawn.Faction || pawn3.Faction.PlayerRelationKind != FactionRelationKind.Hostile)
-                    && (!pawn3.InBed() || (pawn3.health.summaryHealth.SummaryHealthPercent <= 0.6f && !pawn3.health.HasHediffsNeedingTendByPlayer()))
-                    && ((pawn3.IsAnimal() && pawn3.health.summaryHealth.SummaryHealthPercent <= 0.4f) || pawn3.health.InPainShock)
-                    && pawn.CanReserve(pawn3, 1, -1, null, false)
-                    && !pawn3.IsForbidden(pawn)
-                    && pawn3.CanParticipateInVore(out reason)
-                    && pawn.CanEndoVore(pawn3, out reason, false)
-                    && !GenAI.EnemyIsNear(pawn, radius)
-                    && !RV2R_Utilities.IsBusy(pawn, pawn3)
-                    && RV2R_Utilities.ShouldFriendlyTarget(pawn, pawn3);
-            };
-            Pawn pawn2 = (Pawn)GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForGroup(ThingRequestGroup.Pawn), PathEndMode.OnCell, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false, false, false), this.radius, predicate, null, 0, -1, false, RegionType.Set_Passable, false);
-            if (pawn2 == null)
+            if (GenAI.EnemyIsNear(pawn, radius))
                 return null;
 
-            List<VoreGoalDef> list = new List<VoreGoalDef> { VoreGoalDefOf.Heal };
-            IEnumerable<VorePathDef> validPaths = VoreInteractionManager.Retrieve(new VoreInteractionRequest(pawn, pawn2, VoreRole.Predator, true, false, false, null, null, null, null, list, null, null, null, null)).ValidPaths;
-            if (validPaths.EnumerableNullOrEmpty<VorePathDef>())
+            try
             {
-                RV2Log.Message("Predator " + pawn.LabelShort + " can't endo-rescue " + pawn2.LabelShort, "Jobs");
+                bool predicate(Thing t)
+                {
+                    Pawn pawn3 = (Pawn)t;
+                    return pawn.CanEndoVore(pawn3, out reason, false)
+                        && !pawn3.IsMechanoid()
+                        && pawn3.health.summaryHealth.SummaryHealthPercent <= 0.9f
+                        && (pawn3.health.InPainShock
+                         || pawn3.Downed
+                        && (!pawn3.InBed() || (
+                           pawn3.health.summaryHealth.SummaryHealthPercent <= 0.65f
+                           && (pawn3.IsAnimal() || (pawn3.IsHumanoid() && !pawn3.health.HasHediffsNeedingTendByPlayer())))
+                        ))
+                        && pawn.CanReserve(pawn3, 1, -1, null, false)
+                        && !pawn3.IsForbidden(pawn)
+                        && !RV2R_Utilities.IsBusy(pawn, pawn3)
+                        && RV2R_Utilities.ShouldFriendlyTarget(pawn, pawn3);
+                }
+                Pawn prey = (Pawn)GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForGroup(ThingRequestGroup.Pawn), PathEndMode.OnCell, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false, false, false), this.radius, predicate, null, 0, -1, false, RegionType.Set_Passable, false);
+                if (prey == null)
+                    return null;
+
+                List<VoreGoalDef> list = new List<VoreGoalDef> { VoreGoalDefOf.Heal };
+                IEnumerable<VorePathDef> validPaths = VoreInteractionManager.Retrieve(new VoreInteractionRequest(pawn, prey, VoreRole.Predator, true, false, false, null, null, null, null, list)).ValidPaths;
+                if (validPaths.EnumerableNullOrEmpty<VorePathDef>())
+                {
+                    RV2Log.Message("Predator " + pawn.LabelShort + " can't endo-rescue " + prey.LabelShort, "Jobs");
+                    return null;
+                }
+                VorePathDef vorePathDef = validPaths.RandomElement<VorePathDef>();
+                RV2Log.Message(prey.LabelShort + "'s getting endo rescued by " + pawn.LabelShort + " via " + vorePathDef.label, "Jobs");
+                VoreJob voreJob = VoreJobMaker.MakeJob(VoreJobDefOf.RV2_VoreInitAsPredator, prey);
+                voreJob.targetA = prey;
+                voreJob.VorePath = vorePathDef;
+                voreJob.Initiator = pawn;
+                voreJob.count = 1;
+                return voreJob;
+            }
+            catch (Exception e)
+            {
+                Log.Warning("RV-2R: Something went wrong when " + pawn.LabelShort + " tried to endo-rescue: " + e);
                 return null;
             }
-            VorePathDef vorePathDef = validPaths.RandomElement<VorePathDef>();
-            RV2Log.Message(pawn2.LabelShort + "'s getting endo rescued by " + pawn.LabelShort + " via " + vorePathDef.label, "Jobs");
-            VoreJob voreJob = VoreJobMaker.MakeJob(VoreJobDefOf.RV2_VoreInitAsPredator, pawn2);
-            voreJob.targetA = pawn2;
-            voreJob.VorePath = vorePathDef;
-            voreJob.Initiator = pawn;
-            voreJob.count = 1;
-            return voreJob;
         }
     }
 }

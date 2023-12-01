@@ -12,45 +12,51 @@ namespace RV2R_RutsStuff
     internal class Patch_DoMisc
     {
         [HarmonyPostfix]
-        static void AdditionalEffects(VoreTrackerRecord __instance)
+        public static void AdditionalEffects(VoreTrackerRecord __instance)
         {
+            if (RV2R_Utilities.ShouldBandaid(__instance.Predator, __instance.Prey))
+                return;
 
-            if (!__instance.VoreGoal.IsLethal && !RV2R_Utilities.ShouldBandaid(__instance.Predator, __instance.Prey))
+            if (__instance.VoreGoal.IsLethal)
+                return;
+
+            SettingsContainer_RutsStuff settings = RV2_Rut_Settings.rutsStuff;
+
+            try
             {
-                SettingsContainer_RutsStuff settings = RV2_Rut_Settings.rutsStuff;
-                if (settings.EndoSicknessStrength > 0f)
-                {
-                    Hediff firstHediffOfDef = __instance.Prey.health.hediffSet.GetFirstHediffOfDef(RV2R_Common.EndoHediff, false);
-                    if (firstHediffOfDef != null)
-                    {
-                        firstHediffOfDef.Severity = Math.Min(firstHediffOfDef.Severity + (0.0135f * settings.EndoSicknessStrength), 1f);
-                        if (settings.EndoPacify && firstHediffOfDef.Severity >= 0.95f)
-                        {
-                            if (__instance.StruggleManager.shouldStruggle)
-                                __instance.StruggleManager.shouldStruggle = false;
-                            if (RV2R_Utilities.IsColonyHostile(__instance.Predator, __instance.Prey))
-                                __instance.Prey.guest.SetGuestStatus(__instance.Predator.Faction, GuestStatus.Prisoner);
-                        }
-                    }
-                    else
-                        __instance.Prey.health.AddHediff(RV2R_Common.EndoHediff, null, null, null);
-                }
+                if (RV2_Rut_Settings.rutsStuff.EndoSicknessStrength > 0f)
+                    HandleSickness(__instance);
 
-                if (settings.NoBleedOut)
+                if (RV2_Rut_Settings.rutsStuff.EndoPets > 0f
+                 && __instance.CurrentVoreStage.PassedRareTicks >= Math.Floor(GenDate.TicksPerDay / 100 * RV2_Rut_Settings.rutsStuff.EndoPets))
+                    HandlePets(__instance);
+
+                if (__instance.CurrentVoreStage.def.displayPartName == "womb"
+                 && RV2_Rut_Settings.rutsStuff.RegressionStrength > 0f)
+                    HandleRegression(__instance);
+
+                if (RV2_Rut_Settings.rutsStuff.EndoBondChance > 0.0000f)
+                    HandleBonding(__instance);
+
+                if (RV2_Rut_Settings.rutsStuff.EndoRecruitment
+                 && (__instance.Prey.IsPrisonerOfColony && __instance.Predator.IsColonistPlayerControlled))
+                    HandleImprisoned(__instance);
+
+                if (RV2_Rut_Settings.rutsStuff.NoBleedOut)
                 {
                     Hediff bleedOut = __instance.Prey.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.BloodLoss, false);
                     if (bleedOut != null)
                         bleedOut.Severity = Math.Min(bleedOut.Severity, 0.9f);
                 }
 
-                if (settings.StopBleeding)
+                if (RV2_Rut_Settings.rutsStuff.StopBleeding)
                     foreach (Hediff hediff in __instance.Prey.health.hediffSet.hediffs.Where((Hediff diff) => diff.Bleeding))
                     {
                         hediff.def.injuryProps.bleedRate *= 0.95f;
                         __instance.Prey.health.Notify_HediffChanged(hediff);
                     }
 
-                if (settings.NoBadTemp)
+                if (RV2_Rut_Settings.rutsStuff.NoBadTemp)
                 {
                     Hediff hypo = __instance.Prey.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Hypothermia, false);
                     if (hypo != null)
@@ -59,133 +65,144 @@ namespace RV2R_RutsStuff
                     if (hyper != null)
                         hyper.Severity = Math.Min(hyper.Severity, 0.29f);
                 }
-                if (settings.EndoPets > 0f && __instance.Predator.IsHumanoid() && __instance.Prey.IsHumanoid() && __instance.CurrentVoreStage.PassedRareTicks >= Math.Floor(GenDate.TicksPerDay / 100 * settings.EndoPets))
-                {
-                    if (__instance.Prey.relations.GetDirectRelationsCount(RV2R_Common.PetPrey) == 0)
-                    {
-                        if (settings.EndoPetsJoin && __instance.Predator.Faction.IsPlayer && (__instance.Prey.Faction == null || !__instance.Prey.Faction.IsPlayer))
-                        {
-                            InteractionWorker_RecruitAttempt.DoRecruit(__instance.Predator, __instance.Prey, false);
-                            Messages.Message(new Message("RV2R_PetJoined".Translate(__instance.Prey.LabelShort, __instance.Predator.LabelShort), MessageTypeDefOf.PositiveEvent, new LookTargets(__instance.Prey)), true);
-                        }
-                        Messages.Message(new Message("RV2R_Pet".Translate(__instance.Prey.LabelShort, __instance.Predator.LabelShort), MessageTypeDefOf.PositiveEvent, new LookTargets(__instance.Prey)), true);
-                        __instance.Predator.relations.AddDirectRelation(RV2R_Common.PetPred, __instance.Prey);
-                        __instance.Prey.relations.AddDirectRelation(RV2R_Common.PetPrey, __instance.Predator);
-                    }
-                }
-#if v1_3
-                if (settings.EndoRecruitment && (!__instance.IsForced && __instance.Prey.IsPrisonerOfColony && __instance.Prey.GuestStatus == GuestStatus.Prisoner))
-                    if (__instance.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.ReduceResistance
-                     || __instance.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.AttemptRecruit)
-                        __instance.Prey.guest.resistance = Math.Max(0.0f, __instance.Prey.guest.resistance -= Rand.Range(0.00f, 0.01f));
-#else
-                if (settings.EndoRecruitment && (!__instance.IsForced && __instance.Prey.IsPrisonerOfColony && __instance.Prey.GuestStatus == GuestStatus.Prisoner) && __instance.Prey.guest.Recruitable)
-                    if (__instance.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.ReduceResistance
-                     || __instance.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.AttemptRecruit)
-                        __instance.Prey.guest.resistance = Math.Max(0.0f, __instance.Prey.guest.resistance -= Rand.Range(0.00f, 0.01f));
-#endif
-                if (settings.RegressionStrength > 0f
-                 && __instance.CurrentVoreStage.def.displayPartName == "womb"
-                 && __instance.Prey.ageTracker.AgeBiologicalTicks > __instance.Prey.ageTracker.AdultMinAgeTicks)
-                {
-                    long num = Math.Min(__instance.Prey.ageTracker.AgeBiologicalTicks - __instance.Prey.ageTracker.AdultMinAgeTicks, (long)Math.Ceiling(GenDate.TicksPerDay * settings.RegressionStrength));
-                    __instance.Prey.ageTracker.AgeBiologicalTicks -= num;
-                    Message message = new Message();
-                    if (settings.ChronicCure)
-                    {
-                        foreach (Hediff hediff in __instance.Prey.health.hediffSet.hediffs.Where((Hediff diff) => diff.def.chronic))
-                        {
-                            float ratio = __instance.Prey.ageTracker.AdultMinAgeTicks / __instance.Prey.ageTracker.AgeBiologicalTicks;
-                            if (ratio > 0.5f)
-                            {
-                                if (hediff.TryGetComp<HediffComp_SeverityPerDay>() != null)
-                                {
-                                    hediff.Severity = Math.Max(hediff.Severity - 0.002f * (ratio / 2f), hediff.def.minSeverity > 0f ? hediff.def.minSeverity : 0f);
-                                    if (hediff.Severity <= 0f)
-                                    {
-                                        message = new Message("HealingCureHediff".Translate(__instance.Prey, hediff.def.label), MessageTypeDefOf.PositiveEvent, new LookTargets(__instance.Prey));
-                                        Messages.Message(message, true);
-                                        __instance.Prey.health.RemoveHediff(__instance.Prey.health.hediffSet.GetFirstHediffOfDef(hediff.def, false));
-                                    }
-                                }
-                                else if (Rand.Chance(0.0005f * (ratio / 2f)))
-                                {
-                                    message = new Message("HealingCureHediff".Translate(__instance.Prey, hediff.def.label), MessageTypeDefOf.PositiveEvent, new LookTargets(__instance.Prey));
-                                    Messages.Message(message, true);
-                                    __instance.Prey.health.RemoveHediff(__instance.Prey.health.hediffSet.GetFirstHediffOfDef(hediff.def, false));
-                                }
-                            }
-                        }
-                    }
-                    PawnData pawnData = __instance.Prey.PawnData(false);
-                    if (pawnData != null && pawnData.VoreTracker != null)
-                    {
-                        VoreTracker voreTracker = pawnData.VoreTracker;
-                        foreach (VoreTrackerRecord voreTrackerRecord in voreTracker.VoreTrackerRecords)
-                        {
-                            num = Math.Min(voreTrackerRecord.Prey.ageTracker.AgeBiologicalTicks - voreTrackerRecord.Prey.ageTracker.AdultMinAgeTicks, (long)Math.Ceiling(GenDate.TicksPerDay * settings.RegressionStrength));
-                            voreTrackerRecord.Prey.ageTracker.AgeBiologicalTicks -= num;
-                            if (settings.ChronicCure)
-                            {
-                                float ratio = voreTrackerRecord.Prey.ageTracker.AdultMinAgeTicks / voreTrackerRecord.Prey.ageTracker.AgeBiologicalTicks;
-                                foreach (Hediff hediff in voreTrackerRecord.Prey.health.hediffSet.hediffs.Where((Hediff diff) => diff.def.chronic))
-                                {
-                                    if (ratio > 0.5f)
-                                    {
-                                        if (hediff.TryGetComp<HediffComp_SeverityPerDay>() != null)
-                                        {
-                                            hediff.Severity = Math.Max(hediff.Severity - 0.002f * (ratio / 2f), hediff.def.minSeverity > 0f ? hediff.def.minSeverity : 0f);
-                                            if (hediff.Severity <= 0f)
-                                            {
-                                                message = new Message("HealingCureHediff".Translate(voreTrackerRecord.Prey, hediff.def.label), MessageTypeDefOf.PositiveEvent, new LookTargets(voreTrackerRecord.Prey));
-                                                Messages.Message(message, true);
-                                                voreTrackerRecord.Prey.health.RemoveHediff(voreTrackerRecord.Prey.health.hediffSet.GetFirstHediffOfDef(hediff.def, false));
-                                            }
-                                        }
-                                        else if (Rand.Chance(0.0005f * (ratio / 2f)))
-                                        {
-                                            message = new Message("HealingCureHediff".Translate(voreTrackerRecord.Prey, hediff.def.label), MessageTypeDefOf.PositiveEvent, new LookTargets(voreTrackerRecord.Prey));
-                                            Messages.Message(message, true);
-                                            voreTrackerRecord.Prey.health.RemoveHediff(voreTrackerRecord.Prey.health.hediffSet.GetFirstHediffOfDef(hediff.def, false));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if (settings.EndoBondChance > 0.0000f)
-                {
-                    bool validSetup = false;
-                    Pawn humanoid;
-                    Pawn animal;
-                    if (__instance.Predator.IsHumanoid())
-                    {
-                        humanoid = __instance.Predator;
-                        animal = __instance.Prey;
-                        validSetup = true;
-                    }
-                    else
-                    {
-                        humanoid = __instance.Prey;
-                        animal = __instance.Predator;
-                    }
-                    if (humanoid.IsColonist
-                     && (validSetup || !settings.PreyOnlyEndoBond)
-                     && (!__instance.IsForced || !settings.WillingOnlyEndoBond)
-                     && animal.relations.GetDirectRelationsCount(PawnRelationDefOf.Bond, null) == 0)
-                        if (Rand.Chance(settings.EndoBondChance))
-                        {
-                            if (animal.Faction == null)
-                                InteractionWorker_RecruitAttempt.DoRecruit(humanoid, animal, false);
+            }
+            catch (Exception e)
+            {
+                Log.Warning("RV-2R: Something went wrong during vore tick for pred " + __instance.Predator.LabelShort + ", prey " + __instance.Prey.LabelShort + " : " + e);
+                return;
+            }
 
-                            RelationsUtility.TryDevelopBondRelation(humanoid, animal, 100f);
-                            animal.training.Train(TrainableDefOf.Tameness, humanoid, true);
-                            animal.training.Train(TrainableDefOf.Obedience, humanoid, true);
-                        }
+        }
+        private static void HandleSickness(VoreTrackerRecord record)
+        {
 
+            Hediff firstHediffOfDef = record.Prey.health.hediffSet.GetFirstHediffOfDef(RV2R_Common.EndoHediff, false);
+            if (firstHediffOfDef != null)
+            {
+                firstHediffOfDef.Severity = Math.Min(firstHediffOfDef.Severity + (0.0135f * RV2_Rut_Settings.rutsStuff.EndoSicknessStrength), 1f);
+                if (RV2_Rut_Settings.rutsStuff.EndoPacify && firstHediffOfDef.Severity >= 0.95f)
+                {
+                    if (record.StruggleManager.shouldStruggle)
+                        record.StruggleManager.shouldStruggle = false;
+                    if (RV2R_Utilities.IsColonyHostile(record.Predator, record.Prey))
+                        record.Prey.guest?.SetGuestStatus(record.Predator.Faction, GuestStatus.Prisoner);
                 }
             }
+            else
+                record.Prey.health.AddHediff(RV2R_Common.EndoHediff, null, null, null);
+        }
+        private static void HandlePets(VoreTrackerRecord record)
+        {
+            if (record.Predator.IsHumanoid() && record.Prey.IsHumanoid())
+            {
+                if (record.Prey.relations.GetDirectRelationsCount(RV2R_Common.PetPrey) == 0)
+                {
+                    if (RV2_Rut_Settings.rutsStuff.EndoPetsJoin
+                     && record.Predator.Faction.IsPlayer
+                     && (record.Prey.Faction == null || !record.Prey.Faction.IsPlayer))
+                    {
+                        InteractionWorker_RecruitAttempt.DoRecruit(record.Predator, record.Prey, false);
+                        Messages.Message(new Message("RV2R_PetJoined".Translate(record.Prey.LabelShort, record.Predator.LabelShort), MessageTypeDefOf.PositiveEvent, new LookTargets(record.Prey)), true);
+                    }
+                    Messages.Message(new Message("RV2R_Pet".Translate(record.Prey.LabelShort, record.Predator.LabelShort), MessageTypeDefOf.PositiveEvent, new LookTargets(record.Prey)), true);
+                    record.Predator.relations.AddDirectRelation(RV2R_Common.PetPred, record.Prey);
+                    record.Prey.relations.AddDirectRelation(RV2R_Common.PetPrey, record.Predator);
+                }
+            }
+        }
+        private static void HandleRegression(VoreTrackerRecord record)
+        {
+            if (record.Prey.ageTracker.AgeBiologicalTicks > record.Prey.ageTracker.AdultMinAgeTicks)
+            {
+                long age = Math.Min(record.Prey.ageTracker.AgeBiologicalTicks - record.Prey.ageTracker.AdultMinAgeTicks, (long)Math.Ceiling(GenDate.TicksPerDay * RV2_Rut_Settings.rutsStuff.RegressionStrength));
+                record.Prey.ageTracker.AgeBiologicalTicks -= age;
+                Message message = new Message();
+                if (RV2_Rut_Settings.rutsStuff.ChronicCure)
+                {
+                    foreach (Hediff hediff in record.Prey.health.hediffSet.hediffs.Where((Hediff diff) => diff.def.chronic))
+                    {
+                        float ratio = record.Prey.ageTracker.AdultMinAgeTicks / record.Prey.ageTracker.AgeBiologicalTicks;
+                        if (ratio > 0.5f)
+                        {
+                            if (hediff.TryGetComp<HediffComp_SeverityPerDay>() != null)
+                            {
+                                hediff.Severity = Math.Max(hediff.Severity - 0.002f * (ratio / 2f), hediff.def.minSeverity > 0f ? hediff.def.minSeverity : 0f);
+                                if (hediff.Severity <= 0f)
+                                {
+                                    message = new Message("HealingCureHediff".Translate(record.Prey, hediff.def.label), MessageTypeDefOf.PositiveEvent, new LookTargets(record.Prey));
+                                    Messages.Message(message, true);
+                                    record.Prey.health.RemoveHediff(record.Prey.health.hediffSet.GetFirstHediffOfDef(hediff.def, false));
+                                }
+                            }
+                            else if (Rand.Chance(0.0005f * (ratio / 2f)))
+                            {
+                                message = new Message("HealingCureHediff".Translate(record.Prey, hediff.def.label), MessageTypeDefOf.PositiveEvent, new LookTargets(record.Prey));
+                                Messages.Message(message, true);
+                                record.Prey.health.RemoveHediff(record.Prey.health.hediffSet.GetFirstHediffOfDef(hediff.def, false));
+                            }
+                        }
+                    }
+                }
+                PawnData pawnData = record.Prey.PawnData(false);
+                if (pawnData != null && pawnData.VoreTracker != null)
+                {
+                    VoreTracker voreTracker = pawnData.VoreTracker;
+                    foreach (VoreTrackerRecord voreTrackerRecord in voreTracker.VoreTrackerRecords)
+                    {
+                        HandleRegression(voreTrackerRecord);
+                    }
+                }
+            }
+        }
+
+        private static void HandleBonding(VoreTrackerRecord record)
+        {
+            if (record.IsForced && RV2_Rut_Settings.rutsStuff.WillingOnlyEndoBond)
+                return;
+
+            bool validSetup = false;
+            Pawn humanoid;
+            Pawn animal;
+            if (record.Predator.IsHumanoid())
+            {
+                humanoid = record.Predator;
+                animal = record.Prey;
+                validSetup = true;
+            }
+            else
+            {
+                humanoid = record.Prey;
+                animal = record.Predator;
+            }
+            if (animal.relations.GetDirectRelationsCount(PawnRelationDefOf.Bond, null) != 0)
+                return;
+            if (!validSetup && RV2_Rut_Settings.rutsStuff.PreyOnlyEndoBond)
+                return;
+
+            if (humanoid.IsColonist)
+                if (Rand.Chance(RV2_Rut_Settings.rutsStuff.EndoBondChance))
+                {
+                    if (animal.Faction == null)
+                        InteractionWorker_RecruitAttempt.DoRecruit(humanoid, animal, false);
+
+                    RelationsUtility.TryDevelopBondRelation(humanoid, animal, 100f);
+                    animal.training.Train(TrainableDefOf.Tameness, humanoid, true);
+                    animal.training.Train(TrainableDefOf.Obedience, humanoid, true);
+                }
+        }
+        private static void HandleImprisoned(VoreTrackerRecord record)
+        {
+#if v1_3
+            if (!record.IsForced)
+                if (record.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.ReduceResistance
+                 || record.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.AttemptRecruit)
+                    record.Prey.guest.resistance = Math.Max(0.0f, record.Prey.guest.resistance -= Rand.Range(0.00f, 0.01f));
+#else
+            if (!record.IsForced && record.Prey.guest.Recruitable)
+                if (record.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.ReduceResistance
+                 || record.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.AttemptRecruit)
+                    record.Prey.guest.resistance = Math.Max(0.0f, record.Prey.guest.resistance -= Rand.Range(0.00f, 0.01f));
+#endif
         }
     }
 }

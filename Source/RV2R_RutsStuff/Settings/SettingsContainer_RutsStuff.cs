@@ -10,7 +10,7 @@ namespace RV2R_RutsStuff
         private BoolSmartSetting sizedEncumberance;
         private FloatSmartSetting encumberanceModifier;
         private BoolSmartSetting visibleEncumberance;
-        private FloatSmartSetting encumberanceCap;
+        //private FloatSmartSetting encumberanceCap;
 
         private FloatSmartSetting endoSicknessStrength;
         private BoolSmartSetting endoPacify;
@@ -26,17 +26,26 @@ namespace RV2R_RutsStuff
         private BoolSmartSetting scariaCapture;
         private BoolSmartSetting endoRecruitment;
 
-        //private FloatSmartSetting fodderChance;
-        //private BoolSmartSetting fodderAnimalsAllowed;
-        //private BoolSmartSetting fodderForce;
-        //private BoolSmartSetting fodderPenAnimals;
-        //private BoolSmartSetting fodderAnimals;
-        //private BoolSmartSetting fodderGuests;
-        //private BoolSmartSetting fodderColonists;
+        private BoolSmartSetting preyLovin;
+        private FloatSmartSetting gutLovinChance;
+        private BoolSmartSetting gutLovinStands;
+        private BoolSmartSetting gutLovinNonCon;
+
+        private FloatSmartSetting fodderChance;
+        private BoolSmartSetting fodderNamedAllowed;
+        private BoolSmartSetting fodderPredatorsAllowed;
+        private BoolSmartSetting fodderAnimalsAllowed;
+        private BoolSmartSetting fodderAnimalsFull;
+        private FloatSmartSetting miscFodderChance;
+        private BoolSmartSetting fodderPenAnimals;
+        private BoolSmartSetting fodderAnimals;
+        private BoolSmartSetting fodderPredators;
+        private BoolSmartSetting fodderGuests;
+        private BoolSmartSetting fodderColonists;
 
         private FloatSmartSetting playVoreChance;
         private FloatSmartSetting playVoreModifier;
-        //   private BoolSmartSetting playVoreIndescriminate;
+        private BoolSmartSetting playVoreIndescriminate;
         private BoolSmartSetting fatalPlayVore;
 
         private FloatSmartSetting endoBondChance;
@@ -52,7 +61,7 @@ namespace RV2R_RutsStuff
         public bool SizedEncumberance => this.sizedEncumberance.value;
         public float EncumberanceModifier => this.encumberanceModifier.value / 100f;
         public bool VisibleEncumberance => this.visibleEncumberance.value;
-        public float EncumberanceCap => this.encumberanceCap.value / 100f;
+        //public float EncumberanceCap => this.encumberanceCap.value / 100f;
 
         public float EndoSicknessStrength => this.endoSicknessStrength.value / 100f;
         public bool EndoPacify => this.endoPacify.value;
@@ -68,10 +77,27 @@ namespace RV2R_RutsStuff
         public bool ScariaCapture => this.scariaCapture.value;
         public bool EndoRecruitment => this.endoRecruitment.value;
 
+        public bool PreyLovin => this.preyLovin.value;
+        public float GutLovinChance => this.gutLovinChance.value / 100f;
+        public bool GutLovinStands => this.gutLovinStands.value;
+        public bool GutLovinNonCon => this.gutLovinNonCon.value;
+
         public float PlayVoreChance => this.playVoreChance.value;
-        public float PlayVoreModifier => this.playVoreModifier.value;
-        // public bool PlayVoreIndescriminate => this.playVoreIndescriminate.value;
+        public float PlayVoreModifier => this.playVoreModifier.value / 100f;
+        public bool PlayVoreIndescriminate => this.playVoreIndescriminate.value;
         public bool FatalPlayVore => this.fatalPlayVore.value;
+
+        public float FodderChance => this.fodderChance.value;
+        public bool FodderNamedAllowed => this.fodderNamedAllowed.value;
+        public bool FodderPredatorsAllowed => this.fodderPredatorsAllowed.value;
+        public bool FodderAnimalsAllowed => this.fodderAnimalsAllowed.value;
+        public bool FodderAnimalsFull => this.fodderAnimalsFull.value;
+        public float MiscFodderChance => this.miscFodderChance.value / 100f;
+        public bool FodderPenAnimals => this.fodderPenAnimals.value;
+        public bool FodderAnimals => this.fodderAnimals.value;
+        public bool FodderPredators => this.fodderPredators.value;
+        public bool FodderGuests => this.fodderGuests.value;
+        public bool FodderColonists => this.fodderColonists.value;
 
         public float EndoBondChance => this.endoBondChance.value;
         public bool PreyOnlyEndoBond => this.preyOnlyEndoBond.value;
@@ -110,6 +136,15 @@ namespace RV2R_RutsStuff
             if (this.endoPetsJoin == null || this.endoPetsJoin.IsInvalid())
                 this.endoPetsJoin = new BoolSmartSetting("RV2R_Settings_PetRecruitment", true, true, "RV2R_Settings_PetRecruitment_Tip");
 
+            if (this.preyLovin == null || this.preyLovin.IsInvalid())
+                this.preyLovin = new BoolSmartSetting("RV2R_Settings_PreyLovin", true, true, "RV2R_Settings_PreyLovin_Tip");
+            if (this.gutLovinChance == null || this.gutLovinChance.IsInvalid())
+                this.gutLovinChance = new FloatSmartSetting("RV2R_Settings_GutLovin", 100f, 100f, 0f, 1000f, "RV2R_Settings_GutLovin_Tip", "0", "%");
+            if (this.gutLovinStands == null || this.gutLovinStands.IsInvalid())
+                this.gutLovinStands = new BoolSmartSetting("RV2R_Settings_GutLovinONS", true, true, "RV2R_Settings_GutLovinONS_Tip");
+            if (this.gutLovinNonCon == null || this.gutLovinNonCon.IsInvalid())
+                this.gutLovinNonCon = new BoolSmartSetting("RV2R_Settings_GutLovinNonCon", false, false, "RV2R_Settings_GutLovinNonCon_Tip");
+
             if (this.endoCapture == null || this.endoCapture.IsInvalid())
                 this.endoCapture = new BoolSmartSetting("RV2R_Settings_EndoCapture", true, true, "RV2R_Settings_EndoCapture_Tip");
             if (this.insectoidCapture == null || this.insectoidCapture.IsInvalid())
@@ -123,10 +158,33 @@ namespace RV2R_RutsStuff
                 this.playVoreChance = new FloatSmartSetting("RV2R_Settings_AnimalRandomNomChance", 24f, 24f, 6f, 168f, "RV2R_Settings_AnimalRandomNomChance_Tip", "0.0");
             if (this.playVoreModifier == null || this.playVoreModifier.IsInvalid())
                 this.playVoreModifier = new FloatSmartSetting("RV2R_Settings_AnimalRandomNomChanceModifier", 50f, 50f, 0f, 800f, "RV2R_Settings_AnimalRandomNomChanceModifier_Tip", "0", "%");
-            // if (this.playVoreIndescriminate == null || this.playVoreIndescriminate.IsInvalid())
-            //     this.playVoreIndescriminate = new BoolSmartSetting("RV2R_Settings_AnimalRandomNomIndiscriminate", false, false, "RV2R_Settings_AnimalRandomNomIndiscriminate_Tip");
+            if (this.playVoreIndescriminate == null || this.playVoreIndescriminate.IsInvalid())
+                this.playVoreIndescriminate = new BoolSmartSetting("RV2R_Settings_AnimalRandomNomIndiscriminate", false, false, "RV2R_Settings_AnimalRandomNomIndiscriminate_Tip");
             if (this.fatalPlayVore == null || this.fatalPlayVore.IsInvalid())
                 this.fatalPlayVore = new BoolSmartSetting("RV2R_Settings_AnimalRandomNomFatal", false, false, "RV2R_Settings_AnimalRandomNomFatal_Tip");
+
+            if (this.fodderChance == null || this.fodderChance.IsInvalid())
+                this.fodderChance = new FloatSmartSetting("RV2R_Settings_Fodder_Chance", 50f, 50f, 0f, 100f, "RV2R_Settings_Fodder_Chance_Tip", "0", "%");
+            if (this.fodderNamedAllowed == null || this.fodderNamedAllowed.IsInvalid())
+                this.fodderNamedAllowed = new BoolSmartSetting("RV2R_Settings_Fodder_AllowNamed", true, true, "RV2R_Settings_Fodder_AllowNamed_Tip");
+            if (this.fodderPredatorsAllowed == null || this.fodderPredatorsAllowed.IsInvalid())
+                this.fodderPredatorsAllowed = new BoolSmartSetting("RV2R_Settings_Fodder_AllowPredators", true, true, "RV2R_Settings_Fodder_AllowPredators_Tip");
+            if (this.fodderAnimalsAllowed == null || this.fodderAnimalsAllowed.IsInvalid())
+                this.fodderAnimalsAllowed = new BoolSmartSetting("RV2R_Settings_Fodder_AllowAnimals", false, false, "RV2R_Settings_Fodder_AllowAnimals_Tip");
+            if (this.fodderAnimalsFull == null || this.fodderAnimalsFull.IsInvalid())
+                this.fodderAnimalsFull = new BoolSmartSetting("RV2R_Settings_Fodder_AnimalsFull", false, false, "RV2R_Settings_Fodder_AnimalsFull_Tip");
+            if (this.miscFodderChance == null || this.miscFodderChance.IsInvalid())
+                this.miscFodderChance = new FloatSmartSetting("RV2R_Settings_MiscFodder_Chance", 5f, 5f, 0f, 100f, "RV2R_Settings_MiscFodder_Chance_Tip", "0", "%");
+            if (this.fodderPenAnimals == null || this.fodderPenAnimals.IsInvalid())
+                this.fodderPenAnimals = new BoolSmartSetting("RV2R_Settings_Fodder_Penned", false, false, "RV2R_Settings_Fodder_Penned_Tip");
+            if (this.fodderAnimals == null || this.fodderAnimals.IsInvalid())
+                this.fodderAnimals = new BoolSmartSetting("RV2R_Settings_Fodder_Animal", false, false, "RV2R_Settings_Fodder_Animal_Tip");
+            if (this.fodderPredators == null || this.fodderPredators.IsInvalid())
+                this.fodderPredators = new BoolSmartSetting("RV2R_Settings_Fodder_Predator", false, false, "RV2R_Settings_Fodder_Predator_Tip");
+            if (this.fodderGuests == null || this.fodderGuests.IsInvalid())
+                this.fodderGuests = new BoolSmartSetting("RV2R_Settings_Fodder_Guests", false, false, "RV2R_Settings_Fodder_Guests_Tip");
+            if (this.fodderColonists == null || this.fodderColonists.IsInvalid())
+                this.fodderColonists = new BoolSmartSetting("RV2R_Settings_Fodder_Colonists", false, false, "RV2R_Settings_Fodder_Colonists_Tip");
 
             if (this.endoBondChance == null || this.endoBondChance.IsInvalid())
                 this.endoBondChance = new FloatSmartSetting("RV2R_Settings_EndoBondChance", 0.0001f, 0.0001f, 0.0000f, 0.0020f, "RV2R_Settings_EndoBondChance_Tip", "0.0000", "%");
@@ -159,7 +217,7 @@ namespace RV2R_RutsStuff
             this.sizedEncumberance = null;
             this.encumberanceModifier = null;
             this.visibleEncumberance = null;
-            //   this.encumberanceCap = null;
+            //this.encumberanceCap = null;
             this.endoSicknessStrength = null;
             this.endoPacify = null;
             this.regressionStrength = null;
@@ -168,13 +226,27 @@ namespace RV2R_RutsStuff
             this.endoPets = null;
             this.endoPetsJoin = null;
             this.endoCapture = null;
+            this.preyLovin = null;
+            this.gutLovinChance = null;
+            this.gutLovinStands = null;
+            this.gutLovinNonCon = null;
             this.insectoidCapture = null;
             this.scariaCapture = null;
             this.endoRecruitment = null;
             this.playVoreChance = null;
             this.playVoreModifier = null;
-            //this.playVoreIndescriminate = null;
+            this.playVoreIndescriminate = null;
             this.fatalPlayVore = null;
+            this.fodderChance = null;
+            this.fodderNamedAllowed = null;
+            this.fodderPredatorsAllowed = null;
+            this.fodderAnimalsAllowed = null;
+            this.fodderAnimalsFull = null;
+            this.fodderPenAnimals = null;
+            this.fodderAnimals = null;
+            this.fodderPredators = null;
+            this.fodderGuests = null;
+            this.fodderColonists = null;
             this.endoBondChance = null;
             this.preyOnlyEndoBond = null;
             this.noBleedOut = null;
@@ -198,7 +270,7 @@ namespace RV2R_RutsStuff
             this.visibleEncumberance.DoSetting(listing_Standard);
             listing_Standard.Gap(6f);
             listing_Standard.Label("RV2R_Settings_EncumberanceTurnOff".Translate());
-            //   this.encumberanceCap.DoSetting(listing_Standard);
+            //this.encumberanceCap.DoSetting(listing_Standard);
             listing_Standard.Gap(18f);
             listing_Standard.Label("RV2R_Tick_Section".Translate());
             listing_Standard.Gap(12f);
@@ -211,6 +283,13 @@ namespace RV2R_RutsStuff
             this.endoPets.DoSetting(listing_Standard);
             this.endoPetsJoin.DoSetting(listing_Standard);
             listing_Standard.Gap(18f);
+            listing_Standard.Label("RV2R_Lovin_Section".Translate());
+            listing_Standard.Gap(12f);
+            this.preyLovin.DoSetting(listing_Standard);
+            this.gutLovinChance.DoSetting(listing_Standard);
+            this.gutLovinStands.DoSetting(listing_Standard);
+            this.gutLovinNonCon.DoSetting(listing_Standard);
+            listing_Standard.Gap(18f);
             listing_Standard.Label("RV2R_Capture_Section".Translate());
             listing_Standard.Gap(12f);
             this.endoCapture.DoSetting(listing_Standard);
@@ -222,8 +301,23 @@ namespace RV2R_RutsStuff
             listing_Standard.Gap(12f);
             this.playVoreChance.DoSetting(listing_Standard);
             this.playVoreModifier.DoSetting(listing_Standard);
-            //   this.playVoreIndescriminate.DoSetting(listing_Standard);
+            this.playVoreIndescriminate.DoSetting(listing_Standard);
             this.fatalPlayVore.DoSetting(listing_Standard);
+            listing_Standard.Gap(18f);
+            listing_Standard.Label("RV2R_Fodder_Section".Translate());
+            listing_Standard.Gap(12f);
+            this.fodderChance.DoSetting(listing_Standard);
+            this.fodderNamedAllowed.DoSetting(listing_Standard);
+            this.fodderPredatorsAllowed.DoSetting(listing_Standard);
+            this.fodderAnimalsAllowed.DoSetting(listing_Standard);
+            listing_Standard.Gap(10f);
+            this.miscFodderChance.DoSetting(listing_Standard);
+            this.fodderAnimalsFull.DoSetting(listing_Standard);
+            this.fodderPenAnimals.DoSetting(listing_Standard);
+            this.fodderAnimals.DoSetting(listing_Standard);
+            this.fodderPredators.DoSetting(listing_Standard);
+            this.fodderGuests.DoSetting(listing_Standard);
+            this.fodderColonists.DoSetting(listing_Standard);
             listing_Standard.Gap(18f);
             listing_Standard.Label("RV2R_Bonds_Section".Translate());
             listing_Standard.Gap(12f);
@@ -238,8 +332,8 @@ namespace RV2R_RutsStuff
             this.stopBleeding.DoSetting(listing_Standard);
             this.noBadTemp.DoSetting(listing_Standard);
             this.curagaVore.DoSetting(listing_Standard);
-            listing_Standard.Gap(108f);
-            listing_Standard.Label("RV2R_FuckUnity".Translate());
+            //listing_Standard.Gap(126f);
+            //listing_Standard.Label("RV2R_FuckUnity".Translate());
             listing_Standard.EndScrollView(ref this.height, ref this.heightStale);
         }
         public override void ExposeData()
@@ -250,7 +344,7 @@ namespace RV2R_RutsStuff
             Scribe_Deep.Look<BoolSmartSetting>(ref this.sizedEncumberance, "sizedEncumberance", new object[0]);
             Scribe_Deep.Look<FloatSmartSetting>(ref this.encumberanceModifier, "encumberanceModifier", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.visibleEncumberance, "visibleEncumberance", new object[0]);
-            //   Scribe_Deep.Look<FloatSmartSetting>(ref this.encumberanceCap, "encumberanceCap", new object[0]);
+            //Scribe_Deep.Look<FloatSmartSetting>(ref this.encumberanceCap, "encumberanceCap", new object[0]);
             Scribe_Deep.Look<FloatSmartSetting>(ref this.endoSicknessStrength, "endoSicknessStrength", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.endoPacify, "endoPacify", new object[0]);
             Scribe_Deep.Look<FloatSmartSetting>(ref this.regressionStrength, "regressionStrength", new object[0]);
@@ -259,12 +353,27 @@ namespace RV2R_RutsStuff
             Scribe_Deep.Look<FloatSmartSetting>(ref this.endoPets, "endoPets", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.endoPetsJoin, "endoPetsJoin", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.endoCapture, "endoCapture", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.preyLovin, "preyLovin", new object[0]);
+            Scribe_Deep.Look<FloatSmartSetting>(ref this.gutLovinChance, "gutLovinChance", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.gutLovinStands, "gutLovinStands", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.gutLovinNonCon, "gutLovinNonCon", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.insectoidCapture, "insectoidCapture", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.scariaCapture, "scariaCapture", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.endoRecruitment, "endoRecruitment", new object[0]);
             Scribe_Deep.Look<FloatSmartSetting>(ref this.playVoreChance, "playVoreChance", new object[0]);
-            //    Scribe_Deep.Look<BoolSmartSetting>(ref this.playVoreIndescriminate, "playVoreIndescriminate", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.playVoreIndescriminate, "playVoreIndescriminate", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.fatalPlayVore, "fatalPlayVore", new object[0]);
+            Scribe_Deep.Look<FloatSmartSetting>(ref this.fodderChance, "fodderChance", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.fodderNamedAllowed, "fodderNamedAllowed", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.fodderPredatorsAllowed, "fodderPredatorsAllowed", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.fodderAnimalsAllowed, "fodderAnimalsAllowed", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.fodderAnimalsFull, "fodderAnimalsFull", new object[0]);
+            Scribe_Deep.Look<FloatSmartSetting>(ref this.miscFodderChance, "miscFodderChance", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.fodderPenAnimals, "fodderPenAnimals", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.fodderAnimals, "fodderAnimals", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.fodderPredators, "fodderPredators", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.fodderGuests, "fodderGuests", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.fodderColonists, "fodderColonists", new object[0]);
             Scribe_Deep.Look<FloatSmartSetting>(ref this.endoBondChance, "endoBondChance", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.preyOnlyEndoBond, "preyOnlyEndoBond", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.willingOnlyEndoBond, "willingOnlyEndoBond", new object[0]);

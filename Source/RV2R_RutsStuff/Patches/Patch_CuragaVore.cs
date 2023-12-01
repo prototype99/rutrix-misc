@@ -7,12 +7,12 @@ namespace RV2R_RutsStuff
     [HarmonyPatch(typeof(RollAction_Heal), "TryAction")]
     internal class Patch_CuragaVore
     {
-        internal static bool Prefix(VoreTrackerRecord record, ref float rollStrength)
+        internal static bool Prefix(ref float rollStrength)
         {
             if (RV2_Rut_Settings.rutsStuff.CuragaVore)
             {
                 //RV2Log.Message(record.Predator.LabelShort + " casting curaga", "OngoingVore");
-                rollStrength *= 3f;
+                rollStrength *= 2.5f;
             }
 
             return true;

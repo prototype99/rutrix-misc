@@ -27,65 +27,69 @@ namespace RV2R_RutsStuff
             if (GenAI.InDangerousCombat(pawn))
                 return null;
 
-            Pawn target = null;
+            try
+            {
+                Pawn prey = null;
 
-            if (RV2_Rut_Settings.rutsStuff.VornyBonds && pawn.relations.GetDirectRelationsCount(PawnRelationDefOf.Bond) > 0)
-            {
-                Pawn bond = pawn.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Bond);
-                if (bond != null
-                 && !bond.Drafted
-                && !GenAI.EnemyIsNear(pawn, 25f)
-                 && !RV2R_Utilities.IsBusy(pawn, bond)
-                 && pawn.Position.DistanceTo(bond.Position) < radius
-                 && pawn.CanReserve(bond, 1, -1, null, false)
-                 && bond.CanParticipateInVore(out reason)
-                 && pawn.CanVore(bond, out reason)
-                 && Rand.Chance(0.2f))
-                    target = bond;
-            }
-            if (target == null)
-            {
-                Predicate<Thing> predicate = delegate (Thing t)
+                if (RV2_Rut_Settings.rutsStuff.VornyBonds && pawn.relations.GetDirectRelationsCount(PawnRelationDefOf.Bond) > 0)
                 {
-                    Pawn pawn3 = (Pawn)t;
-                    return pawn3 != pawn
-                        && !pawn3.Drafted
-                        && !GenAI.InDangerousCombat(pawn3)
-                        && !pawn3.HostileTo(pawn)
-                        && pawn.CanReserve(pawn3, 1, -1, null, false)
-                        && !pawn3.IsForbidden(pawn)
-                        && !GenAI.EnemyIsNear(pawn, radius)
-                        && !RV2R_Utilities.IsBusy(pawn, pawn3)
-                        && pawn3.CanParticipateInVore(out reason)
-                        && pawn.CanVore(pawn3, out reason);
-                };
-                target = (Pawn)GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForGroup(ThingRequestGroup.Pawn), PathEndMode.OnCell, TraverseParms.For(pawn, Danger.Some, TraverseMode.ByPawn, false, false, false), this.radius, predicate, null, 0, -1, false, RegionType.Set_Passable, false);
-            }
-            if (target == null)
-                return null;
-            List<VoreGoalDef> list = DefDatabase<VoreGoalDef>.AllDefsListForReading.Where((VoreGoalDef goal) => !goal.IsLethal && goal.defName != "Store").ToList();
-            if (!pawn.Name.Numerical)
-                list.Append(VoreGoalDefOf.Store);
+                    Pawn bond = pawn.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Bond);
+                    if (bond != null
+                     && !GenAI.EnemyIsNear(pawn, radius)
+                     && !RV2R_Utilities.IsBusy(pawn, bond)
+                     && pawn.Position.DistanceTo(bond.Position) < radius
+                     && pawn.CanReserve(bond, 1, -1, null, false)
+                     && pawn.CanVore(bond, out reason)
+                     && Rand.Chance(0.25f))
+                        prey = bond;
+                }
+                if (prey == null)
+                {
+                    bool predicate(Thing t)
+                    {
+                        Pawn pawn3 = (Pawn)t;
+                        return pawn3 != pawn
+                            && (pawn3.IsColonist || RV2_Rut_Settings.rutsStuff.PlayVoreIndescriminate)
+                            && !GenAI.InDangerousCombat(pawn3)
+                            && pawn.CanReserve(pawn3, 1, -1, null, false)
+                            && !pawn3.IsForbidden(pawn)
+                            && !GenAI.EnemyIsNear(pawn, radius)
+                            && !RV2R_Utilities.IsBusy(pawn, pawn3)
+                            && !RV2R_Utilities.IsColonyHostile(pawn, pawn3)
+                            && pawn.CanVore(pawn3, out reason);
+                    }
+                    prey = (Pawn)GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForGroup(ThingRequestGroup.Pawn), PathEndMode.OnCell, TraverseParms.For(pawn, Danger.Some, TraverseMode.ByPawn, false, false, false), this.radius, predicate, null, 0, -1, false, RegionType.Set_Passable, false);
+                }
+                if (prey == null)
+                    return null;
+                List<VoreGoalDef> list = DefDatabase<VoreGoalDef>.AllDefsListForReading.Where((VoreGoalDef goal) => !goal.IsLethal && goal.defName != "Store").ToList();
+                if (!pawn.Name.Numerical)
+                    list.Append(VoreGoalDefOf.Store);
 
-            if (RV2_Rut_Settings.rutsStuff.FatalPlayVore)
-                list = DefDatabase<VoreGoalDef>.AllDefsListForReading;
-            VoreInteraction voreInteraction = VoreInteractionManager.Retrieve(new VoreInteractionRequest(pawn, target, VoreRole.Predator, true, false, false, null, null, null, null, list, null, null));
-            if (voreInteraction.ValidPaths.EnumerableNullOrEmpty<VorePathDef>())
+                if (RV2_Rut_Settings.rutsStuff.FatalPlayVore)
+                    list = DefDatabase<VoreGoalDef>.AllDefsListForReading;
+                VoreInteraction voreInteraction = VoreInteractionManager.Retrieve(new VoreInteractionRequest(pawn, prey, VoreRole.Predator, true, false, false, null, null, null, null, list));
+                if (voreInteraction.ValidPaths.EnumerableNullOrEmpty<VorePathDef>())
+                {
+                    RV2Log.Message("Predator " + pawn.LabelShort + " can't play-pred their target " + prey.LabelShort, "Jobs");
+                    return null;
+                }
+                VorePathDef vorePathDef = (voreInteraction.PreferredPath ?? voreInteraction.ValidPaths.RandomElement<VorePathDef>());
+                RV2Log.Message(pawn.LabelShort + " play-predding " + prey.LabelShort + " via " + vorePathDef.label, "Jobs");
+                VoreProposal_TwoWay voreProposal_TwoWay = new VoreProposal_TwoWay(voreInteraction.Predator, voreInteraction.Prey, pawn, prey, vorePathDef);
+                VoreJob voreJob = VoreJobMaker.MakeJob(prey.IsColonistPlayerControlled ? VoreJobDefOf.RV2_ProposeVore : VoreJobDefOf.RV2_VoreInitAsPredator, pawn);
+                voreJob.targetA = prey;
+                voreJob.Proposal = voreProposal_TwoWay;
+                voreJob.VorePath = vorePathDef;
+                voreJob.Initiator = pawn;
+                voreJob.count = 1;
+                return voreJob;
+            }
+            catch (Exception e)
             {
-                RV2Log.Message("Predator " + pawn.LabelShort + " can't play-pred their target " + target.LabelShort, "Jobs");
+                Log.Warning("RV-2R: Something went wrong when " + pawn.LabelShort + " tried to play-pred: " + e);
                 return null;
             }
-            VorePathDef vorePathDef = (voreInteraction.PreferredPath ?? voreInteraction.ValidPaths.RandomElement<VorePathDef>());
-            RV2Log.Message(pawn.LabelShort + " play-predding " + target.LabelShort + " via " + vorePathDef.label, "Jobs");
-            VoreProposal_TwoWay voreProposal_TwoWay = new VoreProposal_TwoWay(voreInteraction.Predator, voreInteraction.Prey, pawn, target, vorePathDef);
-            VoreJob voreJob = VoreJobMaker.MakeJob(target.IsHumanoid() ? VoreJobDefOf.RV2_ProposeVore : VoreJobDefOf.RV2_VoreInitAsPredator, pawn);
-            voreJob.targetA = target;
-            voreJob.Proposal = voreProposal_TwoWay;
-            voreJob.VorePath = vorePathDef;
-            voreJob.Initiator = pawn;
-            voreJob.count = 1;
-            return voreJob;
         }
-
     }
 }
