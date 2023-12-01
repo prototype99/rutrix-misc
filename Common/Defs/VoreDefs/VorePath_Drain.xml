@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <RimVore2.VorePathDef Abstract="True" Name="Drain_Base">
+    <voreGoal>RV2R_Drain</voreGoal>
+  </RimVore2.VorePathDef>
+
+  <!-- Essential Paths -->
+  <!-- Oral -->
+
+  <RimVore2.VorePathDef ParentName="Drain_Base">
+    <defName>OralDrain</defName>
+    <label>(Drain) Oral</label>
+    <RMBLabel>Oral vore</RMBLabel>
+    <actionDescription>{PREDATOR} will orally drain {PREY}</actionDescription>
+    <description>Oral parasitisim is where the predator swallows the prey into their stomach, where they are drained of their energy. This process is safe, if exhausting.</description>
+    <initTale>RV2R_VoreInitiation_OralDrain</initTale>
+    <exitTale>RV2R_VoreExit_OralDrain</exitTale>
+    <voreType>Oral</voreType>
+    <postVoreMemories>
+      <predatorPostVoreSuccess>RV2R_PredatorOralDrainSuccess</predatorPostVoreSuccess>
+      <predatorPostVoreInterrupted>RV2R_PredatorOralDrainInterrupted</predatorPostVoreInterrupted>
+      <preyPostVoreInterrupted>RV2R_PreyOralDrainInterrupted</preyPostVoreInterrupted>
+    </postVoreMemories>
+    <stages>
+      <li>Mouth_Enter</li>
+      <li>Stomach_Warmup_Fast</li>
+      <li>Stomach_Drain</li>
+      <li>Stomach_SoftChurn</li>
+      <li>Intestines_SoftProcess</li>
+      <li>Anus_Exit</li>
+    </stages>
+    <defaultRequiredStruggles>60</defaultRequiredStruggles>
+  </RimVore2.VorePathDef>
+
+  <!-- Anal -->
+
+  <RimVore2.VorePathDef ParentName="Drain_Base">
+    <defName>AnalDrain</defName>
+    <label>(Drain) Anal</label>
+    <RMBLabel>Anal vore</RMBLabel>
+    <description>Anal parasitisim is where the predator is where the predator stuffs the prey up their butt and eventually to their stomach, where they are drained of their energy. This process is safe, if exhausting.</description>
+    <actionDescription>{0} will anally drain {1}</actionDescription>
+    <initTale>RV2R_VoreInitiation_AnalDrain</initTale>
+    <exitTale>RV2R_VoreExit_AnalDrain</exitTale>
+    <voreType>Anal</voreType>
+    <postVoreMemories>
+      <predatorPostVoreSuccess>RV2R_PredatorAnalDrainSuccess</predatorPostVoreSuccess>
+      <predatorPostVoreInterrupted>RV2R_PredatorAnalDrainInterrupted</predatorPostVoreInterrupted>
+      <preyPostVoreInterrupted>RV2R_PreyAnalDrainInterrupted</preyPostVoreInterrupted>
+    </postVoreMemories>
+    <stages>
+      <li>Anus_Enter</li>
+      <li>Intestines_Enter</li>
+      <li>Stomach_Warmup_Fast</li>
+      <li>Stomach_Drain</li>
+      <li>Stomach_SoftChurn</li>
+      <li>Intestines_SoftProcess</li>
+      <li>Anus_Exit</li>
+    </stages>
+    <defaultRequiredStruggles>60</defaultRequiredStruggles>
+  </RimVore2.VorePathDef>
+
+
+</Defs>
