@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<Defs>
+  <JobDef>
+    <defName>RV2R_GutLovin</defName>
+    <driverClass>RV2R_RutsStuff.JobDriver_GutLovin</driverClass>
+    <reportString>gut lovin'.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+  </JobDef>
+</Defs>
