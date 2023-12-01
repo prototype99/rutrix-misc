@@ -5,7 +5,7 @@
     <defName>RV2R_EndoRecovery</defName>
     <hediffClass>HediffWithComps</hediffClass>
     <label>endo sickness</label>
-    <description>A label given to the generalized weakness and disorientation caused by sensory deprivation and lack of movement assosiated with predatory entrapment. It's generaly not dangerous, and most report feeling relaxed and comfortable, if woozy. Victims recover with rest and time.</description>
+    <description>Generalized weakness and disorientation caused by predatory entrapment. It's generaly not dangerous, and most report feeling relaxed and comfortable, if woozy. Victims recover with rest and time.</description>
     <initialSeverity>0.01</initialSeverity>
     <maxSeverity>1.00</maxSeverity>
     <isBad>false</isBad>
@@ -342,6 +342,20 @@
     <defName>RV2R_VoreEncumbrence</defName>
     <label>Weighed Down</label>
     <description>Encumbrance from prey within.</description>
+  </HediffDef>
+  
+  
+  <HediffDef ParentName="RV2_PreyInStomach">
+    <defName>RV2R_PreyInStomachDrain</defName>
+    <description>This pawn is passivily draining living prey in their stomach.</description>
+  </HediffDef>
+  <HediffDef ParentName="RV2_PreyInStomach">
+    <defName>RV2R_PreyInStomachSoftChurning</defName>
+    <description>This pawn is passivily churning living prey in their stomach.</description>
+  </HediffDef>
+  <HediffDef ParentName="RV2_PreyInIntestines">
+    <defName>RV2R_PreyInIntestinesSoftProcessing</defName>
+    <description>This pawn is passing someone through their guts, towards the anus, while passivily draining them for nourishment.</description>
   </HediffDef>
   
 </Defs>
