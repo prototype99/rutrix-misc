@@ -24,7 +24,7 @@
     </rulePack>
   </TaleDef>
   <TaleDef ParentName="RV2_VoreInitiation_Base">
-    <defName>RV2_VoreInitiation_OralDrain</defName>
+    <defName>RV2R_VoreInitiation_OralDrain</defName>
     <rulePack>
       <include>
         <li>RV2R_Goal_Drain</li>
@@ -33,7 +33,7 @@
     </rulePack>
   </TaleDef>
   <TaleDef ParentName="RV2_VoreInitiation_Base">
-    <defName>RV2_VoreInitiation_AnalDrain</defName>
+    <defName>RV2R_VoreInitiation_AnalDrain</defName>
     <rulePack>
       <include>
         <li>RV2R_Goal_Drain</li>
@@ -42,7 +42,7 @@
     </rulePack>
   </TaleDef>
   <TaleDef ParentName="RV2_VoreExit_Base">
-    <defName>RV2_VoreExit_OralDrain</defName>
+    <defName>RV2R_VoreExit_OralDrain</defName>
     <rulePack>
       <include>
         <li>RV2R_Goal_Drain</li>
@@ -51,7 +51,7 @@
     </rulePack>
   </TaleDef>
   <TaleDef ParentName="RV2_VoreExit_Base">
-    <defName>RV2_VoreExit_AnalDrain</defName>
+    <defName>RV2R_VoreExit_AnalDrain</defName>
     <rulePack>
       <include>
         <li>RV2R_Goal_Drain</li>
