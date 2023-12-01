@@ -169,4 +169,65 @@
     </stages>
   </ThoughtDef>
   
+  <ThoughtDef ParentName="RV2_VoreMemory_Base">
+    <defName>RV2R_PredatorOralDrainSuccess</defName>
+    <stages>
+      <li>
+        <label>Orally drained {0}</label>
+        <description>I ate and churned up {1}. A satisfying meal!</description>
+        <baseMoodEffect>12</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  <ThoughtDef ParentName="RV2_VoreMemory_Base">
+    <defName>RV2R_PredatorOralDrainInterrupted</defName>
+    <stages>
+      <li>
+        <label>Oral draining of {0} interrupted</label>
+        <description>I tried to churn up {1}, but they got away. *Now* what am I supposed to eat?</description>
+        <baseMoodEffect>-4</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  <ThoughtDef ParentName="RV2_VoreMemory_Base">
+    <defName>RV2R_PreyOralDrainInterrupted</defName>
+    <stages>
+      <li>
+        <label>Escaped oral draining</label>
+        <description>{1} tried to eat me! I'm not food!</description>
+        <baseMoodEffect>-4</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  
+  <ThoughtDef ParentName="RV2_VoreMemory_Base">
+    <defName>RV2R_PredatorAnalDrainSuccess</defName>
+    <stages>
+      <li>
+        <label>Anally drained {0}</label>
+        <description>I churned {1} up through my rear end!</description>
+        <baseMoodEffect>8</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  <ThoughtDef ParentName="RV2_VoreMemory_Base">
+    <defName>RV2R_PredatorAnalDrainInterrupted</defName>
+    <stages>
+      <li>
+        <label>Anal draining of {0} interrupted</label>
+        <description>I tried to eat {1} with my ass, but they got away. *Now* how am I supposed to feed my tush?</description>
+        <baseMoodEffect>-4</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  <ThoughtDef ParentName="RV2_VoreMemory_Base">
+    <defName>RV2R_PreyAnalDrainInterrupted</defName>
+    <stages>
+      <li>
+        <label>Escaped anal draining</label>
+        <description>{1} tried to feed me to their ass! I'm not butt-food!</description>
+        <baseMoodEffect>-8</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
 </Defs>
