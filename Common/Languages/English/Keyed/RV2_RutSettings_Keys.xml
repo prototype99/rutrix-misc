@@ -11,20 +11,18 @@
   <RV2R_Settings_SizedEncumberance>Size-based encumbrance scaling</RV2R_Settings_SizedEncumberance>  
   <RV2R_Settings_SizedEncumberance_Tip>Enable to scale encumberance by total weight of all prey. Disable to scale encumberance by count of prey, Can cause problems for smaller preds.</RV2R_Settings_SizedEncumberance_Tip>  
   <RV2R_Settings_EncumberanceModifier>Encumbrance multiplier</RV2R_Settings_EncumberanceModifier>  
-  <RV2R_Settings_EncumberanceModifier_Tip>How heavy prey are. Setting too high can easily incapacitate preds. Prey held in extremiedies or absorbed in some way are easier to hold.</RV2R_Settings_EncumberanceModifier_Tip>    
+  <RV2R_Settings_EncumberanceModifier_Tip>How heavy prey are. Setting too high can easily incapacitate preds. Setting to 0% effectivly disables the mechanic. Prey held in extremiedies or absorbed in some way are easier to hold.</RV2R_Settings_EncumberanceModifier_Tip>    
   <RV2R_Settings_EncumberanceVisible>Visible "Weighed down" hediff</RV2R_Settings_EncumberanceVisible>  
-  <RV2R_Settings_EncumberanceVisible_Tip>Makes the "weighed down" hediff used for encumbrance visible. This dosn't change it's functonality, it just makes it visible to the player./n/nNote that it will always be shown when hovering over a pawn's moving capacity stat if it is affecting it.</RV2R_Settings_EncumberanceVisible_Tip> 
-  <RV2R_Settings_EncumberanceCap>Encumbrance cap</RV2R_Settings_EncumberanceCap>  
-  <RV2R_Settings_EncumberanceCap_Tip>How high the "Weighed Down" hediff is allowed to get to. Can be used to quickly get overburdedened preds back up to let some prey out. One prey, assuming no modifiers and same size, is 25%.\n\nAt 25%, moving reduction is -17.5%.\nAt 50%, it's -40%.\nAt 75%, it's -65%.\nAt 100%, it's -150%.</RV2R_Settings_EncumberanceCap_Tip>  
+  <RV2R_Settings_EncumberanceVisible_Tip>If the "weighed down" hediff used for encumbrance is visible. This dosn't change it's functonality, it just allows you to hide it in a pawn's health tab.\n\nNote that it will always be shown when hovering over a pawn's moving capacity stat if it is affecting it.</RV2R_Settings_EncumberanceVisible_Tip> 
 
-  <RV2R_Settings_EncumberanceTurnOff>Due to how the encumbrance scaling works, disabling size-based encumbrance scaling will not revert to RimVore-2's methods for encumbrance, instead using a method that aproximates it. To revert, set encumbrance multiplier to 0% and remove Patches/Patch_Hediffs_Vore_CapmodRemoval.xml from this submod's Common folder.</RV2R_Settings_EncumberanceTurnOff>  
+  <RV2R_Settings_EncumberanceTurnOff>Due to how the encumbrance scaling works, disabling size-based encumbrance scaling will not revert to RimVore-2's methods for encumbrance, instead using a method that aproximates it.\n\nIf you need to revert, set encumbrance multiplier to 0% and remove Patches/Patch_Hediffs_Vore_CapmodRemoval.xml from this submod's Common folder.</RV2R_Settings_EncumberanceTurnOff>  
 
   <RV2R_Tick_Section>Endo Stuff</RV2R_Tick_Section>
 
   <RV2R_Settings_EndoSickness>Endo sickness strength</RV2R_Settings_EndoSickness>  
   <RV2R_Settings_EndoSickness_Tip>How quickly (if at all) a pawn should get "endo sick" while safely inside of a pred. At default, it's 1% severity per "vore tick". It's not dangerous, and even puts them in a good mood, at the cost of being loopy and disorientated for about a day or two.\n\nIndirectly nerfs endo storage as a way to keep medics and such safe and makes struggling harder, among other things.</RV2R_Settings_EndoSickness_Tip>  
   <RV2R_Settings_EndoSicknessPacification>Endo pacification</RV2R_Settings_EndoSicknessPacification>  
-  <RV2R_Settings_EndoSicknessPacification_Tip>Prey that are too endo sick can no longer struggle, and will be captured if hostile.</RV2R_Settings_EndoSicknessPacification_Tip>
+  <RV2R_Settings_EndoSicknessPacification_Tip>Prey that get too endo sick stop struggling, and will be captured if hostile.</RV2R_Settings_EndoSicknessPacification_Tip>
   <RV2R_Settings_AgeRegression>Age regression strength</RV2R_Settings_AgeRegression>
   <RV2R_Settings_AgeRegression_Tip>How quickly, in days spent to days gained, prey regress in age while unbirthed. They'll never regress to below biological adulthood, which varies by race. Set to 0 to disable, and to 1 to prevent but not reverse aging.\n\n(Remember that Rimworld has 60 days in a year.)</RV2R_Settings_AgeRegression_Tip>
   <RV2R_Settings_AgeRegressionCure>Chronic regression</RV2R_Settings_AgeRegressionCure>
@@ -34,18 +32,56 @@
   <RV2R_Settings_PetRecruitment>Pets join</RV2R_Settings_PetRecruitment>
   <RV2R_Settings_PetRecruitment_Tip>Prey will join your faction if they become a pet of one of your pawns. Can very easily be abused.</RV2R_Settings_PetRecruitment_Tip>
   <RV2R_Settings_EndoThoughts>Relationship Thoughts</RV2R_Settings_EndoThoughts>
-  <RV2R_Settings_EndoThoughts_Tip>Lets preds and prey gain positive thoughts if they're in a relationship or bonded, based on their opinion of each other.n\n\At most, it's +5 mood for spouses, +5 mood for holding 2 bonded animals, and +5 mood for belly pets.</RV2R_Settings_EndoThoughts_Tip>
+  <RV2R_Settings_EndoThoughts_Tip>Lets preds and prey gain positive thoughts if they're in a relationship or bonded, based on their opinion of each other.\n\nAt most, it's +5 mood for spouses, +5 mood for holding 2 bonded animals, and +5 mood for belly pets.</RV2R_Settings_EndoThoughts_Tip>
 
+  
+  <RV2R_Lovin_Section>Lovin'</RV2R_Lovin_Section>
+  <RV2R_Settings_PreyLovin>Voraphile 3-ways</RV2R_Settings_PreyLovin>
+  <RV2R_Settings_PreyLovin_Tip>Lets prey have some fun if their predators engage in lovin'. How much (if at all) a prey enjoys it is based on their Preyish Libido quirks.</RV2R_Settings_PreyLovin_Tip>
+  <RV2R_Settings_GutLovin>Gut lovin' chance</RV2R_Settings_GutLovin>
+  <RV2R_Settings_GutLovin_Tip>How likely a romanticaly involved pred/prey pair will engage in some voraphilic lovin'. It works kinda like regular lovin', respects lovin's cooldown, and both need to consent for it to happen. Odds are affected by the Predatory and Preyish Libido quirks.\n\n</RV2R_Settings_GutLovin_Tip>
+  <RV2R_Settings_GutLovinONS>One-nom-stands</RV2R_Settings_GutLovinONS>
+  <RV2R_Settings_GutLovinONS_Tip>Lets those not romanticaly involved engage in some voraphilic lovin'. Those with lovers will refrain if their partner isn't involved.</RV2R_Settings_GutLovinONS_Tip>  
+  <RV2R_Settings_GutLovinNonCon>Allow non-con</RV2R_Settings_GutLovinNonCon>
+  <RV2R_Settings_GutLovinNonCon_Tip>Allows for psycopaths or low opinion preds to gut-love regardless of what their prey think. Will absolutly destroy relationships if they're unwilling, and Kind pawns just won't.</RV2R_Settings_GutLovinNonCon_Tip>
+		
+  <RV2R_Fodder_Section>Living meals</RV2R_Fodder_Section>
+  
+  <RV2R_Settings_Fodder_Chance>Fodder chance</RV2R_Settings_Fodder_Chance>
+  <RV2R_Settings_Fodder_Chance_Tip>How likely colonists will vore a prisoner marked as fodder instead of getting a regular meal. They won't if they're too far away, or if they don't like any goals avialable to them.\n\nIf they can't reach any food, this check will always succeed, even if the odds are set to 0%.\n\nThis can dramaticaly increase the amount of auto-vore happening, for better or for worse.</RV2R_Settings_Fodder_Chance_Tip>
+  <RV2R_Settings_Fodder_AllowNamed>Named animals can fodder</RV2R_Settings_Fodder_AllowNamed>
+  <RV2R_Settings_Fodder_AllowNamed_Tip>Allows named colony animals to fodder prisoners. Any animal can be named in their Training tab.</RV2R_Settings_Fodder_AllowNamed_Tip>
+  <RV2R_Settings_Fodder_AllowPredators>Colony predators can fodder</RV2R_Settings_Fodder_AllowPredators>
+  <RV2R_Settings_Fodder_AllowPredators_Tip>Allows predatory colony animals to fodder prisoners. Their odds are lower than colonists.</RV2R_Settings_Fodder_AllowPredators_Tip>
+  <RV2R_Settings_Fodder_AllowAnimals>Colony animals can fodder</RV2R_Settings_Fodder_AllowAnimals>
+  <RV2R_Settings_Fodder_AllowAnimals_Tip>Allows all colony animals to fodder prisoners. Allowing predators must be enabled for this to have an effect. Their odds are lower than predator animals.</RV2R_Settings_Fodder_AllowAnimals_Tip>
+  <RV2R_Settings_Fodder_AnimalsFull>Colony animals can fodder non-prisoners</RV2R_Settings_Fodder_AnimalsFull>
+  <RV2R_Settings_Fodder_AnimalsFull_Tip>Allows colony animals to follow the fodder rules below. Can cause things to get a little chaotic, particularly in large colonies. Farm animals will never fodder others.</RV2R_Settings_Fodder_AnimalsFull_Tip>
+    
+  <RV2R_Settings_MiscFodder_Chance>Misc. fodder chance</RV2R_Settings_MiscFodder_Chance>
+  <RV2R_Settings_MiscFodder_Chance_Tip>How likely voring a non-prisoner pawn will happen instead of getting a regular meal.\n\nThis can and will dramaticaly increase the amount of auto-vore happening, for better or for worse.</RV2R_Settings_MiscFodder_Chance_Tip>
+
+  <RV2R_Settings_Fodder_Penned>Pen animals are fodder</RV2R_Settings_Fodder_Penned>
+  <RV2R_Settings_Fodder_Penned_Tip>If farm animals are valid fodder meals. Fodder prisoners have higher odds to be chosen, any living meal based on friendlies/non-hostiles have a base chance to fail, and 2 males and females of any species will be spared.</RV2R_Settings_Fodder_Penned_Tip>
+  <RV2R_Settings_Fodder_Animal>Colony animals are fodder</RV2R_Settings_Fodder_Animal>
+  <RV2R_Settings_Fodder_Animal_Tip>If non-predatory or small colony animals are valid fodder meals. Each trainable leared lowers the odds of being chosen, named animals are spared, and 2 males and females of any species will be spared.</RV2R_Settings_Fodder_Animal_Tip>
+  <RV2R_Settings_Fodder_Predator>Colony predators are fodder</RV2R_Settings_Fodder_Predator>
+  <RV2R_Settings_Fodder_Predator_Tip>If predatory colony animals are valid fodder meals. Each trainable leared lowers the odds of being chosen, named animals are spared, and 2 males and females of any species will be spared.</RV2R_Settings_Fodder_Predator_Tip>
+  <RV2R_Settings_Fodder_Guests>Colony guests are fodder</RV2R_Settings_Fodder_Guests>
+  <RV2R_Settings_Fodder_Guests_Tip>You really should leave this off.</RV2R_Settings_Fodder_Guests_Tip>
+  <RV2R_Settings_Fodder_Colonists>Colonists are fodder</RV2R_Settings_Fodder_Colonists>
+  <RV2R_Settings_Fodder_Colonists_Tip>You -REALLY- should leave this off.\n\n(They can use the drain vore-goal, making this a significantly less bad idea, but having fractions of your colony vanish every other day and come back loopy/passing out is more than a little chaotic.)</RV2R_Settings_Fodder_Colonists_Tip>
+  
   <RV2R_Capture_Section>Capturing</RV2R_Capture_Section>
 	
   <RV2R_Settings_EndoCapture>Endo capture</RV2R_Settings_EndoCapture>  
-  <RV2R_Settings_EndoCapture_Tip>Enabled, hostiles are captured and imprisoned if endo-vored by a colonist or colony animal while downed. Works great with heal-voring incapacitated raiders, and enabling means predatory trained animals have a way to help with recruitment.\n\n(Animals trained in predation will heal-vore hostiles if they can't fatal vore them.)</RV2R_Settings_EndoCapture_Tip>
+  <RV2R_Settings_EndoCapture_Tip>Enabled, hostiles are captured and imprisoned if endo-vored by a colonist or colony animal while downed (but not from grappling). Works great with heal-voring incapacitated raiders, and enabling means predatory trained animals have a way to help with recruitment.\n\n(Animals trained in predation will heal-vore hostiles if they can't fatal vore them.)</RV2R_Settings_EndoCapture_Tip>
   <RV2R_Settings_EndoCapture_Insectoids>Capture insectoids</RV2R_Settings_EndoCapture_Insectoids>  
-  <RV2R_Settings_EndoCapture_Insectoids_Tip>Members of the Sorne Geneline are pacified if endo-captured, ready to be tamed when released. Not at all balanced.</RV2R_Settings_EndoCapture_Insectoids_Tip>
+  <RV2R_Settings_EndoCapture_Insectoids_Tip>Members of the Sorne Geneline are pacified if endo-captured, ready to be tamed when released. Not at all balanced.\n\nAnimals trained in predation will only vore-capture or endo-rescue wildlife you designate to tame.</RV2R_Settings_EndoCapture_Insectoids_Tip>
   <RV2R_Settings_EndoCapture_Scaria>Scaria cure</RV2R_Settings_EndoCapture_Scaria>  
-  <RV2R_Settings_EndoCapture_Scaria_Tip>Healing vore can cure scaria, allowing endo-capture to be used on rabid animals. They'll only capture or endo-rescue animals you've set to tame.</RV2R_Settings_EndoCapture_Scaria_Tip>
+  <RV2R_Settings_EndoCapture_Scaria_Tip>Healing vore can cure scaria, allowing endo-capture to be used on rabid animals.\n\nAnimals trained in predation will only vore-capture or endo-rescue wildlife you designate to tame.</RV2R_Settings_EndoCapture_Scaria_Tip>
   <RV2R_Settings_EndoCapture_Recruitment>Endo recruitment</RV2R_Settings_EndoCapture_Recruitment>  
-  <RV2R_Settings_EndoCapture_Recruitment_Tip>Prisoners set to "Reduce Resistance" or "Recruit" will have their resistance slowly lower while willingly endo-vored. Having a warden chat them up is still faster, and this won't sway the unwavering.</RV2R_Settings_EndoCapture_Recruitment_Tip>
+  <RV2R_Settings_EndoCapture_Recruitment_Tip>Prisoners set to "Reduce Resistance" or "Recruit" will have their resistance slowly lower while willingly endo-vored. Keeping them happy and having a warden chat them up is much faster, and this won't sway the unwavering.</RV2R_Settings_EndoCapture_Recruitment_Tip>
   
   <RV2R_AnimalNom_Section>Animal Vore</RV2R_AnimalNom_Section>
 	
@@ -53,8 +89,10 @@
   <RV2R_Settings_AnimalRandomNomChance_Tip>How often, in hours on average, an animal trained to be playfully predatory will endo vore others. They're request vore to colonists, but they'll just nom anything else.</RV2R_Settings_AnimalRandomNomChance_Tip>
   <RV2R_Settings_AnimalRandomNomChanceModifier>Playful predation modifier</RV2R_Settings_AnimalRandomNomChanceModifier>
   <RV2R_Settings_AnimalRandomNomChanceModifier_Tip>The percentage of average hours to add for each prey a playful predator has. At default, 1 prey increases the average hours from 24 to 30, and two increases it to 36.</RV2R_Settings_AnimalRandomNomChanceModifier_Tip>
+  <RV2R_Settings_AnimalRandomNomIndiscriminate>Indescriminate predation</RV2R_Settings_AnimalRandomNomIndiscriminate>
+  <RV2R_Settings_AnimalRandomNomIndiscriminate_Tip>If your animals are allowed to play-pred anyone, not just your colonists or animals. Bear in mind, they can and will eat traders and quest pawns if enabled.</RV2R_Settings_AnimalRandomNomIndiscriminate_Tip>
   <RV2R_Settings_AnimalRandomNomFatal>Not-so-playful predation</RV2R_Settings_AnimalRandomNomFatal>
-  <RV2R_Settings_AnimalRandomNomFatal_Tip>...You, uh, might want to leave this off.</RV2R_Settings_AnimalRandomNomFatal_Tip>
+  <RV2R_Settings_AnimalRandomNomFatal_Tip>Playful predation is endo only. Not-so-playful predation isn't.\n\nYou might want to leave this off.</RV2R_Settings_AnimalRandomNomFatal_Tip>
   
   <RV2R_Bonds_Section>Bonds</RV2R_Bonds_Section>
 	
@@ -74,9 +112,9 @@
   <RV2R_Cheats_StopBleeding>Staunch bleeding</RV2R_Cheats_StopBleeding>
   <RV2R_Cheats_StopBleeding_Tip>Prey have their bleeding gradualy lower while vored. Does not tend injuries, just reduces bleeding.</RV2R_Cheats_StopBleeding_Tip>
   <RV2R_Cheats_NoExtremeTemp>No extreme temps</RV2R_Cheats_NoExtremeTemp>
-  <RV2R_Cheats_NoExtremeTemp_Tip>Caps a prey's hypothermia and heat stroke hediffs to 30%.</RV2R_Cheats_NoExtremeTemp_Tip>
+  <RV2R_Cheats_NoExtremeTemp_Tip>Caps a prey's hypothermia and heat stroke hediffs to 30%. Any higher, and consus penalties and frostbite occour.</RV2R_Cheats_NoExtremeTemp_Tip>
   <RV2R_Cheats_HyperHealing>Curaga Vore</RV2R_Cheats_HyperHealing>
-  <RV2R_Cheats_HyperHealing_Tip>Healing preds start casting curaga instead of cure, dramaticaly improving the best vore goal. Having a skilled doctor tend injuries and then heal-vore is still more effective.</RV2R_Cheats_HyperHealing_Tip>
+  <RV2R_Cheats_HyperHealing_Tip>Healing preds start casting curaga instead of cure, tripling the strength of healing vore and dramaticaly improving the best vore goal. Having a skilled doctor tend injuries and then heal-vore is still more effective.</RV2R_Cheats_HyperHealing_Tip>
 
   <RV2R_FuckUnity>Remember to add\n\n0.0.0.0 *unity.com\n0.0.0.0 *.unity.com\n0.0.0.0 *unity3d.com\n0.0.0.0 *.unity3d.com\n\n to your hosts file. You'll gain a sense of pride and accomplishment, no surprise mechanics needed.\n\n\nRimWorld was created with Unity, which has decided to fuck over every single developer who has ever used their platform. Show some love to Ludeon Studios and other once-Unity devs.\n\n\nFuck Unity.</RV2R_FuckUnity>
 
