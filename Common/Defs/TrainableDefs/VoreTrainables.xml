@@ -9,7 +9,7 @@
     <difficulty>50</difficulty>
     <requiredTrainability>None</requiredTrainability>
     <steps>2</steps>
-    <minBodySize>0.45</minBodySize>
+    <minBodySize>0.0</minBodySize>
     <defaultTrainable>true</defaultTrainable>
   </TrainableDef>
   <TrainableDef>
