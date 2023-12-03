@@ -12,7 +12,7 @@ namespace RV2R_RutsStuff
         {
             float preyMod = 1f;
 
-            if (Pawn.training != null && Pawn.training.GetWanted(RV2R_Common.PlayVore))
+            if (Pawn.training != null && !Pawn.training.GetWanted(RV2R_Common.PlayVore))
                 return -1f;
             //if (RV2_Rut_Settings.rutsStuff.PlayVoreNamedBoost && !Pawn.Name?.Numerical)
             //  mtbHours /= 2f;
