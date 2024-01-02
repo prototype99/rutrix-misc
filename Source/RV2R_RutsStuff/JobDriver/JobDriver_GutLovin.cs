@@ -63,7 +63,7 @@ namespace RV2R_RutsStuff
                     if (voreTrackerRecord.Prey.QuirkManager(false) != null && voreTrackerRecord.Prey.QuirkManager(false).HasValueModifier("Prey_Libido"))
                         num = voreTrackerRecord.Prey.QuirkManager(false).ModifyValue("Prey_Libido", num);
 
-                    if (num <= .33f && voreTrackerRecord.Prey.relations.OpinionOf(this.pawn) < 33)
+                    if (num <= .33f && voreTrackerRecord.Prey.relations.OpinionOf(pawn) < 33)
                         unwillingList.Add(voreTrackerRecord.Prey);
                     else
                         willingList.Add(voreTrackerRecord.Prey);
@@ -93,16 +93,20 @@ namespace RV2R_RutsStuff
                 if (this.pawn.IsHashIntervalTick(100))
                 {
                     FleckMaker.ThrowMetaIcon(this.pawn.Position, this.pawn.Map, FleckDefOf.Heart, 0.42f);
-                    this.pawn.needs.joy.CurLevel += 0.005f * predMod;
+                    if (this.pawn.needs.joy != null)
+                        this.pawn.needs.joy.CurLevel += 0.005f * predMod;
                     if (pawnData.VoreTracker != null)
                         foreach (VoreTrackerRecord voreTrackerRecord2 in voreTracker.VoreTrackerRecords)
                         {
-                            float willingness = 1f;
-                            if (voreTrackerRecord2.Prey.QuirkManager(false) != null && voreTrackerRecord2.Prey.QuirkManager().HasValueModifier("Prey_Libido"))
-                                willingness = quirkManager.ModifyValue("Prey_Libido", willingness);
+                            if (voreTrackerRecord2.Prey.needs.joy != null)
+                            {
+                                float willingness = 1f;
+                                if (voreTrackerRecord2.Prey.QuirkManager(false) != null && voreTrackerRecord2.Prey.QuirkManager().HasValueModifier("Prey_Libido"))
+                                    willingness = quirkManager.ModifyValue("Prey_Libido", willingness);
 
-                            if (willingness > 0f)
-                                voreTrackerRecord2.Prey.needs.joy.CurLevel += 0.03f * willingness;
+                                if (willingness > 0f)
+                                    voreTrackerRecord2.Prey.needs.joy.CurLevel += 0.03f * willingness;
+                            }
                         }
                 }
             });
