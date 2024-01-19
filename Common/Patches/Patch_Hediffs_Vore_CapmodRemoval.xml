@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Patch>
   <Operation Class="PatchOperationReplace">
-    <xpath>Defs/HediffDef[@Name="RV2_VoreHediffBase"]/stages</xpath>
+    <xpath>*/HediffDef[@Name="RV2_VoreHediffBase"]/stages</xpath>
     <value>
       <stages>
 			<li>
@@ -23,9 +23,9 @@
     </value>
   </Operation>
 	<Operation Class="PatchOperationReplace">
-		<xpath>Defs/HediffDef[@Name="RV2_PreyInMouth"]/stages</xpath>
+		<xpath>*/HediffDef[@Name="RV2_PreyInMouth"]/stages</xpath>
 			<value>
-				<stages>
+				<stages Inherit="False">
 					<li>
 						<minSeverity>0</minSeverity>
 					</li>
