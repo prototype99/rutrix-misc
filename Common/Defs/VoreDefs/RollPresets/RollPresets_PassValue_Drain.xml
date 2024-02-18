@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <RimVore2.RollPresetDef ParentName="Digest_StrengthModifiers">
+    <defName>IncreaseDigestionProgress_50Perc</defName>
+    <strength>0.01</strength>
+    <actionsOnSuccess>
+      <li Class="RimVore2.RollAction_PassValue_Add">
+        <name>DigestionProgress</name>
+        <maxValue>0.45</maxValue>
+      </li>
+    </actionsOnSuccess>
+  </RimVore2.RollPresetDef>
+  
+</Defs>
