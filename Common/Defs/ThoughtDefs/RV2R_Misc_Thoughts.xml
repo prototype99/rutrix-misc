@@ -37,7 +37,45 @@
       </li>
     </stages>
   </ThoughtDef>
-
+	
+  <ThoughtDef>
+    <defName>RV2R_Drained</defName>
+    <workerClass>ThoughtWorker_Hediff</workerClass>
+    <hediff>RV2R_Drained</hediff>
+    <validWhileDespawned>false</validWhileDespawned>
+    <stages>
+      <li>
+        <visible>false</visible>
+      </li>
+      <li>
+        <visible>false</visible>
+      </li>
+      <li>
+        <visible>false</visible>
+      </li>
+      <li>
+        <label>drained</label>
+        <description>I'm still a little dizzy every now and then, but it's mostly passed.</description>
+        <baseMoodEffect>0</baseMoodEffect>
+      </li>
+      <li>
+        <label>drained</label>
+        <description>I'm sick and tired of feeling sick and tired.</description>
+        <baseMoodEffect>-3</baseMoodEffect>
+      </li>
+      <li>
+        <label>drained</label>
+        <description>My head's foggy and my limbs feel like dough. What I wouldn't give to just pass out...</description>
+        <baseMoodEffect>-6</baseMoodEffect>
+      </li>
+      <li>
+        <label>numb</label>
+        <description>The only thing I feel is numb and tired. Just let me sleep...</description>
+        <baseMoodEffect>0</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+	
   <ThoughtDef ParentName="RV2_VoreThoughtSituationBase">
     <defName>RV2R_LoverPred</defName>
     <thoughtClass>RV2R_RutsStuff.Thought_VoreRelation</thoughtClass>
