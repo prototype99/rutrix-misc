@@ -32,8 +32,8 @@
   <RV2R_Settings_Pets_Tip>Predators and prey who willingly spend this many days straight in a vore stage gain a special relationship, providing a permanate opinion boost. Can be abused, but pets and their preds will get upset if something happens to the other.</RV2R_Settings_Pets_Tip>
   <RV2R_Settings_PetRecruitment>Pets join</RV2R_Settings_PetRecruitment>
   <RV2R_Settings_PetRecruitment_Tip>Prey will join your faction if they become a pet of one of your pawns. Can very easily be abused.</RV2R_Settings_PetRecruitment_Tip>
-  <Rv2R_Settings_EndoThoughts>Relationship Thoughts</Rv2R_Settings_EndoThoughts>
-  <Rv2R_Settings_EndoThoughts_Tip>Lets preds and prey gain positive thoughts if they're in a relationship or bonded, based on their opinion of each other.n\n\At most, it's +5 mood for spouses, +5 mood for holding 2 bonded animals, and +5 mood for belly pets.</Rv2R_Settings_EndoThoughts_Tip>
+  <RV2R_Settings_EndoThoughts>Relationship Thoughts</RV2R_Settings_EndoThoughts>
+  <RV2R_Settings_EndoThoughts_Tip>Lets preds and prey gain positive thoughts if they're in a relationship or bonded, based on their opinion of each other.n\n\At most, it's +5 mood for spouses, +5 mood for holding 2 bonded animals, and +5 mood for belly pets.</RV2R_Settings_EndoThoughts_Tip>
 
   <RV2R_Capture_Section>Capturing</RV2R_Capture_Section>
 	
