@@ -17,7 +17,8 @@
   <RimVore2.RollPresetDef ParentName="Drain_StrengthModifiers">
     <defName>DecreaseNeed_Prey_Rest</defName>
     <interval>2</interval>
-    <strength>-0.015~-0.025</strength>
+    <strength>0.015~0.025</strength>
+    <invert>true</invert>
     <actionsOnSuccess>
       <li Class="RimVore2.RollAction_IncreaseNeed">
         <target>Prey</target>
