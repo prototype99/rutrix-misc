@@ -3,7 +3,6 @@ using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Jobs;
 using Verse;
 using Verse.AI;
 using static RV2R_RutsStuff.Patch_RV2R_Settings;
@@ -48,19 +47,23 @@ namespace RV2R_RutsStuff
                 if (prey == null)
                     return null;
 
+                VoreJob voreJob = VoreJobMaker.MakeJob(VoreJobDefOf.RV2_VoreInitAsPredator, prey);
+                voreJob.targetA = prey;
+                voreJob.Initiator = pawn;
+                voreJob.IsForced = true;
+                voreJob.count = 1;
+
+                VorePathDef vorePathDef;
+
                 List<VoreGoalDef> list = DefDatabase<VoreGoalDef>.AllDefsListForReading.Where((VoreGoalDef goal) => goal.IsLethal).ToList();
 
                 IEnumerable<VorePathDef> interaction = VoreInteractionManager.Retrieve(new VoreInteractionRequest(pawn, prey, VoreRole.Predator, true, false, false, null, null, null, null, list)).ValidPaths;
 
                 if (!interaction.EnumerableNullOrEmpty<VorePathDef>())
                 {
-                    VorePathDef vorePathDef = interaction.RandomElement<VorePathDef>();
+                    vorePathDef = interaction.RandomElement<VorePathDef>();
                     RV2Log.Message(pawn.LabelShort + " eating hostile " + prey.LabelShort + " via " + vorePathDef.ToString(), "Jobs");
-                    VoreJob voreJob = VoreJobMaker.MakeJob(VoreJobDefOf.RV2_VoreInitAsPredator, prey);
-                    voreJob.targetA = prey;
                     voreJob.VorePath = vorePathDef;
-                    voreJob.Initiator = pawn;
-                    voreJob.count = 1;
                     return voreJob;
                 }
                 RV2Log.Message("Predator " + pawn.LabelShort + " can't fatal vore " + prey.LabelShort + "; checking for healing instead", true, "Jobs");
@@ -80,14 +83,10 @@ namespace RV2R_RutsStuff
                     RV2Log.Message("Predator " + pawn.LabelShort + " can't heal vore " + prey.LabelShort + ", no predation", true, "Jobs");
                     return null;
                 }
-                VorePathDef vorePathDef2 = interaction.RandomElement<VorePathDef>();
-                RV2Log.Message(pawn.LabelShort + " capturing hostile " + prey.LabelShort + " via " + vorePathDef2.ToString(), "Jobs");
-                VoreJob voreJob2 = VoreJobMaker.MakeJob(VoreJobDefOf.RV2_VoreInitAsPredator, prey);
-                voreJob2.targetA = prey;
-                voreJob2.VorePath = vorePathDef2;
-                voreJob2.Initiator = pawn;
-                voreJob2.count = 1;
-                return voreJob2;
+                vorePathDef = interaction.RandomElement<VorePathDef>();
+                RV2Log.Message(pawn.LabelShort + " capturing hostile " + prey.LabelShort + " via " + vorePathDef.ToString(), "Jobs");
+                voreJob.VorePath = vorePathDef;
+                return voreJob;
 
             predFail:
                 RV2Log.Message("Predator " + pawn.LabelShort + " can't fatal or heal vore " + prey.LabelShort + ", no predation", true, "Jobs");

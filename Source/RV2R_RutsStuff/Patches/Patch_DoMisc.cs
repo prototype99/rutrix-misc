@@ -28,7 +28,8 @@ namespace RV2R_RutsStuff
                     HandleSickness(__instance);
 
                 if (RV2_Rut_Settings.rutsStuff.EndoPets > 0f
-                 && __instance.CurrentVoreStage.PassedRareTicks >= Math.Floor(GenDate.TicksPerDay / 100 * RV2_Rut_Settings.rutsStuff.EndoPets))
+                 && __instance.CurrentVoreStage.PassedRareTicks >= Math.Floor(GenDate.TicksPerDay / 100 * RV2_Rut_Settings.rutsStuff.EndoPets)
+                 && __instance.Prey.relations.GetDirectRelationsCount(RV2R_Common.PetPrey) == 0)
                     HandlePets(__instance);
 
                 if (__instance.CurrentVoreStage.def.displayPartName == "womb"
@@ -41,6 +42,19 @@ namespace RV2R_RutsStuff
                 if (RV2_Rut_Settings.rutsStuff.EndoRecruitment
                  && (__instance.Prey.IsPrisonerOfColony && __instance.Predator.IsColonistPlayerControlled))
                     HandleImprisoned(__instance);
+
+                if (__instance.Prey.needs.comfort != null)
+                    if (__instance.Predator.QuirkManager(false) == null || !__instance.Predator.QuirkManager(false).HasValueModifier("VoreComfort"))
+                        __instance.Prey.needs.comfort.CurLevelPercentage = Math.Min(0.5f, __instance.Prey.needs.comfort.CurLevelPercentage + 0.025f);
+                    else if (__instance.Predator.QuirkManager(false).TryGetValueModifier("VoreComfort", ModifierOperation.Multiply, out float comfort))
+                        __instance.Prey.needs.comfort.CurLevelPercentage = Math.Min(comfort, __instance.Prey.needs.comfort.CurLevelPercentage + comfort / 20f);
+
+                if (RV2_Rut_Settings.rutsStuff.PreyJoy
+                 && __instance.Prey.needs.joy != null
+                 && (__instance.Prey.QuirkManager(false) == null
+                 || __instance.Prey.QuirkManager(false).GetTotalSelectorModifier(VoreRole.Prey, ModifierOperation.Add) >= 0f)
+                 && __instance.Prey.needs.joy.CurLevelPercentage < (__instance.IsForced ? 0.33f : 0.5f))
+                    __instance.Prey.needs.joy.CurLevelPercentage += 0.025f;
 
                 if (RV2_Rut_Settings.rutsStuff.NoBleedOut)
                 {
@@ -84,7 +98,7 @@ namespace RV2R_RutsStuff
                 {
                     if (record.StruggleManager.shouldStruggle)
                         record.StruggleManager.shouldStruggle = false;
-                    if (RV2R_Utilities.IsColonyHostile(record.Predator, record.Prey))
+                    if (RV2R_Utilities.IsColonyHostile(record.Predator, record.Prey) && !record.Prey.IsPrisoner)
                         record.Prey.guest?.SetGuestStatus(record.Predator.Faction, GuestStatus.Prisoner);
                 }
             }
@@ -95,19 +109,16 @@ namespace RV2R_RutsStuff
         {
             if (record.Predator.IsHumanoid() && record.Prey.IsHumanoid())
             {
-                if (record.Prey.relations.GetDirectRelationsCount(RV2R_Common.PetPrey) == 0)
+                if (RV2_Rut_Settings.rutsStuff.EndoPetsJoin
+                 && record.Predator.Faction.IsPlayer
+                 && (record.Prey.Faction == null || !record.Prey.Faction.IsPlayer))
                 {
-                    if (RV2_Rut_Settings.rutsStuff.EndoPetsJoin
-                     && record.Predator.Faction.IsPlayer
-                     && (record.Prey.Faction == null || !record.Prey.Faction.IsPlayer))
-                    {
-                        InteractionWorker_RecruitAttempt.DoRecruit(record.Predator, record.Prey, false);
-                        Messages.Message(new Message("RV2R_PetJoined".Translate(record.Prey.LabelShort, record.Predator.LabelShort), MessageTypeDefOf.PositiveEvent, new LookTargets(record.Prey)), true);
-                    }
-                    Messages.Message(new Message("RV2R_Pet".Translate(record.Prey.LabelShort, record.Predator.LabelShort), MessageTypeDefOf.PositiveEvent, new LookTargets(record.Prey)), true);
-                    record.Predator.relations.AddDirectRelation(RV2R_Common.PetPred, record.Prey);
-                    record.Prey.relations.AddDirectRelation(RV2R_Common.PetPrey, record.Predator);
-                }
+                    InteractionWorker_RecruitAttempt.DoRecruit(record.Predator, record.Prey, false);
+                    Messages.Message(new Message("RV2R_PetJoined".Translate(record.Prey.LabelShort, record.Predator.LabelShort), MessageTypeDefOf.PositiveEvent, new LookTargets(record.Prey)), true);
+                } // Needs to be done in this order; the "became pet" message ends up above the "pet joined" message, makes it read better
+                Messages.Message(new Message("RV2R_Pet".Translate(record.Prey.LabelShort, record.Predator.LabelShort), MessageTypeDefOf.PositiveEvent, new LookTargets(record.Prey)), true);
+                record.Predator.relations.AddDirectRelation(RV2R_Common.PetPred, record.Prey);
+                record.Prey.relations.AddDirectRelation(RV2R_Common.PetPrey, record.Predator);
             }
         }
         private static void HandleRegression(VoreTrackerRecord record)
@@ -174,6 +185,8 @@ namespace RV2R_RutsStuff
                 humanoid = record.Prey;
                 animal = record.Predator;
             }
+            if (animal.RaceProps.trainability == TrainabilityDefOf.None)
+                return;
             if (animal.relations.GetDirectRelationsCount(PawnRelationDefOf.Bond, null) != 0)
                 return;
             if (!validSetup && RV2_Rut_Settings.rutsStuff.PreyOnlyEndoBond)
@@ -188,6 +201,7 @@ namespace RV2R_RutsStuff
                     RelationsUtility.TryDevelopBondRelation(humanoid, animal, 100f);
                     animal.training.Train(TrainableDefOf.Tameness, humanoid, true);
                     animal.training.Train(TrainableDefOf.Obedience, humanoid, true);
+                    animal.training.SetWantedRecursive(TrainableDefOf.Obedience, true);
                 }
         }
         private static void HandleImprisoned(VoreTrackerRecord record)

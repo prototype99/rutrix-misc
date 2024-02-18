@@ -37,18 +37,15 @@ namespace RV2R_RutsStuff
                 if (record.Predator.Faction == null || !record.Predator.Faction.IsPlayer)
                     return;
 
-                if (record.Prey.IsAnimal() && RV2_Rut_Settings.rutsStuff.ScariaCapture)
+                if (record.Prey.IsAnimal() && record.VoreGoal == VoreGoalDefOf.Heal && RV2_Rut_Settings.rutsStuff.ScariaCapture)
                     HandleRabids(record);
 
                 if ((grappleHediff != null && !record.Prey.health.InPainShock) || !record.Prey.Downed) // So grappled pawns won't be captured
                     return;
-
-                if (!RV2R_Utilities.IsColonyHostile(record.Predator, record.Prey))
-                    return;
-
+                
                 if (record.Prey.IsInsectoid() && !record.Prey.IsHumanoid()) // Needs to be set up like this because of Apini; they're made of insect meat
                     HandleInsectoids(record);
-                else if (record.Prey.IsHumanoid())
+                else if (RV2R_Utilities.IsColonyHostile(record.Predator, record.Prey) && record.Prey.IsHumanoid())
                     record.Prey.guest.SetGuestStatus(record.Predator.Faction, GuestStatus.Prisoner);
             }
             catch (Exception e)

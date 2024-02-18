@@ -63,30 +63,32 @@ namespace RV2R_RutsStuff
                 };
 
                 if (pawn.IsActivePredator() && pawn.needs.food.CurLevelPercentage > 0.10f)
+                {
+                    PawnData pawnData = pawn.PawnData(false);
+                    if (pawnData != null)
                     {
-                        PawnData pawnData = pawn.PawnData(false);
-                        if (pawnData != null)
-                        {
-                            VoreTracker voreTracker = pawnData.VoreTracker;
-                            if (voreTracker != null)
-                                foreach (VoreTrackerRecord record in voreTracker.VoreTrackerRecords)
+                        VoreTracker voreTracker = pawnData.VoreTracker;
+                        if (voreTracker != null)
+                            foreach (VoreTrackerRecord record in voreTracker.VoreTrackerRecords)
+                            {
+                                if (record.VoreGoal == VoreGoalDefOf.Digest || record.VoreGoal == RV2R_Common.Drain)
                                 {
-                                    if (record.VoreGoal == VoreGoalDefOf.Digest || record.VoreGoal == RV2R_Common.Drain)
-                                        if (record.CurrentVoreStage.def.defName == "Intestines_Enter" || record.CurrentVoreStage.def.partGoal == "Warm up" || record.CurrentVoreStage.def.partGoal == "Digest" || record.CurrentVoreStage.def.partGoal == "Drain" || record.CurrentVoreStage.def.partGoal == "Churn")
-                                            if (!Rand.Chance((0.1f - pawn.needs.food.CurLevelPercentage) / 0.225f))
-                                            {
-                                                __result = null;
-                                                return;
-                                            }
-
-                                    if ((record.VoreType == VoreTypeDefOf.Oral && record.CurrentVoreStage.def.DisplayPartName.ToLower() == "mouth") || (record.VoreType == VoreTypeDefOf.Anal && record.CurrentVoreStage.def.DisplayPartName.ToLower() == "anus"))
-                                    {
-                                        __result = null;
-                                        return;
-                                    }
+                                    string defName = record.CurrentVoreStage.def.defName.ToLower();
+                                    if (defName == "Intestines_Enter" || defName.Contains("warmup") || defName.Contains("digest") || defName.Contains("drain") || defName.Contains("churn"))
+                                        if (!Rand.Chance((0.1f - pawn.needs.food.CurLevelPercentage) / 0.225f))
+                                        {
+                                            __result = null;
+                                            return;
+                                        }
                                 }
-                        }
+                                if ((record.VoreType == VoreTypeDefOf.Oral || record.VoreType == VoreTypeDefOf.Anal) && record.HasReachedEntrance)
+                                {
+                                    __result = null;
+                                    return;
+                                }
+                            }
                     }
+                }
 
                 if (pawn.PreferenceFor(VoreRole.Predator, ModifierOperation.Add) < 0f
                  || (pawn.PreferenceFor(VoreGoalDefOf.Digest, VoreRole.Predator, ModifierOperation.Add) < 0f

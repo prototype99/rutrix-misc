@@ -29,6 +29,7 @@ namespace RV2R_RutsStuff
         private BoolSmartSetting preyLovin;
         private FloatSmartSetting gutLovinChance;
         private BoolSmartSetting gutLovinStands;
+        private BoolSmartSetting gutLovinCheats;
         private BoolSmartSetting gutLovinNonCon;
 
         private FloatSmartSetting fodderChance;
@@ -53,6 +54,7 @@ namespace RV2R_RutsStuff
         private BoolSmartSetting willingOnlyEndoBond;
         private BoolSmartSetting vornyBonds;
 
+        private BoolSmartSetting preyJoy;
         private BoolSmartSetting noBleedOut;
         private BoolSmartSetting stopBleeding;
         private BoolSmartSetting noBadTemp;
@@ -80,6 +82,7 @@ namespace RV2R_RutsStuff
         public bool PreyLovin => this.preyLovin.value;
         public float GutLovinChance => this.gutLovinChance.value / 100f;
         public bool GutLovinStands => this.gutLovinStands.value;
+        public bool GutLovinCheats => this.gutLovinCheats.value;
         public bool GutLovinNonCon => this.gutLovinNonCon.value;
 
         public float PlayVoreChance => this.playVoreChance.value;
@@ -99,11 +102,12 @@ namespace RV2R_RutsStuff
         public bool FodderGuests => this.fodderGuests.value;
         public bool FodderColonists => this.fodderColonists.value;
 
-        public float EndoBondChance => this.endoBondChance.value;
+        public float EndoBondChance => this.endoBondChance.value / 100f;
         public bool PreyOnlyEndoBond => this.preyOnlyEndoBond.value;
         public bool WillingOnlyEndoBond => this.willingOnlyEndoBond.value;
         public bool VornyBonds => this.vornyBonds.value;
 
+        public bool PreyJoy => this.preyJoy.value;
         public bool NoBleedOut => this.noBleedOut.value;
         public bool StopBleeding => this.stopBleeding.value;
         public bool NoBadTemp => this.noBadTemp.value;
@@ -142,6 +146,8 @@ namespace RV2R_RutsStuff
                 this.gutLovinChance = new FloatSmartSetting("RV2R_Settings_GutLovin", 100f, 100f, 0f, 1000f, "RV2R_Settings_GutLovin_Tip", "0", "%");
             if (this.gutLovinStands == null || this.gutLovinStands.IsInvalid())
                 this.gutLovinStands = new BoolSmartSetting("RV2R_Settings_GutLovinONS", true, true, "RV2R_Settings_GutLovinONS_Tip");
+            if (this.gutLovinCheats == null || this.gutLovinCheats.IsInvalid())
+                this.gutLovinCheats = new BoolSmartSetting("RV2R_Settings_GutLovinCheats", false, false, "RV2R_Settings_GutLovinCheats_Tip");
             if (this.gutLovinNonCon == null || this.gutLovinNonCon.IsInvalid())
                 this.gutLovinNonCon = new BoolSmartSetting("RV2R_Settings_GutLovinNonCon", false, false, "RV2R_Settings_GutLovinNonCon_Tip");
 
@@ -187,7 +193,7 @@ namespace RV2R_RutsStuff
                 this.fodderColonists = new BoolSmartSetting("RV2R_Settings_Fodder_Colonists", false, false, "RV2R_Settings_Fodder_Colonists_Tip");
 
             if (this.endoBondChance == null || this.endoBondChance.IsInvalid())
-                this.endoBondChance = new FloatSmartSetting("RV2R_Settings_EndoBondChance", 0.0001f, 0.0001f, 0.0000f, 0.0020f, "RV2R_Settings_EndoBondChance_Tip", "0.0000", "%");
+                this.endoBondChance = new FloatSmartSetting("RV2R_Settings_EndoBondChance", 0.005f, 0.010f, 0.000f, 0.200f, "RV2R_Settings_EndoBondChance_Tip", "0.000", "%");
             if (this.preyOnlyEndoBond == null || this.preyOnlyEndoBond.IsInvalid())
                 this.preyOnlyEndoBond = new BoolSmartSetting("RV2R_Settings_EndoBondPredOnly", false, false, "RV2R_Settings_EndoBondPredOnly_Tip");
             if (this.willingOnlyEndoBond == null || this.willingOnlyEndoBond.IsInvalid())
@@ -195,6 +201,8 @@ namespace RV2R_RutsStuff
             if (this.vornyBonds == null || this.vornyBonds.IsInvalid())
                 this.vornyBonds = new BoolSmartSetting("RV2R_Settings_VornyBonds", false, false, "RV2R_Settings_VornyBonds_Tip");
 
+            if (this.preyJoy == null || this.preyJoy.IsInvalid())
+                this.preyJoy = new BoolSmartSetting("RV2R_Cheats_PreyJoy", true, true, "RV2R_Cheats_PreyJoy_Tip");
             if (this.noBleedOut == null || this.noBleedOut.IsInvalid())
                 this.noBleedOut = new BoolSmartSetting("RV2R_Cheats_NoBleedOut", false, false, "RV2R_Cheats_NoBleedOut_Tip");
             if (this.stopBleeding == null || this.stopBleeding.IsInvalid())
@@ -249,6 +257,7 @@ namespace RV2R_RutsStuff
             this.fodderColonists = null;
             this.endoBondChance = null;
             this.preyOnlyEndoBond = null;
+            this.preyJoy = null;
             this.noBleedOut = null;
             this.stopBleeding = null;
             this.noBadTemp = null;
@@ -328,6 +337,7 @@ namespace RV2R_RutsStuff
             listing_Standard.Gap(18f);
             listing_Standard.Label("RV2R_Cheats_Section".Translate());
             listing_Standard.Gap(12f);
+            this.preyJoy.DoSetting(listing_Standard);
             this.noBleedOut.DoSetting(listing_Standard);
             this.stopBleeding.DoSetting(listing_Standard);
             this.noBadTemp.DoSetting(listing_Standard);
@@ -378,6 +388,7 @@ namespace RV2R_RutsStuff
             Scribe_Deep.Look<BoolSmartSetting>(ref this.preyOnlyEndoBond, "preyOnlyEndoBond", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.willingOnlyEndoBond, "willingOnlyEndoBond", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.vornyBonds, "vornyBonds", new object[0]);
+            Scribe_Deep.Look<BoolSmartSetting>(ref this.preyJoy, "preyJoy", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.noBleedOut, "noBleedOut", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.stopBleeding, "stopBleeding", new object[0]);
             Scribe_Deep.Look<BoolSmartSetting>(ref this.noBadTemp, "noBadTemp", new object[0]);

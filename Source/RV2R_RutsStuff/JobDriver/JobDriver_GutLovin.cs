@@ -94,7 +94,7 @@ namespace RV2R_RutsStuff
                 {
                     FleckMaker.ThrowMetaIcon(this.pawn.Position, this.pawn.Map, FleckDefOf.Heart, 0.42f);
                     if (this.pawn.needs.joy != null)
-                        this.pawn.needs.joy.CurLevel += 0.005f * predMod;
+                        this.pawn.needs.joy.CurLevel += 0.002f * predMod;
                     if (pawnData.VoreTracker != null)
                         foreach (VoreTrackerRecord voreTrackerRecord2 in voreTracker.VoreTrackerRecords)
                         {
@@ -105,7 +105,7 @@ namespace RV2R_RutsStuff
                                     willingness = quirkManager.ModifyValue("Prey_Libido", willingness);
 
                                 if (willingness > 0f)
-                                    voreTrackerRecord2.Prey.needs.joy.CurLevel += 0.03f * willingness;
+                                    voreTrackerRecord2.Prey.needs.joy.CurLevel += 0.01f * willingness;
                             }
                         }
                 }
@@ -124,21 +124,20 @@ namespace RV2R_RutsStuff
 
                 ThoughtDef predThought = RV2R_Common.PredLovin_Normal_Mood;
                 ThoughtDef predOpinion = RV2R_Common.PredLovin_Normal;
-                switch (predLib)
+                if (predLib > 1.5f)
                 {
-                    case 2f:
-                        predThought = RV2R_Common.PredLovin_VeryGood_Mood;
-                        predOpinion = RV2R_Common.PredLovin_VeryGood;
-                        break;
-                    case 1.5f:
-                        predThought = RV2R_Common.PredLovin_Good_Mood;
-                        predOpinion = RV2R_Common.PredLovin_Good;
-                        break;
-                    case 0.33f:
-                        predThought = RV2R_Common.PreyLovin_Meh; // Meh contains no mood boosts, so doubling up does nothing
-                        predOpinion = RV2R_Common.PreyLovin_Meh;
-                        break;
-
+                    predThought = RV2R_Common.PredLovin_VeryGood_Mood;
+                    predOpinion = RV2R_Common.PredLovin_VeryGood;
+                }
+                else if (predLib >= 1f)
+                {
+                    predThought = RV2R_Common.PredLovin_Good_Mood;
+                    predOpinion = RV2R_Common.PredLovin_Good;
+                }
+                else if (predLib <= 0.5f)
+                {
+                    predThought = RV2R_Common.PreyLovin_Meh; // Meh contains no mood boosts, so doubling up does nothing
+                    predOpinion = RV2R_Common.PreyLovin_Meh;
                 }
                 Thought_Memory thought_Memory = (Thought_Memory)ThoughtMaker.MakeThought(predThought);
                 Thought_Memory thought_MemoryOpinion = (Thought_Memory)ThoughtMaker.MakeThought(predOpinion);
@@ -167,21 +166,15 @@ namespace RV2R_RutsStuff
                         if (preyLib > 0f)
                             willingList.Add(voreTrackerRecord2.Prey);
 
-                        switch (preyLib)
-                        {
-                            case 2f:
-                                preyThought = RV2R_Common.PreyLovin_VeryGood;
-                                break;
-                            case 1.5f:
-                                preyThought = RV2R_Common.PreyLovin_Good;
-                                break;
-                            case 0.33f:
-                                preyThought = RV2R_Common.PreyLovin_Meh;
-                                break;
-                            case 0.00f:
-                                preyThought = null;
-                                break;
-                        }
+                        if (preyLib > 1.5f)
+                            preyThought = RV2R_Common.PreyLovin_VeryGood;
+                        else if (preyLib >= 1f)
+                            preyThought = RV2R_Common.PreyLovin_Good;
+                        else if (preyLib <= 0.0f)
+                            preyThought = null;
+                        else if (preyLib <= 0.5f)
+                            preyThought = RV2R_Common.PreyLovin_Meh;
+
                         voreTrackerRecord2.Prey.mindState.canLovinTick = Find.TickManager.TicksGame + this.GenerateRandomMinTicksToNextLovin(voreTrackerRecord2.Prey);
 
                         // You're welcome for the mental images this little bit may generate
@@ -199,7 +192,7 @@ namespace RV2R_RutsStuff
 
                     if (preyThought != null)
                     {
-                        thought_Memory = (Thought_Memory)ThoughtMaker.MakeThought(preyThought); 
+                        thought_Memory = (Thought_Memory)ThoughtMaker.MakeThought(preyThought);
                         voreTrackerRecord2.Prey.needs.mood?.thoughts.memories.TryGainMemory(thought_Memory, this.pawn);
                         thought_MemoryOpinion = (Thought_Memory)ThoughtMaker.MakeThought(predOpinion);
                         this.pawn.needs.mood?.thoughts.memories.TryGainMemory(thought_MemoryOpinion, voreTrackerRecord2.Prey);
