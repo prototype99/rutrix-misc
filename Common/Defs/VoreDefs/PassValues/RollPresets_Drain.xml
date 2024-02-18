@@ -18,11 +18,11 @@
     <defName>DecreaseNeed_Prey_Rest</defName>
     <interval>2</interval>
     <strength>0.015~0.025</strength>
-    <invert>true</invert>
     <actionsOnSuccess>
       <li Class="RimVore2.RollAction_IncreaseNeed">
         <target>Prey</target>
         <need>Rest</need>
+        <invert>true</invert>
       </li>
     </actionsOnSuccess>
   </RimVore2.RollPresetDef>
