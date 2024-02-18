@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>  
+  <RimVore2.RollPresetDef Abstract="True" Name="Drain_StrengthModifiers">
+    <strengthModifiers>
+      <li Class="RimVore2.RollModifier_VoreSpeed"/>
+      <li Class="RimVore2.RollModifier_SizeDifference">
+        <pawn>Predator</pawn>
+        <relationTo>Prey</relationTo>
+      </li>
+      <li Class="RimVore2.RollModifier_Capacity">
+        <target>Predator</target>
+        <capacity>Metabolism</capacity>
+      </li>
+    </strengthModifiers>
+  </RimVore2.RollPresetDef>
+  
+  <RimVore2.RollPresetDef ParentName="Drain_StrengthModifiers">
+    <defName>DecreaseNeed_Prey_Rest</defName>
+    <interval>2</interval>
+    <strength>-0.015~-0.025</strength>
+    <actionsOnSuccess>
+      <li Class="RimVore2.RollAction_IncreaseNeed">
+        <target>Prey</target>
+        <need>Rest</need>
+      </li>
+    </actionsOnSuccess>
+  </RimVore2.RollPresetDef>
+  
+  <RimVore2.RollPresetDef ParentName="Drain_StrengthModifiers">
+    <defName>IncreaseDigestionProgress_Slow</defName>
+    <strength>0.008</strength>
+    <actionsOnSuccess>
+      <li Class="RimVore2.RollAction_PassValue_Add">
+        <name>DigestionProgress</name>
+        <maxValue>0.45</maxValue>
+      </li>
+    </actionsOnSuccess>
+  </RimVore2.RollPresetDef>
+  
+  <RimVore2.RollPresetDef ParentName="Drain_StrengthModifiers">
+    <defName>ConvertNutritionToPredatorFood_Slow</defName>
+    <strength>0.0033~0.01</strength>
+    <actionsOnSuccess>
+      <li Class="RimVore2.RollAction_IncreaseNeed">
+        <target>Predator</target>
+        <need>Food</need>
+      </li>
+      <li Class="RimVore2.RollAction_PassValue_Subtract">
+        <name>PreyNutrition</name>
+        <minValue>0</minValue>
+      </li>
+    </actionsOnSuccess>
+  </RimVore2.RollPresetDef>
+  
+  <RimVore2.RollPresetDef>
+    <defName>IncreaseNeed_Predator_Food_Instant</defName>
+    <strength>0.2~0.35</strength>
+    <strengthModifiers>
+      <li Class="RimVore2.RollModifier_SizeDifference">
+        <pawn>Predator</pawn>
+        <relationTo>Prey</relationTo>
+      </li>
+      <li Class="RimVore2.RollModifier_Capacity">
+        <target>Predator</target>
+        <capacity>Metabolism</capacity>
+      </li>
+    </strengthModifiers>
+    <actionsOnSuccess>
+      <li Class="RimVore2.RollAction_IncreaseNeed">
+        <target>Predator</target>
+        <need>Food</need>
+      </li>
+    </actionsOnSuccess>
+  </RimVore2.RollPresetDef>
+  
+  <RimVore2.RollPresetDef ParentName="Drain_StrengthModifiers">
+    <defName>IncreaseNeed_Predator_Food_Lesser</defName>
+    <strength>0.0025~0.0055</strength>
+    <actionsOnSuccess>
+      <li Class="RimVore2.RollAction_IncreaseNeed">
+        <target>Predator</target>
+        <need>Food</need>
+      </li>
+    </actionsOnSuccess>
+  </RimVore2.RollPresetDef>
+  
+  <RimVore2.RollPresetDef>
+    <defName>IncreaseNeed_Prey_Food</defName>
+    <strength>0.0125~0.0275</strength>
+    <strengthModifiers>
+      <li Class="RimVore2.RollModifier_VoreSpeed"></li>
+    </strengthModifiers>
+    <actionsOnSuccess>
+      <li Class="RimVore2.RollAction_IncreaseNeed">
+        <target>Prey</target>
+        <need>Food</need>
+      </li>
+    </actionsOnSuccess>
+  </RimVore2.RollPresetDef>
+  
+  <RimVore2.RollPresetDef ParentName="Drain_StrengthModifiers">
+    <defName>IncreaseDrainHediff</defName>
+    <strength>0.0125</strength>
+    <actionsOnSuccess>
+      <li Class="RV2R_RutsStuff.RollAction_ModHediff">
+        <target>Prey</target>
+        <hediff>RV2R_Drained</hediff>
+      </li>
+    </actionsOnSuccess>
+  </RimVore2.RollPresetDef>
+  
+  <RimVore2.RollPresetDef ParentName="Drain_StrengthModifiers">
+    <defName>IncreaseDrainHediff_Greater</defName>
+    <strength>0.05</strength>
+    <actionsOnSuccess>
+      <li Class="RV2R_RutsStuff.RollAction_ModHediff">
+        <target>Prey</target>
+        <hediff>RV2R_Drained</hediff>
+      </li>
+    </actionsOnSuccess>
+  </RimVore2.RollPresetDef>
+</Defs>
