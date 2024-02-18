@@ -13,7 +13,6 @@
         <li>Sound_Churn_10</li>
         <li>IncreaseNeed_Predator_Food_Lesser</li>
         <li>IncreaseNeed_Prey_Food</li>
-        <li>IncreaseNeed_Prey_Rest</li>
       </rollPresets>
     </onCycle>
     <passConditions>
@@ -46,6 +45,7 @@
     </onStart>
     <onCycle>
       <rollPresets>
+        <li>IncreaseDrainHediff</li>
         <li>Mote_BubbleDigest</li>
         <li>Sound_Gurgle_Chance_5</li>
         <li>Sound_Burp_Chance_15</li>
@@ -95,6 +95,7 @@
     </onStart>
     <onCycle>
       <rollPresets>
+        <li>IncreaseDrainHediff_Greater</li>
         <li>Mote_BubbleDigest</li>
         <li>Sound_Churn_10</li>
         <li>Sound_Gurgle_Chance_5</li>
