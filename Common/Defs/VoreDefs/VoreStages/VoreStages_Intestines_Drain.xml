@@ -24,6 +24,7 @@
     </onStart>
     <onCycle>
       <rollPresets>
+        <li>IncreaseDrainHediff_Greater</li>
         <li>Mote_BubbleDigest</li>
         <li>Sound_Churn_Chance_5</li>
         <li>Sound_Gurgle_Chance_5</li>
