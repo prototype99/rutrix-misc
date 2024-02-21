@@ -3,7 +3,7 @@
 <Defs>
   <RimVore2.VoreStageDef ParentName="Stomach_Base">
     <defName>Stomach_Warmup_Fast</defName>
-    <partGoal>Warm up</partGoal>
+    <partGoal>WarmUp</partGoal>
     <canReverseDirection>true</canReverseDirection>
     <predatorHediffDef>RV2_PreyInStomachWarming</predatorHediffDef>
     <predatorThoughtDef>RV2_PreyInStomachWarming</predatorThoughtDef>
@@ -13,6 +13,7 @@
         <li>Sound_Churn_10</li>
         <li>IncreaseNeed_Predator_Food_Lesser</li>
         <li>IncreaseNeed_Prey_Food</li>
+        <li>IncreaseNeed_Prey_Rest</li>
       </rollPresets>
     </onCycle>
     <passConditions>
@@ -52,7 +53,6 @@
         <li>IncreaseDigestionProgress_Slow</li>
         <li>IncreaseNeed_Predator_Food_Lesser</li>
         <li>IncreaseNeed_Prey_Food</li>
-        <li>DecreaseNeed_Prey_Rest</li>
       </rollPresets>
     </onCycle>
     <onEnd>
@@ -103,7 +103,6 @@
         <li>IncreaseDigestionProgress_Slow</li>
         <li>IncreaseNeed_Predator_Food</li>
         <li>IncreaseNeed_Prey_Food</li>
-        <li>DecreaseNeed_Prey_Rest</li>
       </rollPresets>
     </onCycle>
     <onEnd>
