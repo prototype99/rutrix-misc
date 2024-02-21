@@ -64,6 +64,7 @@ namespace RV2R_RutsStuff
                     vorePathDef = interaction.RandomElement<VorePathDef>();
                     RV2Log.Message(pawn.LabelShort + " eating hostile " + prey.LabelShort + " via " + vorePathDef.ToString(), "Jobs");
                     voreJob.VorePath = vorePathDef;
+                    voreJob.IsForced = true;
                     return voreJob;
                 }
                 RV2Log.Message("Predator " + pawn.LabelShort + " can't fatal vore " + prey.LabelShort + "; checking for healing instead", true, "Jobs");
@@ -86,6 +87,7 @@ namespace RV2R_RutsStuff
                 vorePathDef = interaction.RandomElement<VorePathDef>();
                 RV2Log.Message(pawn.LabelShort + " capturing hostile " + prey.LabelShort + " via " + vorePathDef.ToString(), "Jobs");
                 voreJob.VorePath = vorePathDef;
+                voreJob.IsForced = true;
                 return voreJob;
 
             predFail:

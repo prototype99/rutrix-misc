@@ -51,7 +51,7 @@ namespace RV2R_RutsStuff
             {
                 float weight = 0f;
 
-                if (check && (target.Faction != null && target.Faction.IsPlayer) && Rand.Chance(0.5f)) // 50% chance for any player faction pawn to be spared
+                if (check && target.IsColonist && Rand.Chance(0.5f)) // 50% chance for any player faction pawn to be spared
                     return 0f;
 
                 if (target.IsPrisonerInPrisonCell())

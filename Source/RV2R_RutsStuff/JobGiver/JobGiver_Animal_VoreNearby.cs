@@ -49,7 +49,7 @@ namespace RV2R_RutsStuff
                     {
                         Pawn pawn3 = (Pawn)t;
                         return pawn3 != pawn
-                            && ((pawn3.Faction != null && pawn3.Faction.IsPlayer) || RV2_Rut_Settings.rutsStuff.PlayVoreIndescriminate)
+                            && (RV2_Rut_Settings.rutsStuff.PlayVoreIndescriminate || (pawn3.Faction != null && pawn3.Faction.IsPlayer))
                             && !GenAI.InDangerousCombat(pawn3)
                             && pawn.CanReserve(pawn3, 1, -1, null, false)
                             && !pawn3.IsForbidden(pawn)
