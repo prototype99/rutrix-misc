@@ -31,7 +31,7 @@ namespace RV2R_RutsStuff
         [HarmonyPostfix]
         public static void InterceptGetFodder(ref Job __result, Pawn pawn)
         {
-            if (!pawn.IsColonist)
+            if (!(pawn.Faction != null && pawn.Faction.IsPlayer))
                 return;
 
             if (!pawn.CanBePredator(out string outText))
@@ -134,7 +134,7 @@ namespace RV2R_RutsStuff
                         Pawn target = (Pawn)t;
                         return pawn.Position.DistanceTo(target.Position) <= 15f
                              && ((RV2_Rut_Settings.rutsStuff.FodderGuests && !target.IsColonist && !RV2R_Utilities.IsColonyHostile(pawn, target))
-                              || (RV2_Rut_Settings.rutsStuff.FodderColonists && target.IsColonistPlayerControlled)
+                              || (RV2_Rut_Settings.rutsStuff.FodderColonists && target.IsColonist)
                                 )
                         ;
                     };
@@ -142,7 +142,7 @@ namespace RV2R_RutsStuff
                     List<Pawn> nearPawns = pawn.Map.mapPawns.AllPawnsSpawned.FindAll((Pawn p) => p != pawn
                                                                                               && baseCheck(p)
                                                                                               && (prisonCheck(p)
-                                                                                               || ((pawn.IsColonistPlayerControlled || RV2_Rut_Settings.rutsStuff.FodderAnimalsFull)
+                                                                                               || ((p.IsColonist || RV2_Rut_Settings.rutsStuff.FodderAnimalsFull)
                                                                                                 &&
                                                                                                 (animalCheck(p)
                                                                                                || humanoidCheck(p)))));
