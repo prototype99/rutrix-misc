@@ -11,9 +11,7 @@
   <RV2R_Settings_SizedEncumberance>Size-based encumbrance scaling</RV2R_Settings_SizedEncumberance>  
   <RV2R_Settings_SizedEncumberance_Tip>Enable to scale encumberance by total weight of all prey. Disable to scale encumberance by count of prey, Can cause problems for smaller preds.</RV2R_Settings_SizedEncumberance_Tip>  
   <RV2R_Settings_EncumberanceModifier>Encumbrance multiplier</RV2R_Settings_EncumberanceModifier>  
-  <RV2R_Settings_EncumberanceModifier_Tip>How heavy prey are. Setting too high can easily incapacitate preds. Prey held in extremiedies or absorbed in some way are easier to hold.</RV2R_Settings_EncumberanceModifier_Tip>  
-  <RV2R_Settings_EncumberanceCap>Encumbrance cap</RV2R_Settings_EncumberanceCap>  
-  <RV2R_Settings_EncumberanceCap_Tip>How high the "Weighed Down" hediff is allowed to be. At 25%, moving reduction is -17.5%. At 50%, it's -40%. At 75%, it's -65%. At 100%, it's -150%.</RV2R_Settings_EncumberanceCap_Tip>  
+  <RV2R_Settings_EncumberanceModifier_Tip>How heavy prey are. Setting too high can easily incapacitate preds.</RV2R_Settings_EncumberanceModifier_Tip>   
   <RV2R_Settings_EncumberanceVisible>Visible "Weighed down" hediff</RV2R_Settings_EncumberanceVisible>  
   <RV2R_Settings_EncumberanceVisible_Tip>Makes the "weighed down" hediff used for encumbrance visible. This dosn't change it's functonality, it just makes it visible to the player.</RV2R_Settings_EncumberanceVisible_Tip> 
   <RV2R_Settings_EncumberanceTurnOff>Due to how the encumbrance scaling works, disabling size-based encumbrance scaling will not revert to RimVore-2's methods for encumbrance, instead using a method that aproximates it.\n\nIf you need to revert, set encumbrance multiplier to 0% and remove Patches/Patch_Hediffs_Vore_CapmodRemoval.xml from this submod's Common folder.</RV2R_Settings_EncumberanceTurnOff>  
@@ -40,7 +38,7 @@
   <RV2R_Settings_EndoCapture>Endo capture</RV2R_Settings_EndoCapture>  
   <RV2R_Settings_EndoCapture_Tip>Enabled, hostiles are captured and imprisoned if endo-vored by a colonist or colony animal while downed. Works great with heal-voring incapacitated raiders, and enabling means predatory trained animals have a way to help with recruitment.\n\n(Animals trained in predation will heal-vore hostiles if they can't fatal vore them.)</RV2R_Settings_EndoCapture_Tip>
   <RV2R_Settings_EndoCapture_Insectoids>Capture insectoids</RV2R_Settings_EndoCapture_Insectoids>  
-  <RV2R_Settings_EndoCapture_Insectoids_Tip>Members of the Sorne Geneline are pacified if endo-captured, ready to be tamed when released. Not at all balanced. Animals will only vore-capture or endo-rescue animals you've set to tame.</RV2R_Settings_EndoCapture_Insectoids_Tip>  
+  <RV2R_Settings_EndoCapture_Insectoids_Tip>Members of the Sorne Geneline are pacified if endo-captured, ready to be tamed when released. Animals will only vore-capture or endo-rescue animals you've set to tame.</RV2R_Settings_EndoCapture_Insectoids_Tip>  
   <RV2R_Settings_EndoCapture_Scaria>Scaria cure</RV2R_Settings_EndoCapture_Scaria>  
   <RV2R_Settings_EndoCapture_Scaria_Tip>Healing vore can cure scaria, allowing endo-capture to be used on rabid animals. Animals will only vore-capture or endo-rescue animals you've set to tame.</RV2R_Settings_EndoCapture_Scaria_Tip>
   <RV2R_Settings_EndoCapture_Recruitment>Endo recruitment</RV2R_Settings_EndoCapture_Recruitment>  
@@ -53,15 +51,13 @@
   <RV2R_Settings_GutLovin_Tip>How likely a romanticaly involved pred/prey pair will engage in some endophilic lovin'. It works like regular lovin', respects lovin's cooldown, and both need to consent for it to happen. Odds are affected by the Predatory and Preyish Libido quirks.</RV2R_Settings_GutLovin_Tip>
   <RV2R_Settings_GutLovinONS>One-nom-stands</RV2R_Settings_GutLovinONS>
   <RV2R_Settings_GutLovinONS_Tip>Sufficiantly "vorny" pairs won't care if they're not romanticaly involved. Those with partners will refrain if their partner isn't involved.</RV2R_Settings_GutLovinONS_Tip>  
-  <RV2R_Settings_GutLovinCheats>Poly-vorous relationships</RV2R_Settings_GutLovinCheats>
-  <RV2R_Settings_GutLovinCheats_Tip>Allows predators to gut-love if their lover isn't involved.</RV2R_Settings_GutLovinCheats_Tip>  
   <RV2R_Settings_GutLovinNonCon>Allow non-con</RV2R_Settings_GutLovinNonCon>
   <RV2R_Settings_GutLovinNonCon_Tip>Allows for psycopaths or low opinion preds to gut-love regardless of what their prey think. Will absolutly destroy relationships, and Kind pawns just won't.</RV2R_Settings_GutLovinNonCon_Tip>
 	
   <RV2R_Fodder_Section>Living meals</RV2R_Fodder_Section>
   
   <RV2R_Settings_Fodder_Chance>Fodder chance</RV2R_Settings_Fodder_Chance>
-  <RV2R_Settings_Fodder_Chance_Tip>How likely colonists will vore a prisoner marked as fodder instead of getting a regular meal. They won't if they're too far away, or if they don't like any goals avialable to them.\n\nIf they can't reach any food, this check will always succeed, even if the odds are set to 0%.\n\nThis can dramaticaly increase the amount of auto-vore happening, for better or for worse.</RV2R_Settings_Fodder_Chance_Tip>
+  <RV2R_Settings_Fodder_Chance_Tip>How likely colonists will vore a prisoner marked as fodder instead of getting a regular meal. They won't if they're too far away, or if they don't like any goals avialable to them.\n\nIf they can't reach -any- food, this check will always succeed.\n\nThis can dramaticaly increase the amount of auto-vore happening, for better or for worse.</RV2R_Settings_Fodder_Chance_Tip>
   <RV2R_Settings_Fodder_AllowNamed>Named animals can fodder</RV2R_Settings_Fodder_AllowNamed>
   <RV2R_Settings_Fodder_AllowNamed_Tip>Allows named colony animals to fodder prisoners. Any animal can be named in their Training tab.</RV2R_Settings_Fodder_AllowNamed_Tip>
   <RV2R_Settings_Fodder_AllowPredators>Colony predators can fodder</RV2R_Settings_Fodder_AllowPredators>
@@ -90,7 +86,7 @@
   <RV2R_Settings_AnimalRandomNomChance>Playful predation average hours</RV2R_Settings_AnimalRandomNomChance>
   <RV2R_Settings_AnimalRandomNomChance_Tip>How often, in hours on average, an animal trained to be playfully predatory will endo vore others. They'll only do so when idle, and when not near danger. They're request vore to colonists, but they'll just nom anything else.\n\nPlayful predation can be disabled on an animal by disabling training it in their Training tab.</RV2R_Settings_AnimalRandomNomChance_Tip>
   <RV2R_Settings_AnimalRandomNomChanceModifier>Playful predation modifier</RV2R_Settings_AnimalRandomNomChanceModifier>
-  <RV2R_Settings_AnimalRandomNomChanceModifier_Tip>The percentage of average hours to add for each prey a playful predator has. At default settings, 1 prey increases the average hours from 24 to 30, and two increases it to 36.</RV2R_Settings_AnimalRandomNomChanceModifier_Tip>
+  <RV2R_Settings_AnimalRandomNomChanceModifier_Tip>The percentage of average hours to add for each prey a playful predator has. At default settings, 1 prey increases the average hours from 24 to 36, and two increases it to 48.</RV2R_Settings_AnimalRandomNomChanceModifier_Tip>
  <RV2R_Settings_AnimalRandomNomIndiscriminate>Indescriminate predation</RV2R_Settings_AnimalRandomNomIndiscriminate>
   <RV2R_Settings_AnimalRandomNomIndiscriminate_Tip>Allows playfuly predatory animals to nom anyone, not just colony members. Can cause problems.</RV2R_Settings_AnimalRandomNomIndiscriminate_Tip>
   <RV2R_Settings_AnimalRandomNomFatal>Not-so-playful predation</RV2R_Settings_AnimalRandomNomFatal>
