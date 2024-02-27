@@ -32,6 +32,9 @@
     <blockingQuirks>
       <li>PredatorDisposition_Refuses</li>
     </blockingQuirks>
+    <requiredKeywords>
+      <li>PawnIsHumanoid</li>
+    </requiredKeywords>
   </RimVore2.QuirkPoolDef>
 
   <RimVore2.QuirkDef>
@@ -149,6 +152,9 @@
     <blockingQuirks>
       <li>PreyDisposition_Refuses</li>
     </blockingQuirks>
+    <requiredKeywords>
+      <li>PawnIsHumanoid</li>
+    </requiredKeywords>
   </RimVore2.QuirkPoolDef>
 
   <RimVore2.QuirkDef>
