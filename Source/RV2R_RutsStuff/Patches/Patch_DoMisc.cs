@@ -2,6 +2,7 @@ using HarmonyLib;
 using RimVore2;
 using RimWorld;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Verse;
 using static RV2R_RutsStuff.Patch_RV2R_Settings;
@@ -11,6 +12,7 @@ namespace RV2R_RutsStuff
     [HarmonyPatch(typeof(VoreTrackerRecord), "TickRare")]
     internal class Patch_DoMisc
     {
+
         [HarmonyPostfix]
         public static void AdditionalEffects(VoreTrackerRecord __instance)
         {
@@ -206,17 +208,16 @@ namespace RV2R_RutsStuff
         }
         private static void HandleImprisoned(VoreTrackerRecord record)
         {
-#if v1_3
-            if (!record.IsForced)
-                if (record.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.ReduceResistance
-                 || record.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.AttemptRecruit)
-                    record.Prey.guest.resistance = Math.Max(0.0f, record.Prey.guest.resistance -= Rand.Range(0.00f, 0.01f));
-#else
-            if (!record.IsForced && record.Prey.guest.Recruitable)
-                if (record.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.ReduceResistance
-                 || record.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.AttemptRecruit)
-                    record.Prey.guest.resistance = Math.Max(0.0f, record.Prey.guest.resistance -= Rand.Range(0.00f, 0.01f));
-#endif
+            if (record.IsForced) return;
+            if (!record.Prey.guest.Recruitable) return;
+            if (!ValidPrisonerInteractionsForRecruiting().Contains(record.Prey.guest.ExclusiveInteractionMode)) return;
+            record.Prey.guest.resistance = Math.Max(0.0f, record.Prey.guest.resistance -= Rand.Range(0.00f, 0.01f));
+
+        }
+        public static IEnumerable<PrisonerInteractionModeDef> ValidPrisonerInteractionsForRecruiting()
+        {
+            yield return PrisonerInteractionModeDefOf.ReduceResistance;
+            yield return PrisonerInteractionModeDefOf.AttemptRecruit;
         }
     }
 }
