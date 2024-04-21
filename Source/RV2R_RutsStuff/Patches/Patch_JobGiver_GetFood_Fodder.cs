@@ -3,6 +3,7 @@ using RimVore2;
 using RimWorld;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Verse;
 using Verse.AI;
 using static RV2R_RutsStuff.Patch_RV2R_Settings;
@@ -115,8 +116,11 @@ namespace RV2R_RutsStuff
                     bool prisonCheck(Thing t)
                     {
                         Pawn target = (Pawn)t;
-                        return target.IsPrisonerInPrisonCell() && target.guest.interactionMode == RV2R_Common.Fodder
-                        ;
+#if v1_4
+                        return target.IsPrisonerInPrisonCell() && target.guest.interactionMode == RV2R_Common.Fodder;
+#else
+                        return target.IsPrisonerInPrisonCell() && target.guest.ExclusiveInteractionMode == RV2R_Common.Fodder;
+#endif
                     };
                     bool animalCheck(Thing t)
                     {
@@ -139,18 +143,19 @@ namespace RV2R_RutsStuff
                         ;
                     };
 
-                    List<Pawn> nearPawns = pawn.Map.mapPawns.AllPawnsSpawned.FindAll((Pawn p) => p != pawn
-                                                                                              && baseCheck(p)
-                                                                                              && (prisonCheck(p)
-                                                                                               || ((pawn.IsColonistPlayerControlled || RV2_Rut_Settings.rutsStuff.FodderAnimalsFull)
-                                                                                                &&
-                                                                                                (animalCheck(p)
-                                                                                               || humanoidCheck(p)))));
+                    var nearPawns = pawn.Map.mapPawns.AllPawnsSpawned
+                        .Where(p => p != pawn)//Exclude self
+                        .Where(p => baseCheck(p))//Base check
+                        .Where(p => 
+                            prisonCheck(p)
+                            || (
+                                p.IsColonistPlayerControlled || RV2_Rut_Settings.rutsStuff.FodderAnimalsFull
+                                && (animalCheck(p) || humanoidCheck(p))
+                            )
+                         );
 
-                    if (nearPawns.NullOrEmpty())
-                        return;
+                    if (!nearPawns.Any()) return;
 
-                    //RV2Log.Message("Predator " + pawn.LabelShort + " found " + nearPawns.Count.ToString() + " nearby pawns", "Jobs");
                     foreach (Pawn p in nearPawns)
                     {
                         if (RV2R_Utilities.GetFodderWeight(pawn, p, true) > 0f)
@@ -164,8 +169,7 @@ namespace RV2R_RutsStuff
 
                     Pawn prey = fodderList.RandomElementByWeightWithDefault(fodder => fodder.Value, 0.01f).Key;
 
-                    if (prey == null)
-                        return;
+                    if (prey == null) return;
 
                     if (job != null && !prey.IsPrisonerInPrisonCell() && !Rand.Chance(RV2_Rut_Settings.rutsStuff.MiscFodderChance))
                         return;
