@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <RecipeDef ParentName="RV2_MakeVoreEnabler_Base">
+    <defName>RV2R_InstallGoalEnabler_Drain</defName>
+    <label>Make parasitic enzyme seeder (Drain)</label>
+    <products>
+      <RV2R_GoalEnabler_Drain>1</RV2R_GoalEnabler_Drain>
+    </products>
+  </RecipeDef>
+  
+  <ThingDef ParentName="RV2_VoreEnabler_Base">
+    <defName>RV2R_GoalEnabler_Drain</defName>
+    <label>parasitic enzyme seeder</label>
+    <description>Special mechanites which enable specialized parasitic methods of obtaining nourishment from prey.</description>
+    <descriptionHyperlinks>
+      <RecipeDef>RV2R_InstallGoalEnabler_Drain</RecipeDef>
+      <HediffDef>RV2R_GoalEnabler_Drain</HediffDef>
+    </descriptionHyperlinks>
+  </ThingDef>
+  
+  <RecipeDef ParentName="RV2_InstallVoreEnabler_Base">
+    <defName>RV2_InstallGoalEnabler_SoftDigest</defName>
+    <label>Install parasitic enzyme seeder</label>
+    <description>Install the enzyme seeder required to allow parasitic draining of prey.</description>
+    <descriptionHyperlinks>
+      <ThingDef>RV2R_GoalEnabler_Drain</ThingDef>
+      <HediffDef>RV2R_GoalEnabler_Drain</HediffDef>
+    </descriptionHyperlinks>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>RV2R_GoalEnabler_Drain</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>RV2R_GoalEnabler_Drain</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <targetsBodyPart>false</targetsBodyPart>
+    <addsHediff>RV2R_GoalEnabler_Drain</addsHediff>
+  </RecipeDef>
+  
+  <HediffDef ParentName="RV2_VoreEnabledPart_Base">
+    <defName>RV2R_GoalEnabler_Drain</defName>
+    <label>parasitic enzymes</label>
+    <description>This pawn is capable of gaining nourishment from live prey without harm.</description>
+    <comps>
+      <li Class="RimVore2.HediffCompProperties_QuirkForcer">
+        <quirks>
+          <li>RV2R_Enablers_Core_Goal_Drain</li>
+        </quirks>
+      </li>
+    </comps>
+  </HediffDef>
+  
+</Defs>
