@@ -1,4 +1,4 @@
-﻿using RimVore2;
+using RimVore2;
 using System;
 using System.Collections.Generic;
 using Verse;

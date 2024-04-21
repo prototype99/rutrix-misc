@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using UnityEngine;
 
 namespace RV2R_RutsStuff

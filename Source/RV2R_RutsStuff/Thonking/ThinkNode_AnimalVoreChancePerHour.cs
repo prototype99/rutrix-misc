@@ -1,4 +1,4 @@
-﻿using RimVore2;
+using RimVore2;
 using Verse;
 using Verse.AI;
 using static RV2R_RutsStuff.Patch_RV2R_Settings;

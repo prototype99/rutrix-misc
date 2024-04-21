@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using Verse;
 
 namespace RV2R_RutsStuff

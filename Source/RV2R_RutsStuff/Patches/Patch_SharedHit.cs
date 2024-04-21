@@ -1,4 +1,4 @@
-﻿/*
+/*
 using HarmonyLib;
 using RimVore2;
 using RimWorld;
