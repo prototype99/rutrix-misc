@@ -15,9 +15,10 @@ namespace RV2R_RutsStuff
 
             if(TryPred(p, out var r)) return r;
             if(TryPrey(p, out  r)) return r;
+
             return false;
         }
-        private bool TryPrey(Pawn p, out bool r)
+        private bool TryPrey(Pawn p, out ThoughtState r)
         {
             r = false;
             var record = p.GetVoreRecord();
@@ -26,56 +27,58 @@ namespace RV2R_RutsStuff
 
             var pred = p.GetVoreRecord().Predator;
             if(pred == null) return false;//Just a safety check
+            (bool, ThoughtState) result = (false, false); 
             switch (this.def.defName)
             {
-                case "RV2R_LoverPrey": return LovePrey();
-                case "RV2R_PetPrey": return PetPrey();
-                case "RV2R_BondPrey": return BondPrey();
-                default: return false;
+                case "RV2R_LoverPrey": result = LovePrey(); break;
+                case "RV2R_PetPrey": result = PetPrey(); break;
+                case "RV2R_BondPrey": result = BondPrey(); break;
             }
-            bool LovePrey()
+            r = result.Item2;
+            return result.Item1;
+
+            (bool, ThoughtState) LovePrey()
             {
-                if (pred != LovePartnerRelationUtility.ExistingMostLikedLovePartner(p, false)) return false;
-                r = p.relations.OpinionOf(pred) > 0;
-                return true;
+                if (pred != LovePartnerRelationUtility.ExistingMostLikedLovePartner(p, false)) return (false, false);
+                return (true, p.relations.OpinionOf(pred) > 0);
             }
-            bool PetPrey()
+            (bool, ThoughtState) PetPrey()
             {
-                if (p.relations.GetDirectRelation(RV2R_Common.PetPrey, pred) == null) return false;
-                r = p.relations.OpinionOf(pred) > 0;
-                return true;
+                if (p.relations.GetDirectRelation(RV2R_Common.PetPrey, pred) == null) return (false, false);
+                return (true, p.relations.OpinionOf(pred) > 0);
             }
-            bool BondPrey()
+            (bool, ThoughtState) BondPrey()
             {
-                if (p.relations.GetDirectRelation(PawnRelationDefOf.Bond, predator) == null) return false;
-                r = true;
-                return true;
+                if (p.relations.GetDirectRelation(PawnRelationDefOf.Bond, pred) == null) return (false, false);
+                return (true, true);
             }
         }
-        private bool TryPred(Pawn p, out bool r)
+        private bool TryPred(Pawn p, out ThoughtState r)
         {
             r = false;
 
             if (!p.IsActivePredator()) return false;
+            (bool, ThoughtState) result = (false, false);
 
             switch (this.def.defName)
             {
-                case "RV2R_LoverPred": return LoverPred();
-                case "RV2R_PetPred": return PetPred();
-                case "RV2R_BondPred": return BondPred();
-                default: return false;
+                case "RV2R_LoverPred": result = LoverPred(); break;
+                case "RV2R_PetPred": result = PetPred(); break;
+                case "RV2R_BondPred": result = BondPred(); break;
             }
+            r = result.Item2;
+            return result.Item1;
 
-            bool LoverPred()
+
+            (bool, ThoughtState) LoverPred()
             {
-                var prey =  LovePartnerRelationUtility.ExistingMostLikedLovePartner(p, false); ;
-                if (prey?.GetVoreRecord()?.Predator != p) return false;
-                r = !prey.GetVoreRecord().VoreGoal.IsLethal && p.relations.OpinionOf(prey) > 0;
-                return true;
+                var prey =  LovePartnerRelationUtility.ExistingMostLikedLovePartner(p, false);
+                if (prey?.GetVoreRecord()?.Predator != p) return (false, false);
+                return (true, !prey.GetVoreRecord().VoreGoal.IsLethal && p.relations.OpinionOf(prey) > 0);
             }
-            bool PetPred()
+            (bool, ThoughtState) PetPred()
             {
-                if (p.relations?.DirectRelations == null) return false;
+                if (p.relations?.DirectRelations == null) return (false, false);
                 foreach(var relation in p.relations.DirectRelations)
                 {
                     if (relation.def != RV2R_Common.PetPred) continue;
@@ -83,14 +86,13 @@ namespace RV2R_RutsStuff
                     if (record == null) continue; ;
                     if (record.Predator != p) continue;
                     if (record.VoreGoal.IsLethal) continue;
-                    r = p.relations.OpinionOf(relation.otherPawn) > 0;
-                    return true;
+                    return (true, p.relations.OpinionOf(relation.otherPawn) > 0);
                 }
-                return false;
+                return (false, false);
             }
-            bool BondPred()
+            (bool, ThoughtState) BondPred()
             {
-                if (p.relations?.DirectRelations == null) return false;
+                if (p.relations?.DirectRelations == null) return (false, false);
                 int strength = -1;
                 foreach(var relation in p.relations.DirectRelations)
                 {
@@ -101,8 +103,7 @@ namespace RV2R_RutsStuff
                     if (record.VoreGoal.IsLethal) continue;
                     strength += 1;
                 }
-                r = ThoughtState.ActiveAtStage(Math.Min(1, strength));
-                return true;
+                return (true, ThoughtState.ActiveAtStage(Math.Min(1, strength)) );
             }
 
         }
