@@ -16,7 +16,7 @@ namespace RV2R_RutsStuff {
     [HarmonyPatch(typeof(JobGiver_GetFood), "TryGiveJob")]
     public static class Patch_JobGiver_GetFodder
     {
-        
+
         [HarmonyPostfix]
         public static void InterceptGetFodder(ref Job __result, Pawn pawn)
         {
