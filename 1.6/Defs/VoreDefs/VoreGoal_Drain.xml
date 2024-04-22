@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <RimVore2.VoreGoalDef>
+    <defName>RV2R_Drain</defName>
+    <label>Drain</label>
+    <goalFinishTale>RV2R_GoalFinish_Drain</goalFinishTale>
+    <goalFinishRecordPredator>RV2R_Goal_Drain_Predator</goalFinishRecordPredator>
+    <goalFinishRecordPrey>RV2R_Goal_Drain_Prey</goalFinishRecordPrey>
+    <relatedRulePacks>
+      <li>RV2R_Goal_Drain</li>
+    </relatedRulePacks>
+    <requiredDesignations>
+      <li>endo</li>
+    </requiredDesignations>
+    <IconPath>UI/Icons/softstomach</IconPath>
+  </RimVore2.VoreGoalDef>
+  
+  <TaleDef ParentName="RV2_GoalFinish_Base">
+    <defName>RV2R_GoalFinish_Drain</defName>
+    <rulePack>
+      <include>
+        <li>RV2R_Goal_Drain</li>
+      </include>
+    </rulePack>
+  </TaleDef>
+  <TaleDef ParentName="RV2_VoreInitiation_Base">
+    <defName>RV2R_VoreInitiation_OralDrain</defName>
+    <rulePack>
+      <include>
+        <li>RV2R_Goal_Drain</li>
+        <li>RV2_Type_Oral</li>
+      </include>
+    </rulePack>
+  </TaleDef>
+  <TaleDef ParentName="RV2_VoreInitiation_Base">
+    <defName>RV2R_VoreInitiation_AnalDrain</defName>
+    <rulePack>
+      <include>
+        <li>RV2R_Goal_Drain</li>
+        <li>RV2_Type_Anal</li>
+      </include>
+    </rulePack>
+  </TaleDef>
+  <TaleDef ParentName="RV2_VoreExit_Base">
+    <defName>RV2R_VoreExit_OralDrain</defName>
+    <rulePack>
+      <include>
+        <li>RV2R_Goal_Drain</li>
+        <li>RV2_Type_Oral</li>
+      </include>
+    </rulePack>
+  </TaleDef>
+  <TaleDef ParentName="RV2_VoreExit_Base">
+    <defName>RV2R_VoreExit_AnalDrain</defName>
+    <rulePack>
+      <include>
+        <li>RV2R_Goal_Drain</li>
+        <li>RV2_Type_Anal</li>
+      </include>
+    </rulePack>
+  </TaleDef>
+  
+  <RulePackDef>
+    <defName>RV2R_Goal_Drain</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>extraSentencePack->[RECIPIENT_nameDef] for [RV2_goalFinish_noun].</li>
+        
+        <li>RV2_addendum->to satisfy their hunger</li>
+        <li>RV2_adverb->hungrily</li>
+        <li>RV2_adjective->hungry</li>
+
+        <li>RV2_goalFinish_verb->churning</li>
+        <li>RV2_goalFinish_verb->draining</li>
+        <li>RV2_goalFinish_noun->churn</li>
+        <li>RV2_goalFinish_noun->drain</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+  
+  <RecordDef>
+    <defName>RV2R_Goal_Drain_Predator</defName>
+    <label>Vore: Draining Predator</label>
+    <description>The number of times I have drained someone.</description>
+    <type>Int</type>
+  </RecordDef>
+  <RecordDef>
+    <defName>RV2R_Goal_Drain_Prey</defName>
+    <label>Vore: Draining Prey</label>
+    <description>The number of times I have been drained.</description>
+    <type>Int</type>
+  </RecordDef>
+  
+</Defs>

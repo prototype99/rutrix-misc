@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/RimVore2.QuirkPoolDef[defName="Enablers_Goals_Core"]/quirks</xpath>
+    <value>
+	  <li>RV2R_Enablers_Core_Goal_Drain</li>        
+	</value>
+  </Operation>
+  
+</Patch>
