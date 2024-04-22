@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+  <RimVore2.VoreStageDef ParentName="Intestines_Base">
+    <defName>Intestines_SoftProcess</defName>
+    <predatorHediffDef>RV2R_PreyInIntestinesSoftProcessing</predatorHediffDef>
+    <predatorThoughtDef>RV2R_PreyInIntestinesSoftProcessing</predatorThoughtDef>
+    <partGoal>Pass</partGoal>
+    <canReverseDirection>false</canReverseDirection>
+    <onStart>
+      <actions>
+        <li Class="RimVore2.RollAction_PassValue_Set">
+          <name>PreyNutrition</name>
+          <type>PreyNutrition</type>
+        </li>
+        <li Class="RimVore2.RollAction_PassValue_Set">
+          <name>DigestionProgress</name>
+          <type>DigestionProgress</type>
+        </li>
+        <li Class="RimVore2.RollAction_ShowMote">
+          <mote>RV2_Mote_BubbleDigest</mote>
+        </li>
+      </actions>
+    </onStart>
+    <onCycle>
+      <rollPresets>
+        <li>IncreaseDrainHediff_Greater</li>
+        <li>Mote_BubbleDigest</li>
+        <li>Sound_Churn_Chance_5</li>
+        <li>Sound_Gurgle_Chance_5</li>
+        <li>IncreaseDigestionProgress_Slow</li>
+        <li>ConvertNutritionToPredatorFood_Slow</li>
+        <li>IncreaseNeed_Prey_Food</li>
+        <li>DecreaseNeed_Prey_Rest</li>
+      </rollPresets>
+    </onCycle>
+    <passConditions>
+      <li Class="RimVore2.StagePassCondition_Timed">
+        <duration>36</duration>
+      </li>
+    </passConditions>
+    <onEnd>
+      <actions>
+        <li Class="RimVore2.RollAction_ShowMote">
+          <mote>RV2_Mote_BubbleDigest</mote>
+        </li>
+        <li Class="RimVore2.RollAction_PlaySound">
+          <sound>RV2_Fart</sound>
+        </li>
+      </actions>
+    </onEnd>
+  </RimVore2.VoreStageDef>
+</Defs>

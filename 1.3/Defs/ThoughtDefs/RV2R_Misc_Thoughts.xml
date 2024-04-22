@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<Defs>
+  <ThoughtDef>
+    <defName>RV2R_EndoSick</defName>
+    <workerClass>ThoughtWorker_Hediff</workerClass>
+    <hediff>RV2R_EndoRecovery</hediff>
+    <validWhileDespawned>true</validWhileDespawned>
+    <stages>
+      <li>
+        <visible>false</visible>
+      </li>
+      <li>
+        <label>lightly endo sick</label>
+        <description>I feel a little dizzy, but comfortable and warm.</description>
+        <baseMoodEffect>2</baseMoodEffect>
+      </li>
+      <li>
+        <label>endo sick</label>
+        <description>I'm dizzy and tired, but really relaxed. I kinda feel... comfortably numb.</description>
+        <baseMoodEffect>4</baseMoodEffect>
+      </li>
+      <li>
+        <label>heavily endo sick</label>
+        <description>I can't think straight, and I'm... really tired... but I-... feel good.</description>
+        <baseMoodEffect>6</baseMoodEffect>
+      </li>
+      <li>
+        <label>severly endo sick</label>
+        <description>I'm... exausted, but... oh, this feels nice...</description>
+        <baseMoodEffect>10</baseMoodEffect>
+      </li>
+      <li>
+        <label>severly endo sick</label>
+        <description>I... just need... nap...</description>
+        <baseMoodEffect>16</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+	
+  <ThoughtDef>
+    <defName>RV2R_Drained</defName>
+    <workerClass>ThoughtWorker_Hediff</workerClass>
+    <hediff>RV2R_Drained</hediff>
+    <validWhileDespawned>false</validWhileDespawned>
+    <stages>
+      <li>
+        <visible>false</visible>
+      </li>
+      <li>
+        <visible>false</visible>
+      </li>
+      <li>
+        <visible>false</visible>
+      </li>
+      <li>
+        <label>drained</label>
+        <description>I'm still a little dizzy every now and then, but it's mostly passed.</description>
+        <baseMoodEffect>0</baseMoodEffect>
+      </li>
+      <li>
+        <label>drained</label>
+        <description>I'm sick and tired of feeling sick and tired.</description>
+        <baseMoodEffect>-3</baseMoodEffect>
+      </li>
+      <li>
+        <label>drained</label>
+        <description>My head's foggy and my limbs feel like dough. What I wouldn't give to just pass out...</description>
+        <baseMoodEffect>-6</baseMoodEffect>
+      </li>
+      <li>
+        <label>numb</label>
+        <description>The only thing I feel is numb and tired. Just let me sleep...</description>
+        <baseMoodEffect>0</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+	
+  <ThoughtDef ParentName="RV2_VoreThoughtSituationBase">
+    <defName>RV2R_LoverPred</defName>
+    <thoughtClass>RV2R_RutsStuff.Thought_VoreRelation</thoughtClass>
+    <workerClass>RV2R_RutsStuff.ThoughtWorker_VoreRelation</workerClass>
+    <validWhileDespawned>true</validWhileDespawned>
+    <stages>
+      <li>
+        <label>In love with prey</label>
+        <description>Having them safely inside me makes me feel this way.</description>
+        <baseMoodEffect>5</baseMoodEffect>
+      </li>
+	</stages>
+  </ThoughtDef>
+  <ThoughtDef ParentName="RV2_VoreThoughtSituationBase">
+    <defName>RV2R_LoverPrey</defName>
+    <thoughtClass>RV2R_RutsStuff.Thought_VoreRelation</thoughtClass>
+    <workerClass>RV2R_RutsStuff.ThoughtWorker_VoreRelation</workerClass>
+    <validWhileDespawned>true</validWhileDespawned>
+    <stages>
+      <li>
+        <label>In love with predator</label>
+        <description>Being safely inside them makes me feel this way.</description>
+        <baseMoodEffect>5</baseMoodEffect>
+      </li>
+	</stages>
+  </ThoughtDef>
+  <ThoughtDef ParentName="RV2_VoreThoughtSituationBase">
+    <defName>RV2R_BondPred</defName>
+    <workerClass>RV2R_RutsStuff.ThoughtWorker_VoreRelation</workerClass>
+    <validWhileDespawned>true</validWhileDespawned>
+    <stages>
+      <li>
+        <label>Bonded with prey</label>
+        <description>Having my bonded animal safely inside me makes me feel better.</description>
+        <baseMoodEffect>2</baseMoodEffect>
+      </li>
+      <li>
+        <label>Bonded with prey</label>
+        <description>Having my bonded animals safely inside me makes me feel better.</description>
+        <baseMoodEffect>5</baseMoodEffect>
+      </li>
+	</stages>
+  </ThoughtDef>
+  <ThoughtDef ParentName="RV2_VoreThoughtSituationBase">
+    <defName>RV2R_BondPrey</defName>
+    <workerClass>RV2R_RutsStuff.ThoughtWorker_VoreRelation</workerClass>
+    <validWhileDespawned>true</validWhileDespawned>
+    <stages>
+      <li>
+        <label>Bonded with predator</label>
+        <description>Being safely inside my bonded animal makes me feel better.</description>
+        <baseMoodEffect>5</baseMoodEffect>
+      </li>
+	</stages>
+  </ThoughtDef>
+  <ThoughtDef ParentName="RV2_VoreThoughtSituationBase">
+    <defName>RV2R_PetPred</defName>
+    <thoughtClass>RV2R_RutsStuff.Thought_VoreRelation</thoughtClass>
+    <workerClass>RV2R_RutsStuff.ThoughtWorker_VoreRelation</workerClass>
+    <validWhileDespawned>true</validWhileDespawned>
+    <stages>
+      <li>
+        <label>Pet prey</label>
+        <description>They're right where they belong.</description>
+        <baseMoodEffect>5</baseMoodEffect>
+      </li>
+	</stages>
+  </ThoughtDef>
+  
+  <ThoughtDef ParentName="RV2_VoreThoughtSituationBase">
+    <defName>RV2R_PetPrey</defName>
+    <thoughtClass>RV2R_RutsStuff.Thought_VoreRelation</thoughtClass>
+    <workerClass>RV2R_RutsStuff.ThoughtWorker_VoreRelation</workerClass>
+    <validWhileDespawned>true</validWhileDespawned>
+    <stages>
+      <li>
+        <label>Prey pet</label>
+        <description>I'm right where I belong.</description>
+        <baseMoodEffect>5</baseMoodEffect>
+      </li>
+	</stages>
+  </ThoughtDef>
+  
+  <ThoughtDef ParentName="DeathMemoryFamily">
+    <defName>RV2R_Relation_PredDied</defName>
+    <nullifyingTraits>
+      <li>Psychopath</li>
+      <li>Bloodlust</li>
+    </nullifyingTraits>
+    <stages>
+      <li>
+        <label>my pred {0} died</label>
+        <description>My predator died. My protector, my home - gone.</description>
+        <baseMoodEffect>-8</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  
+  <ThoughtDef ParentName="LostMemory">
+    <defName>RV2R_Relation_PredLost</defName>
+    <nullifyingTraits>
+      <li>Psychopath</li>
+      <li>Bloodlust</li>
+    </nullifyingTraits>
+    <stages>
+      <li>
+        <label>my pred {0} was lost</label>
+        <description>My predator is lost. I should have been with them.</description>
+        <baseMoodEffect>-8</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  
+  <ThoughtDef>
+    <defName>RV2R_KilledMyPred</defName>
+    <thoughtClass>Thought_MemorySocial</thoughtClass>
+    <durationDays>60</durationDays>
+    <stackLimit>300</stackLimit>
+    <stackLimitForSameOtherPawn>10</stackLimitForSameOtherPawn>
+    <stages>
+      <li>
+        <label>killed my pred</label>
+        <baseOpinionOffset>-35</baseOpinionOffset>
+      </li>
+    </stages>
+  </ThoughtDef>
+  
+  <ThoughtDef ParentName="DeathMemoryFamily">
+    <defName>RV2R_Relation_PreyDied</defName>
+    <nullifyingTraits>
+      <li>Psychopath</li>
+      <li>Bloodlust</li>
+    </nullifyingTraits>
+    <stages>
+      <li>
+        <label>my prey pet {0} died</label>
+        <description>My prey pet died. I couldn't protect them...</description>
+        <baseMoodEffect>-8</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  
+  <ThoughtDef ParentName="LostMemory">
+    <defName>RV2R_Relation_PreyLost</defName>
+    <nullifyingTraits>
+      <li>Psychopath</li>
+      <li>Bloodlust</li>
+    </nullifyingTraits>
+    <stages>
+      <li>
+        <label>my pet {0} was lost</label>
+        <description>My prey pet is lost. I shouldn't have let them go...</description>
+        <baseMoodEffect>-8</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  
+  <ThoughtDef>
+    <defName>RV2R_KilledMyPrey</defName>
+    <thoughtClass>Thought_MemorySocial</thoughtClass>
+    <durationDays>60</durationDays>
+    <stackLimit>300</stackLimit>
+    <stackLimitForSameOtherPawn>10</stackLimitForSameOtherPawn>
+    <stages>
+      <li>
+        <label>killed my prey pet</label>
+        <baseOpinionOffset>-35</baseOpinionOffset>
+      </li>
+    </stages>
+  </ThoughtDef>
+  
+  <ThoughtDef>
+    <defName>RV2R_SoldPred</defName>
+    <thoughtClass>Thought_MemorySocial</thoughtClass>
+    <durationDays>120</durationDays>
+    <stackLimit>10</stackLimit>
+    <stackLimitForSameOtherPawn>2</stackLimitForSameOtherPawn>
+    <stages>
+      <li>
+        <label>predator sold</label>
+        <labelSocial>sold my pred</labelSocial>
+        <description>My pred was sold to a trader like a piece of meat!</description>
+        <baseOpinionOffset>-10</baseOpinionOffset>
+        <baseMoodEffect>-10</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <ThoughtDef>
+    <defName>RV2R_SoldPrey</defName>
+    <thoughtClass>Thought_MemorySocial</thoughtClass>
+    <durationDays>120</durationDays>
+    <stackLimit>10</stackLimit>
+    <stackLimitForSameOtherPawn>2</stackLimitForSameOtherPawn>
+    <stages>
+      <li>
+        <label>prey sold</label>
+        <labelSocial>sold my prey</labelSocial>
+        <description>My prey was sold to a trader like a piece of meat!</description>
+        <baseOpinionOffset>-10</baseOpinionOffset>
+        <baseMoodEffect>-10</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  
+</Defs>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <RimVore2.QuirkPoolDef>
+    <defName>Comfort</defName>
+    <label>Internal Comfort</label>
+	<category>General</category>
+	<description>These quirks determine how comfortable a pawn is to be inside of.</description>
+    <generationOrder>6</generationOrder>
+    <poolType>PickOne</poolType>
+    <quirks>
+		<li>Comfort_Excellent</li>
+		<li>Comfort_VeryGood</li>
+		<li>Comfort_Good</li>
+		<li>Comfort_Normal</li>
+		<li>Comfort_Bad</li>
+		<li>Comfort_VeryBad</li>
+		<li>Comfort_Terrible</li>
+    </quirks>
+  </RimVore2.QuirkPoolDef>
+
+  <RimVore2.QuirkDef>
+    <defName>Comfort_Excellent</defName>
+    <label>Heavenly</label>
+    <description>[PAWN_label]'s prey are formaly warned - once you're in, you'll never want to leave.</description>
+    <rarity>VeryRare</rarity>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>VoreComfort</modifierName>
+        <modifierValue>1.5</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>Comfort_VeryGood</defName>
+    <label>Pillowy</label>
+    <description>[PAWN_label]'s innards let you sink in, then hold you snug. It's not uncommon for [PAWN_possessive] prey to blink and have hours pass.</description>
+    <rarity>Uncommon</rarity>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>VoreComfort</modifierName>
+        <modifierValue>0.90</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>Comfort_Good</defName>
+    <label>Cozy</label>
+    <description>[PAWN_label]'s innards might churn and grind, but it's soothing and relaxing. They'd make for a good predatory massuess.</description>
+    <rarity>Abundant</rarity>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>VoreComfort</modifierName>
+        <modifierValue>0.75</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>Comfort_Normal</defName>
+    <label>Snug</label>
+    <description>[PAWN_label]'s innards won't give much give, but it's not too hard to find a nice spot.</description>
+    <rarity>Abundant</rarity>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>VoreComfort</modifierName>
+        <modifierValue>0.50</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>Comfort_Bad</defName>
+    <label>Rough</label>
+    <description>[PAWN_label]'s insides like to clench in a little too much, making it hard to get comfortable inside [PAWN_objective].</description>
+    <rarity>Uncommon</rarity>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>VoreComfort</modifierName>
+        <modifierValue>0.35</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>Comfort_VeryBad</defName>
+    <label>Abrasive</label>
+    <description>[PAWN_label]'s insides are too rough and tumble to relax and get snug inside of. The only real comfort you can expect as [PAWN_possessive] prey is the aftercare.</description>
+    <rarity>Rare</rarity>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>VoreComfort</modifierName>
+        <modifierValue>0.20</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>Comfort_Terrible</defName>
+    <label>Tenderizing</label>
+    <description>[PAWN_label]'s innards have the rough comfort of a used concrete mixer with cinder block bedding. [PAWN_possessive] prey are recomended to bring anesthesia if they want to sleep.</description>
+    <rarity>VeryRare</rarity>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>VoreComfort</modifierName>
+        <modifierValue>0</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+</Defs>

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <PrisonerInteractionModeDef>
+    <defName>RV2R_Fodder</defName>
+    <label>fodder</label>
+    <description>Treat the prisoner as a meal. Colonists can vore the prisoner when hungry, if they can and are willing to do so.</description>
+    <listOrder>80</listOrder>
+  </PrisonerInteractionModeDef>
+</Defs>

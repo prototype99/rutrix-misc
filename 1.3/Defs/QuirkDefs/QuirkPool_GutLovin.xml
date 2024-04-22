@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <RimVore2.QuirkPoolDef>
+    <defName>RV2R_Predator_GutLibido</defName>
+    <label>Predatory Libido</label>
+	<category>Proposals</category>
+	<description>The quirks determine how eager a predator is to engage in "gut lovin'" when holding prey they're interested in. More eager couples do so more often, and ride the high longer.</description>
+    <generationOrder>3</generationOrder>
+    <poolType>PickOne</poolType>
+    <quirks>
+      <li>RV2R_Predator_GutLibido_Voraphile</li>
+      <li>RV2R_Predator_GutLibido_VeryHigh</li>
+	   <li>RV2R_Predator_GutLibido_High</li>
+      <li>RV2R_Predator_GutLibido_Normal</li>
+      <li>RV2R_Predator_GutLibido_Low</li>
+	  <li>RV2R_Predator_GutLibido_None</li>
+    </quirks>
+    <blockingQuirks>
+      <li>PredatorDisposition_Refuses</li>
+    </blockingQuirks>
+    <requiredKeywords>
+      <li>PawnIsHumanoid</li>
+    </requiredKeywords>
+  </RimVore2.QuirkPoolDef>
+
+  <RimVore2.QuirkDef>
+    <defName>RV2R_Predator_GutLibido_Voraphile</defName>
+    <label>Vorny</label>
+    <description>As far as [PAWN_label] is concerned, sex is just foreplay for vore. Bulge me, baby!</description>
+    <rarity>VeryRare</rarity>
+    <blockingQuirks>
+      <li>GoalPreference_Predator_Pleasure_Dislikes</li>
+      <li>GoalPreference_Predator_Pleasure_Refuses</li>
+    </blockingQuirks>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>Predator_Libido</modifierName>
+        <modifierValue>2</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>RV2R_Predator_GutLibido_VeryHigh</defName>
+    <label>Intense predatory libido</label>
+    <description>[PAWN_label] absolutely loves lovin' on prey. They barely need to writhe to get them heated.</description>
+    <rarity>Rare</rarity>
+    <blockingQuirks>
+      <li>GoalPreference_Predator_Pleasure_Dislikes</li>
+      <li>GoalPreference_Predator_Pleasure_Refuses</li>
+    </blockingQuirks>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>Predator_Libido</modifierName>
+        <modifierValue>1.5</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>RV2R_Predator_GutLibido_High</defName>
+    <label>Predatory libido</label>
+    <description>[PAWN_label] likes giving out a little gut lovin', from time to time. They're stuck next to your hips anyway, why not?</description>
+    <rarity>Common</rarity>
+    <blockingQuirks>
+      <li>GoalPreference_Predator_Pleasure_Dislikes</li>
+      <li>GoalPreference_Predator_Pleasure_Refuses</li>
+    </blockingQuirks>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>Predator_Libido</modifierName>
+        <modifierValue>1</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>RV2R_Predator_GutLibido_Normal</defName>
+    <label>Normal libido</label>
+    <description>[PAWN_label] likes gut-grinding as much as anyone does.</description>
+    <rarity>Abundant</rarity>
+    <blockingQuirks>
+      <li>GoalPreference_Predator_Pleasure_Refuses</li>
+    </blockingQuirks>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>Predator_Libido</modifierName>
+        <modifierValue>0.66</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>RV2R_Predator_GutLibido_Low</defName>
+    <label>Chaste predator</label>
+    <description>[PAWN_label] dosn't enjoy grinding a gut as much as most. They'd have to be corerced by some rather kinky prey to give out some lovin', and would rather just cuddle.</description>
+    <rarity>Common</rarity>
+    <blockingQuirks>
+      <li>GoalPreference_Predator_Pleasure_Obsessed</li>
+      <li>GoalPreference_Predator_Pleasure_Likes</li>
+    </blockingQuirks>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>Predator_Libido</modifierName>
+        <modifierValue>0.33</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>RV2R_Predator_GutLibido_None</defName>
+    <label>Turn off</label>
+    <description>[PAWN_label] just can't have fun lovin' on a gut. There may be a hole, sure, but good luck reaching it.</description>
+    <rarity>Rare</rarity>
+	<blockingQuirks>
+      <li>GoalPreference_Predator_Pleasure_Obsessed</li>
+      <li>GoalPreference_Predator_Pleasure_Likes</li>
+    </blockingQuirks>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>Predator_Libido</modifierName>
+        <modifierValue>0</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  
+  
+  <RimVore2.QuirkPoolDef>
+    <defName>RV2R_Prey_GutLibido</defName>
+    <label>Preyish Libido</label>
+	<category>Proposals</category>
+	<description>These quirks determine how eager a prey is to engage in "gut lovin'". More eager couples do so more often, and ride the high longer. Only predators can initiate it, but their prey's willingness influences their descision.</description>
+    <generationOrder>3</generationOrder>
+    <poolType>PickOne</poolType>
+    <quirks>
+	  <li>RV2R_Prey_GutLibido_Voraphile</li>
+	  <li>RV2R_Prey_GutLibido_VeryHigh</li>
+	  <li>RV2R_Prey_GutLibido_High</li>
+	  <li>RV2R_Prey_GutLibido_Normal</li>
+	  <li>RV2R_Prey_GutLibido_Low</li>
+	  <li>RV2R_Prey_GutLibido_None</li>
+    </quirks>
+    <blockingQuirks>
+      <li>PreyDisposition_Refuses</li>
+    </blockingQuirks>
+    <requiredKeywords>
+      <li>PawnIsHumanoid</li>
+    </requiredKeywords>
+  </RimVore2.QuirkPoolDef>
+
+  <RimVore2.QuirkDef>
+    <defName>RV2R_Prey_GutLibido_Voraphile</defName>
+    <label>Vorny</label>
+    <description>As far as [PAWN_label] is concerned, sex is just foreplay for vore. Bulge me, baby!</description>
+    <rarity>VeryRare</rarity>
+    <blockingQuirks>
+      <li>GoalPreference_Prey_Pleasure_Dislikes</li>
+      <li>GoalPreference_Prey_Pleasure_Refuses</li>
+    </blockingQuirks>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>Prey_Libido</modifierName>
+        <modifierValue>2</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>RV2R_Prey_GutLibido_VeryHigh</defName>
+    <label>Intense preyish libido</label>
+    <description>[PAWN_label] absolutely loves getting some gut lovin'. The guts squish and grind over all the right places.</description>
+    <rarity>Rare</rarity>
+    <blockingQuirks>
+      <li>GoalPreference_Prey_Pleasure_Dislikes</li>
+      <li>GoalPreference_Prey_Pleasure_Refuses</li>
+    </blockingQuirks>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>Prey_Libido</modifierName>
+        <modifierValue>1.5</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>RV2R_Prey_GutLibido_High</defName>
+    <label>Preyish libido</label>
+    <description>[PAWN_label] likes to get a little gut lovin', from time to time. We're doing this for fun anyway, why not go full contact?</description>
+    <rarity>Common</rarity>
+    <blockingQuirks>
+      <li>GoalPreference_Prey_Pleasure_Dislikes</li>
+      <li>GoalPreference_Prey_Pleasure_Refuses</li>
+    </blockingQuirks>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>Prey_Libido</modifierName>
+        <modifierValue>1</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>RV2R_Prey_GutLibido_Normal</defName>
+    <label>Normal libido</label>
+    <description>[PAWN_label] likes getting ground up as much as anyone else does.</description>
+    <rarity>Abundant</rarity>
+    <blockingQuirks>
+      <li>GoalPreference_Prey_Pleasure_Refuses</li>
+    </blockingQuirks>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>Prey_Libido</modifierName>
+        <modifierValue>0.66</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>RV2R_Prey_GutLibido_Low</defName>
+    <label>Chaste prey</label>
+    <description>[PAWN_label] dosn't enjoy getting ground up like others do. They'll entertain an eager pred from time to time, but they'd rather just snuggle.</description>
+    <rarity>Common</rarity>
+    <blockingQuirks>
+      <li>GoalPreference_Prey_Pleasure_Obsessed</li>
+      <li>GoalPreference_Prey_Pleasure_Likes</li>
+    </blockingQuirks>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>Prey_Libido</modifierName>
+        <modifierValue>0.33</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  <RimVore2.QuirkDef>
+    <defName>RV2R_Prey_GutLibido_None</defName>
+    <label>Turn off</label>
+    <description>[PAWN_label] hates it when their pred starts grinding. It's all contact, no passion.</description>
+    <rarity>Rare</rarity>
+    <blockingQuirks>
+      <li>GoalPreference_Prey_Pleasure_Obsessed</li>
+      <li>GoalPreference_Prey_Pleasure_Likes</li>
+    </blockingQuirks>
+    <comps>
+      <li Class="RimVore2.QuirkComp_ValueModifier">
+        <modifierName>Prey_Libido</modifierName>
+        <modifierValue>0</modifierValue>
+      </li>
+    </comps>
+  </RimVore2.QuirkDef>
+  
+</Defs>
