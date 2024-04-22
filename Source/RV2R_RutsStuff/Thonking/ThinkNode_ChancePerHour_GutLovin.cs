@@ -1,6 +1,7 @@
 using RimVore2;
 using RimWorld;
 using System;
+using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 using static RV2R_RutsStuff.Patch_RV2R_Settings;
@@ -18,36 +19,33 @@ namespace RV2R_RutsStuff
              && pawn.ageTracker.AgeBiologicalYears < 18f)
                 return -1f;
 
-            if (pawn.CurrentBed() == null
-             || !pawn.IsActivePredator())
-                return -1f;
+            if(!pawn.IsActivePredator()) return -1f;
+            if(pawn.CurrentBed() == null) return -1f;
 
             float drive = 1f;
-            QuirkManager quirkManager = pawn.QuirkManager(false) ?? null;
-            if (quirkManager != null && quirkManager.HasValueModifier("Predator_Libido"))
-                drive = quirkManager.ModifyValue("Predator_Libido", drive);
+            drive = ApplyQuirkResults(drive, pawn);
+            if (drive <= 0f) return -1;
+            var result = (36f / RV2_Rut_Settings.rutsStuff.GutLovinChance) / drive / ThinkNode_ChancePerHour_GutLovin.LovinMtbSinglePawnFactor(pawn);
+            RV2Log.Message($"Predator {pawn.LabelShort} gut loves ever {result}" +
+                $" - {RV2_Rut_Settings.rutsStuff.GutLovinChance}" +
+                $" - {drive}" +
+                $" - {ThinkNode_ChancePerHour_GutLovin.LovinMtbSinglePawnFactor(pawn)}"
+                , "Gutlovin");
 
+            return result;
+        }
 
-            if (drive > 0f)
-            {
-                RV2Log.Message(string.Concat(new string[]
-                {
-                    "Predator ",
-                    pawn.LabelShort,
-                    " gut loves every ",
-                    ((24f/RV2_Rut_Settings.rutsStuff.GutLovinChance) / drive / ThinkNode_ChancePerHour_GutLovin.LovinMtbSinglePawnFactor(pawn)).ToString(),
-                    " h/a ((36/",
-                    RV2_Rut_Settings.rutsStuff.GutLovinChance.ToString(),
-                    ")/",
-                    drive.ToString(),
-                    "/",
-                    ThinkNode_ChancePerHour_GutLovin.LovinMtbSinglePawnFactor(pawn).ToString(),
-                    ")"
-                }), "Gutlovin");
-                return (36f / RV2_Rut_Settings.rutsStuff.GutLovinChance) / drive / ThinkNode_ChancePerHour_GutLovin.LovinMtbSinglePawnFactor(pawn);
-            }
-
-            return -1f;
+        private float ApplyQuirkResults(float drive, Pawn pawn)
+        {
+            var quirkManager = pawn.QuirkManager(false);
+            if (quirkManager == null) return drive;
+            foreach (var modifier in QuirkValueModifers())
+                drive = quirkManager.ModifyValue(modifier, drive);
+            return drive;
+        }
+        private IEnumerable<string> QuirkValueModifers()
+        {
+            yield return "Predator_Libido";
         }
 
         private static float LovinMtbSinglePawnFactor(Pawn pawn)
