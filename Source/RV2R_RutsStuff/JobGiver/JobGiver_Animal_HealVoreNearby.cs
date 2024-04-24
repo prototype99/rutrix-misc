@@ -2,8 +2,10 @@ using RimVore2;
 using RimWorld;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Verse;
 using Verse.AI;
+using static RimWorld.PsychicRitualRoleDef;
 
 namespace RV2R_RutsStuff
 {
@@ -17,43 +19,31 @@ namespace RV2R_RutsStuff
             jobGiver_Animal_HealVoreNearby.radius = this.radius;
             return jobGiver_Animal_HealVoreNearby;
         }
-
-        protected override Job TryGiveJob(Pawn pawn)
+        protected bool PreemptiveSip(Pawn pawn)
         {
+
             if (!pawn.CanParticipateInVore(out string reason))
-                return null;
+                return true;
 
             if (GenAI.InDangerousCombat(pawn))
-                return null;
+                return true;
 
             if (GenAI.EnemyIsNear(pawn, radius))
-                return null;
+                return true;
 
+            return false;
+        }
+        protected override Job TryGiveJob(Pawn pawn)
+        {
+            if(PreemptiveSip(pawn)) return null;
             try
             {
-                bool predicate(Thing t)
-                {
-                    Pawn pawn3 = (Pawn)t;
-                    return pawn.CanEndoVore(pawn3, out reason, false)
-                        && !pawn3.IsMechanoid()
-                        && pawn3.health.summaryHealth.SummaryHealthPercent <= 0.9f
-                        && (pawn3.health.InPainShock
-                         || pawn3.Downed
-                        && (!pawn3.InBed() || (
-                           pawn3.health.summaryHealth.SummaryHealthPercent <= 0.65f
-                           && (pawn3.IsAnimal() || (pawn3.IsHumanoid() && !pawn3.health.HasHediffsNeedingTendByPlayer())))
-                        ))
-                        && pawn.CanReserve(pawn3, 1, -1, null, false)
-                        && !pawn3.IsForbidden(pawn)
-                        && !RV2R_Utilities.IsBusy(pawn, pawn3)
-                        && RV2R_Utilities.ShouldFriendlyTarget(pawn, pawn3);
-                }
-                Pawn prey = (Pawn)GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForGroup(ThingRequestGroup.Pawn), PathEndMode.OnCell, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false, false, false), this.radius, predicate, null, 0, -1, false, RegionType.Set_Passable, false);
+                var prey = SelectPrey(pawn);
                 if (prey == null)
                     return null;
 
-                List<VoreGoalDef> list = new List<VoreGoalDef> { VoreGoalDefOf.Heal };
-                IEnumerable<VorePathDef> validPaths = VoreInteractionManager.Retrieve(new VoreInteractionRequest(pawn, prey, VoreRole.Predator, true, false, false, null, null, null, null, list)).ValidPaths;
+                var list = ValidHealGoal();
+                IEnumerable<VorePathDef> validPaths = VoreInteractionManager.Retrieve(new VoreInteractionRequest(pawn, prey, VoreRole.Predator, true, false, false, null, null, null, null, list.ToList())).ValidPaths;
                 if (validPaths.EnumerableNullOrEmpty<VorePathDef>())
                 {
                     RV2Log.Message("Predator " + pawn.LabelShort + " can't endo-rescue " + prey.LabelShort, "Jobs");
@@ -73,6 +63,35 @@ namespace RV2R_RutsStuff
                 Log.Warning("RV-2R: Something went wrong when " + pawn.LabelShort + " tried to endo-rescue: " + e);
                 return null;
             }
+        }
+        protected IEnumerable<VoreGoalDef> ValidHealGoal()
+        {
+            yield return VoreGoalDefOf.Heal;
+        }
+        protected Pawn SelectPrey(Pawn pawn)
+        {
+            bool predicate(Thing t)
+            {
+                Pawn pawn3 = (Pawn)t;
+                return pawn.CanEndoVore(pawn3, out var reason, false)
+                    && !pawn3.IsMechanoid()
+                    && pawn3.health.summaryHealth.SummaryHealthPercent <= 0.9f
+                    && (pawn3.health.InPainShock
+                     || pawn3.Downed
+                    && (!pawn3.InBed() || (
+                       pawn3.health.summaryHealth.SummaryHealthPercent <= 0.65f
+                       && (pawn3.IsAnimal() || (pawn3.IsHumanoid() && !pawn3.health.HasHediffsNeedingTendByPlayer())))
+                    ))
+                    && pawn.CanReserve(pawn3, 1, -1, null, false)
+                    && !pawn3.IsForbidden(pawn)
+                    && !RV2R_Utilities.IsBusy(pawn, pawn3)
+                    && RV2R_Utilities.ShouldFriendlyTarget(pawn, pawn3);
+            }
+            return GenClosest.ClosestThingReachable(
+                pawn.Position, pawn.Map, ThingRequest.ForGroup(ThingRequestGroup.Pawn), PathEndMode.OnCell,
+                TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false, false, false), this.radius,
+                predicate, null, 0, -1, false, RegionType.Set_Passable, false
+                ) as Pawn;
         }
     }
 }
