@@ -209,7 +209,7 @@ namespace RV2R_RutsStuff
             {
                 if (NonBanddaidableXenotype().Contains(pred.genes.xenotypeName)) return true;
             }
-            if (pred.genes?.Xenotype != null)
+            if (prey.genes?.Xenotype != null)
             {
                 if (NonBanddaidableXenotype().Contains(prey.genes.xenotypeName)) return true;
             }
