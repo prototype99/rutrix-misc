@@ -9,26 +9,29 @@ namespace RV2R_RutsStuff
         {
             get
             {
-                return Mathf.Max(GetValue(), 1f);
-
-                float GetValue()
+                float num = 1f;
+                if (this.def.defName == "RV2R_LoverPred" || this.def.defName == "RV2R_LoverPrey")
                 {
-                    switch (this.def.defName)
-                    {
-                        case "RV2R_LoverPred":
-                        case "RV2R_LoverPrey":
-                            if (LovePartnerRelationUtility.ExistingMostLikedLovePartner(this.pawn, false) == null) return 1;
-                            return 0.05f * (float)this.pawn.relations.OpinionOf(LovePartnerRelationUtility.ExistingMostLikedLovePartner(this.pawn, false));
-                        case "RV2R_PetPred":
-                            if (this.pawn?.relations?.GetFirstDirectRelationPawn(RV2R_Common.PetPred) == null) return 1;
-                            return 0.05f * (float)this.pawn.relations.OpinionOf(this.pawn.relations.GetFirstDirectRelationPawn(RV2R_Common.PetPred));
-                        case "RV2R_PetPrey":
-                            if (this.pawn?.relations?.GetFirstDirectRelationPawn(RV2R_Common.PetPrey) != null) return 1;
-                            return 0.1f * (float)this.pawn.relations.OpinionOf(this.pawn.relations.GetFirstDirectRelationPawn(RV2R_Common.PetPrey));
-                        default:
-                            return 1f;
-                    }
+                    if (LovePartnerRelationUtility.ExistingMostLikedLovePartner(this.pawn, false) != null)
+                        num = 0.05f * (float)this.pawn.relations.OpinionOf(LovePartnerRelationUtility.ExistingMostLikedLovePartner(this.pawn, false));
+                    return Mathf.Max(num, 1f);
+
                 }
+                if (this.def.defName == "RV2R_PetPred")
+                {
+                    if (this.pawn.relations.GetFirstDirectRelationPawn(RV2R_Common.PetPred) != null)
+                        num = 0.05f * (float)this.pawn.relations.OpinionOf(this.pawn.relations.GetFirstDirectRelationPawn(RV2R_Common.PetPred));
+                    return Mathf.Max(num, 1f);
+
+                }
+                if (this.def.defName == "RV2R_PetPrey")
+                {
+                    if (this.pawn.relations.GetFirstDirectRelationPawn(RV2R_Common.PetPrey) != null)
+                        num = 0.1f * (float)this.pawn.relations.OpinionOf(this.pawn.relations.GetFirstDirectRelationPawn(RV2R_Common.PetPrey));
+                    return Mathf.Max(num, 1f);
+
+                }
+                return 1f;
             }
         }
     }
