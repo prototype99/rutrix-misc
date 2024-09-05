@@ -13,28 +13,37 @@ namespace RV2R_RutsStuff
         public override void Tick()
         {
             base.Tick();
-            if (ageTicks % 500 != 0) return;
-
-            Severity = TickSeverity(pawn);
-            pawn.health.Notify_HediffChanged(this);
+            if (ageTicks % 250 == 0)
+            {
+                Severity = TickSeverity(pawn);
+                pawn.health.Notify_HediffChanged(this);
+            }
         }
 
         private float TickSeverity(Pawn pawn)
         {
-            if (PreemptiveSkip(pawn)) return 0f;
             try
             {
+                if (RV2_Rut_Settings.rutsStuff.EncumberanceModifier <= 0.0f)
+                    return 0f;
+                if (RV2_Rut_Settings.rutsStuff.EncumberanceCap < 0.05f)
+                    return 0f;
+                if (!pawn.IsActivePredator())
+                    return 0f;
+                if (pawn.PawnData(false) == null)
+                    return 0f;
+
                 float quirkMod = pawn.QuirkManager(false)?.CapModOffsetModifierFor(PawnCapacityDefOf.Moving, null) ?? 1f;
 
                 if (RV2_Rut_Settings.rutsStuff.SizedEncumberance)
                 {
                     float totalWeight = RV2R_Utilities.GetPreySize(pawn);
-                    return Math.Min(totalWeight / Math.Max(pawn.BodySize, 0.01f) / 4f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, 1f);
+                    return Math.Min(totalWeight / Math.Max(pawn.BodySize, 0.01f) / 4f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, RV2_Rut_Settings.rutsStuff.EncumberanceCap);
                 }
                 else
                 {
                     int totalPrey = RV2R_Utilities.GetPreyCount(pawn);
-                    return Math.Min(totalPrey / 4f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, 1f);
+                    return Math.Min(totalPrey / 4f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, RV2_Rut_Settings.rutsStuff.EncumberanceCap);
                 }
             }
             catch (Exception e) 
@@ -42,19 +51,6 @@ namespace RV2R_RutsStuff
                 Log.Warning("RV-2R: Something went wrong when getting " + pawn.LabelShort + "'s encumberance: " + e);
                 return 0f;
             }
-        }
-
-        private bool PreemptiveSkip(Pawn pawn)
-        {
-            if (!pawn.SpawnedOrAnyParentSpawned)
-                return true;
-            if (RV2_Rut_Settings.rutsStuff.EncumberanceModifier <= 0.0f)
-                return true;
-            if (!pawn.IsActivePredator())
-                return true;
-            if (pawn.PawnData(false) == null)
-                return true;
-            return false;
         }
 
         public override bool Visible

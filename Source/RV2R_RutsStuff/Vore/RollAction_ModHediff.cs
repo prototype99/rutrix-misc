@@ -11,20 +11,21 @@ namespace RV2R_RutsStuff
         {
             base.TryAction(record, rollStrength);
             HediffDef hediffDef = HediffDef.Named(this.hediff);
-
-            if (hediffDef == null) return false;
-
-            Hediff hediff = base.TargetPawn.health.hediffSet.GetFirstHediffOfDef(hediffDef, false);
-            if (hediff != null)
+            if (hediffDef != null)
             {
-                hediff.Severity = Math.Min(hediff.Severity + rollStrength, hediffDef.maxSeverity);
+                Hediff hediff = base.TargetPawn.health.hediffSet.GetFirstHediffOfDef(hediffDef, false);
+                if (hediff != null)
+                {
+                    hediff.Severity = Math.Min(hediff.Severity + rollStrength, hediffDef.maxSeverity);
+                }
+                else
+                {
+                    BodyPartRecord bodyPartByDef = base.TargetPawn.GetBodyPartByDef(this.partDef);
+                    base.TargetPawn.health.AddHediff(hediffDef, bodyPartByDef, null, null);
+                }
+                return true;
             }
-            else
-            {
-                BodyPartRecord bodyPartByDef = base.TargetPawn.GetBodyPartByDef(this.partDef);
-                base.TargetPawn.health.AddHediff(hediffDef, bodyPartByDef, null, null);
-            }
-            return true;
+            return false;
         }
 
         public override IEnumerable<string> ConfigErrors()
