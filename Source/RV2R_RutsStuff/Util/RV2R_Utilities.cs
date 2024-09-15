@@ -1,17 +1,13 @@
 using DefOfs;
-using HarmonyLib;
-using LudeonTK;
 using RimVore2;
 using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
-using static RimWorld.IdeoFoundation_Deity;
 
 namespace RV2R_RutsStuff
 {
@@ -22,7 +18,15 @@ namespace RV2R_RutsStuff
             return pawn?.PawnData(initalize)?.VoreTracker;
         }
 
+        public static bool IsInControllableState(Pawn pawn)
+        {
+            if(pawn.Dead) return false;
+            if(pawn.IsBurning) return false;
+            if(pawn.InMentalState) return false;
+            if (pawn.Downed) return false;
 
+            return true;
+        }
         static public bool IsBusy(Pawn pawn, Pawn target, bool respectMasterJob = false)
         {
             if (IsPawnBusy(pawn)) return true;
@@ -133,17 +137,16 @@ namespace RV2R_RutsStuff
             if(!target.IsHumanoid() && pawn.Map.designationManager.DesignationOn(target, DesignationDefOf.Tame) != null) return true;
             return false;
         }
-        static public bool IsInTargetMidsection(Pawn pawn, Pawn target, bool isLethal)
+        static public bool IsInTargetMidsection(Pawn prey, Pawn predator)
         {
-            var voreTracker = pawn.GetVoreTracker();
+            var voreTracker = prey.GetVoreTracker();
             if (voreTracker == null) return false;
 
-            if(!target.IsActivePredator()) return false;
+            if(!predator.IsActivePredator()) return false;
 
             return voreTracker.VoreTrackerRecords.Any(r =>
             {
-                if (r.Prey != pawn) return false;
-                if (!r.VoreGoal.IsLethal) return false;
+                if (r.Prey != prey) return false;
                 return MidsectionVoreStageDefs().Contains(r.CurrentVoreStage.def);
             });
         }

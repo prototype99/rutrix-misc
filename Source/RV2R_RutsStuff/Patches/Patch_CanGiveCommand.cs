@@ -2,6 +2,7 @@ using HarmonyLib;
 using RimVore2;
 using RimVore2.Tabs;
 using RimWorld;
+using System;
 using Verse;
 
 namespace RV2R_RutsStuff
@@ -12,30 +13,41 @@ namespace RV2R_RutsStuff
         [HarmonyPostfix]
         public static void TamedCommands(ref bool __result, Pawn pawn)
         {
-            if (!pawn.Dead && !pawn.InMentalState && !pawn.Downed && !pawn.IsBurning())
+            try
             {
-                if (RV2R_Utilities.IsSapient(pawn))
+                if (!RV2R_Utilities.IsInControllableState(pawn)) return;
+                if (!RV2R_Utilities.IsSapient(pawn))
                 {
                     __result = true;
                     return;
                 }
-                if (pawn.IsAnimal() && pawn.IsActivePredator())
+                if (!pawn.IsAnimal()) return;
+                if (!pawn.IsActivePredator()) return;
+
+                if (RV2R_Utilities.GetHighestPreySkillLevel(pawn, SkillDefOf.Animals) > pawn.GetStatValue(StatDefOf.MinimumHandlingSkill) * 2)
                 {
-                    if (RV2R_Utilities.GetHighestPreySkillLevel(pawn, SkillDefOf.Animals) >= pawn.GetStatValue(StatDefOf.MinimumHandlingSkill) * 2)
-                    {
-                        __result = true;
-                        return;
-                    }
-                    if (pawn.training != null)
-                    {
-                        Pawn_PlayerSettings playerSettings = pawn.playerSettings;
-                        if (playerSettings != null)
-                            if (playerSettings.RespectedMaster != null && (pawn.playerSettings.RespectedMaster.Position.DistanceTo(pawn.Position) <= 8f || pawn.playerSettings.RespectedMaster.IsPreyOf(pawn)))
-                                __result = true;
-                    }
+                    __result = true;
+                    return;
+                }
+                if (pawn.training == null) return;
+                var master = pawn.playerSettings?.Master;
+                if (master == null) return;
+
+                if (master.IsPreyOf(pawn))//is inside animal
+                {
+                    __result = true;
+                    return;
+                }
+                if (master.Position.DistanceTo(pawn.Position) <= 8f)//or close enough
+                {
+                    __result = true;
+                    return;
                 }
             }
-            return;
+            catch (Exception e)
+            {
+                RV2Log.Error($"Caught exception in TamedCommands {e}", "RV2 Stuff Patches");
+            }
         }
     }
 }

@@ -1,6 +1,9 @@
 using HarmonyLib;
+using RimVore2;
 using RimWorld;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Verse;
 
 namespace RV2R_RutsStuff
@@ -13,34 +16,33 @@ namespace RV2R_RutsStuff
         {
             try
             {
-                if (p.needs.food != null && RV2R_Utilities.HasPreyIn(p, "stomach"))
-                    switch (p.needs.food.CurCategory)
-                    {
-                        case HungerCategory.Fed:
-                            __result = ThoughtState.Inactive;
-                            break;
-                        case HungerCategory.Hungry:
-                            __result = ThoughtState.Inactive;
-                            break;
-                        case HungerCategory.UrgentlyHungry:
-                            __result = ThoughtState.ActiveAtStage(0);
-                            break;
-                        case HungerCategory.Starving:
-                            {
-                                Hediff firstHediffOfDef = p.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Malnutrition, false);
-                                int num = ((firstHediffOfDef == null) ? 0 : firstHediffOfDef.CurStageIndex);
-                                __result = ThoughtState.ActiveAtStage(1 + num);
-                            }
-                            break;
-                        default:
-                            throw new NotImplementedException();
-                    }
+                if (p.needs?.food == null) return;
+                if (!ValidOrgans().Any(organ => RV2R_Utilities.HasPreyIn(p, organ))) return;
+                switch (p.needs.food.CurCategory)
+                {
+                    case HungerCategory.Fed:
+                        __result = ThoughtState.Inactive;
+                        break;
+                    case HungerCategory.Hungry:
+                        __result = ThoughtState.Inactive;
+                        break;
+                    case HungerCategory.UrgentlyHungry:
+                        __result = ThoughtState.ActiveAtStage(0);
+                        break;
+                    case HungerCategory.Starving:
+                        Hediff firstHediffOfDef = p.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Malnutrition, false);
+                        int num = ((firstHediffOfDef == null) ? 0 : firstHediffOfDef.CurStageIndex);
+                        __result = ThoughtState.ActiveAtStage(1 + num);
+                        break;
+                }
             }
-            catch (Exception e)
-            {
-                Log.Warning("RV-2R: Something went wrong when trying to modify "+p.LabelShort+"'s hunger thought : " + e);
-                return;
+            catch (Exception e) {
+                RV2Log.Error($"Caught exception in Patch_FullBellyThought {e}", "RV2 Stuff Patches");
             }
+        }
+        public static IEnumerable<string> ValidOrgans()
+        {
+            yield return "stomach";
         }
     }
 }

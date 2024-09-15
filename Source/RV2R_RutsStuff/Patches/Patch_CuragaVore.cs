@@ -7,12 +7,11 @@ namespace RV2R_RutsStuff
     [HarmonyPatch(typeof(RollAction_Heal), "TryAction")]
     internal class Patch_CuragaVore
     {
-        internal static bool Prefix(ref float rollStrength)
+        internal static void Prefix(ref float rollStrength)
         {
-            if (RV2_Rut_Settings.rutsStuff.CuragaVore)
-                rollStrength *= 2.5f;
+            if (!RV2_Rut_Settings.rutsStuff.CuragaVore) return;
 
-            return true;
+            rollStrength *= 2.5f;
         }
     }
 }
