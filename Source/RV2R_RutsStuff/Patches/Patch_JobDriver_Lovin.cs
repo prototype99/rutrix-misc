@@ -16,25 +16,25 @@ namespace RV2R_RutsStuff
         [HarmonyPostfix]
         public static IEnumerable<Toil> GrindUpPrey(IEnumerable<Toil> __result, JobDriver_Lovin __instance)
         {
-            if (!RV2_Rut_Settings.rutsStuff.PreyLovin) return;
-            foreach (Toil toil in __result)
+            foreach (Toil t in __result)
             {
-                yield return toil;
+                yield return t;
             }
+            if (!RV2_Rut_Settings.rutsStuff.PreyLovin) yield break;
             var toil = ToilMaker.MakeToil("Patch_JobDriver_Lovin making toil");
             toil.AddFinishAction(() =>
             {
-                Action(__instance.pawn);
+                PreformTheAction(__instance.pawn);
             });
             yield return toil;
             
         }
-        public static void Action(Pawn pawn)
+        public static void PreformTheAction(Pawn pawn)
         {
             try
             {
                 var voreTrackerList = pawn?.PawnData(true)?.VoreTracker?.VoreTrackerRecords?.Where(r => RV2R_Utilities.IsInTargetMidsection(r.Prey, r.Predator) && !r.VoreGoal.IsLethal);
-                if (voreTrackerList.EnumerableNullOrEmpty()) yield break;
+                if (voreTrackerList.EnumerableNullOrEmpty()) return;
 
                 List<Pawn> WasLoved = new List<Pawn>();
                 voreTrackerList.ForEach(r =>
@@ -55,7 +55,7 @@ namespace RV2R_RutsStuff
 
                     IEnumerable<Pawn> lovers = LovePartnerRelationUtility.ExistingLovePartners(r.Prey, false)
                     .Select(relation => relation.otherPawn)
-                    .Where(p => voreTrackerList.Any(r => r.Prey == p))
+                    .Where(p => voreTrackerList.Any(r2 => r2.Prey == p))
                     .Where(p => !WasLoved.Contains(p));
 
                     lovers.ForEach(lover =>
@@ -70,7 +70,6 @@ namespace RV2R_RutsStuff
             catch (Exception e)
             {
                 Log.Warning("RV-2R: Something went wrong when trying to make a predatory 3 way : " + e);
-                yield break;
             }
         }
         public static Thought_Memory GetLovinMemoryFor(Pawn prey, Pawn pred)

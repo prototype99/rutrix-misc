@@ -21,7 +21,7 @@ namespace RV2R_RutsStuff
         public static bool IsInControllableState(Pawn pawn)
         {
             if(pawn.Dead) return false;
-            if(pawn.IsBurning) return false;
+            if(pawn.IsBurning()) return false;
             if(pawn.InMentalState) return false;
             if (pawn.Downed) return false;
 
@@ -102,7 +102,7 @@ namespace RV2R_RutsStuff
 
             if(target.training == null) return 0;
 
-            int learnedTrainables = DefDatabase<TrainabilityDef>.AllDefsListForReading.Sum(d=>target.training.HasLearned(d));
+            int learnedTrainables = DefDatabase<TrainableDef>.AllDefsListForReading.Sum(d=>target.training.HasLearned(d) ? 1 : 0);
 
             float idealness = Mathf.Abs(target.BodySize * 2f / pawn.BodySize);
             if (idealness > 1f)
@@ -186,7 +186,7 @@ namespace RV2R_RutsStuff
 
             if (!pawn.IsActivePredator()) return 0;
 
-            return tracker.VoreTrackerRecords.Sum(r =>
+            return voreTracker.VoreTrackerRecords.Sum(r =>
             {
                 return 1 + GetLivePreyCount(pawn, depth + 1);
             });
