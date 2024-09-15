@@ -45,7 +45,7 @@ namespace RV2R_RutsStuff
                 
                 if (record.Prey.IsInsectoid() && !record.Prey.IsHumanoid()) // Needs to be set up like this because of Apini; they're made of insect meat
                     HandleInsectoids(record);
-                else if (RV2R_Utilities.IsColonyHostile(record.Predator, record.Prey) && record.Prey.IsHumanoid())
+                else if (RV2R_Utilities.IsFreeHostileToColony(record.Predator, record.Prey) && record.Prey.IsHumanoid())
                     record.Prey.guest.SetGuestStatus(record.Predator.Faction, GuestStatus.Prisoner);
             }
             catch (Exception e)

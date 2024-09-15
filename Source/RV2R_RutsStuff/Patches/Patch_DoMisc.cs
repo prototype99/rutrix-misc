@@ -98,7 +98,7 @@ namespace RV2R_RutsStuff
                 {
                     if (record.StruggleManager.shouldStruggle)
                         record.StruggleManager.shouldStruggle = false;
-                    if (RV2R_Utilities.IsColonyHostile(record.Predator, record.Prey) && !record.Prey.IsPrisoner)
+                    if (RV2R_Utilities.IsFreeHostileToColony(record.Predator, record.Prey) && !record.Prey.IsPrisoner)
                         if (!RV2R_Utilities.IsSapient(record.Prey))
                             record.Prey.SetFaction(null, null);
                         else

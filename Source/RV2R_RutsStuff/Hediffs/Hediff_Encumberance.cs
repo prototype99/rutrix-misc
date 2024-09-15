@@ -42,7 +42,7 @@ namespace RV2R_RutsStuff
                 }
                 else
                 {
-                    int totalPrey = RV2R_Utilities.GetPreyCount(pawn);
+                    int totalPrey = RV2R_Utilities.GetLivePreyCount(pawn);
                     return Math.Min(totalPrey / 4f * RV2_Rut_Settings.rutsStuff.EncumberanceModifier * quirkMod, RV2_Rut_Settings.rutsStuff.EncumberanceCap);
                 }
             }

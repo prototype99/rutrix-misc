@@ -142,7 +142,7 @@ namespace RV2R_RutsStuff
                     {
                         Pawn target = (Pawn)t;
                         return pawn.Position.DistanceTo(target.Position) <= 15f
-                             && ((RV2_Rut_Settings.rutsStuff.FodderGuests && !target.IsColonist && !RV2R_Utilities.IsColonyHostile(pawn, target))
+                             && ((RV2_Rut_Settings.rutsStuff.FodderGuests && !target.IsColonist && !RV2R_Utilities.IsFreeHostileToColony(pawn, target))
                               || (RV2_Rut_Settings.rutsStuff.FodderColonists && target.IsColonistPlayerControlled)
                                 )
                         ;

@@ -17,7 +17,7 @@ namespace RV2R_RutsStuff
             //if (RV2_Rut_Settings.rutsStuff.PlayVoreNamedBoost && !Pawn.Name?.Numerical)
             //  mtbHours /= 2f;
             if (Pawn.IsActivePredator())
-                preyMod += RV2R_Utilities.GetPreyCount(Pawn) * RV2_Rut_Settings.rutsStuff.PlayVoreModifier;
+                preyMod += RV2R_Utilities.GetLivePreyCount(Pawn) * RV2_Rut_Settings.rutsStuff.PlayVoreModifier;
 
             return this.mtbHours * preyMod;
         }

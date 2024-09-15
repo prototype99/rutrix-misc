@@ -1,51 +1,72 @@
+using DefOfs;
+using HarmonyLib;
+using LudeonTK;
 using RimVore2;
 using RimWorld;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
+using static RimWorld.IdeoFoundation_Deity;
 
 namespace RV2R_RutsStuff
 {
     internal static class RV2R_Utilities
     {
-        static public bool IsBusy(Pawn pawn, Pawn target, bool respect = false)
+        public static VoreTracker GetVoreTracker(this Pawn pawn, bool initalize = false)
         {
+            return pawn?.PawnData(initalize)?.VoreTracker;
+        }
 
-            if (pawn.GetLord()?.LordJob is LordJob_FormAndSendCaravan || target.GetLord()?.LordJob is LordJob_FormAndSendCaravan)
-                return true;
-            if (pawn.CarriedBy != null || target.CarriedBy != null)
-                return true;
-            if (!pawn.Spawned || !target.Spawned)
-                return true;
 
-            if (pawn.Drafted || target.Drafted)
-                return true;
+        static public bool IsBusy(Pawn pawn, Pawn target, bool respectMasterJob = false)
+        {
+            if (IsPawnBusy(pawn)) return true;
+            if (IsPawnBusy(target)) return true;
 
-            if (pawn.IsBurning() || target.IsBurning())
-                return true;
+            if (pawn.Faction == null) return false;
+            if (pawn.IsHumanoid()) return false;
+            if (!pawn.Faction.IsPlayer) return false;
 
-            if (pawn.ShouldBeSlaughtered() || target.ShouldBeSlaughtered())
-                return true;
+            if(!respectMasterJob) return false;
+            if (pawn?.playerSettings?.RespectedMaster == null) return false;
+            if (pawn.playerSettings.followDrafted && pawn.playerSettings.RespectedMaster.Drafted) return true;
+            if (pawn.playerSettings.followFieldwork && pawn.playerSettings.RespectedMaster.mindState.lastJobTag == JobTag.Fieldwork) return true;
 
-            if (pawn.Faction != null && !pawn.IsHumanoid() && pawn.Faction.IsPlayer)
-                if (respect && pawn.playerSettings != null && pawn.playerSettings.RespectedMaster != null
-                 && ((pawn.playerSettings.followDrafted && pawn.playerSettings.RespectedMaster.Drafted) || (pawn.playerSettings.followFieldwork && pawn.playerSettings.RespectedMaster.mindState.lastJobTag == JobTag.Fieldwork)))
-                    return true;
+            return false;
+
+            
+        }
+        public static bool IsPawnBusy(Pawn pawn)
+        {
+            if (pawn.CarriedBy is null) return true;
+
+            if (pawn.Drafted) return true;
+
+            if (pawn.GetLord() != null && BusyLordJobs().Contains(pawn.GetLord().LordJob.GetType())) return true;
+
+            if (pawn.IsBurning()) return true;
+
+            if (pawn.ShouldBeSlaughtered()) return true;
 
             return false;
         }
-
-        static public bool IsColonyHostile(Pawn pawn, Pawn target)
+        private static IEnumerable<Type> BusyLordJobs()
         {
-            if (pawn.Faction != null && pawn.Faction.IsPlayer)
-                if (target.Faction != null && target.Faction.HostileTo(Faction.OfPlayer))
-                    if (!target.IsPrisonerOfColony)
-                        return true;
+            yield return typeof(LordJob_FormAndSendCaravan);
+        }
 
-            return false;
+        static public bool IsFreeHostileToColony(Pawn pawn, Pawn target)
+        {
+            if (pawn?.Faction?.IsPlayer != true) return false;//if you don't have a faction or is part of players not hostile
+            if (target?.Faction?.HostileTo(Faction.OfPlayer) != true) return false;//If target is not a part of a faction or the faction is not hostile
+            if (target.IsPrisonerOfColony) return false;//If target is a prisoner then they aren't actively hostile
+
+            return true;
         }
 
         static public bool IsSapient(Pawn pawn)
@@ -61,207 +82,163 @@ namespace RV2R_RutsStuff
             return false;
         }
 
-        static public float GetFodderWeight(Pawn pawn, Pawn target, bool check)
+        private static float GetFodderWeightAnimal(Pawn pawn, Pawn target, bool DoColonySafetyCheck)
         {
-            try
+            
+            if (DoColonySafetyCheck)
             {
-                float weight = 0f;
-
-                if (check && target.IsColonist && Rand.Chance(0.5f)) // 50% chance for any player faction pawn to be spared
-                    return 0f;
-
-                if (target.IsPrisonerInPrisonCell())
-                    return 6f;
-
-                if (target.IsAnimal())
-                {
-                    if (check)
-                    {
-                        List<Pawn> colonySpecies = target.Map.mapPawns.SpawnedColonyAnimals.FindAll((Pawn p) => p.def == target.def && p.gender == target.gender && !target.IsReserved());
-                        if (colonySpecies.Count > 2)
-                            weight = 1f;
-                        else
-                            return 0f;
-                    }
-                    else
-                    {
-                        int learnedTrainables = 0;
-                        foreach (TrainableDef trainable in DefDatabase<TrainableDef>.AllDefsListForReading)
-                            if (target.training.HasLearned(trainable))
-                                learnedTrainables++;
-
-                        float idealness = Mathf.Abs(target.BodySize * 2f / pawn.BodySize);
-                        if (idealness > 1f)
-                            idealness = Mathf.Pow(idealness, -1f); // Gives highest weight to prey that are half a predator's size; makes foxxo want to nom chickm and bunbun
-
-                        weight = (2f * idealness) / learnedTrainables;
-                    }
-                }
-
-                if (target.IsHumanoid())
-                {
-                    if (pawn.IsAnimal())
-                        weight = (1f / (target.IsColonist ? 2f : 1f));
-                    else
-                        weight = (100 - pawn.relations.OpinionOf(target)) / 50 / (target.IsColonist ? 1.5f : 1f); // Don't eat people you like
-                }
-
-                return weight;
-            }
-            catch (Exception e)
-            {
-                Log.Warning("RV-2R: Something went wrong when trying to get " + target.LabelShort + "'s fodder weight: " + e);
+                var colonySpecies = target.Map.mapPawns.SpawnedColonyAnimals.FindAll(p => 
+                    p.def == target.def 
+                    && p.gender == target.gender
+                    && !target.IsReserved()
+                );
+                if (colonySpecies.Count > 2) return 1;
                 return 0;
             }
+
+            if(target.training == null) return 0;
+
+            int learnedTrainables = DefDatabase<TrainabilityDef>.AllDefsListForReading.Sum(d=>target.training.HasLearned(d));
+
+            float idealness = Mathf.Abs(target.BodySize * 2f / pawn.BodySize);
+            if (idealness > 1f)
+                idealness = Mathf.Pow(idealness, -1f); // Gives highest weight to prey that are half a predator's size; makes foxxo want to nom chickm and bunbun
+
+            return (2f * idealness) / learnedTrainables;
+        }
+        private static float GetFodderWeightHumanoid(Pawn pawn, Pawn target, bool DoColonySafetyCheck)
+        {
+            return (100 - pawn.relations.OpinionOf(target)) / 50 / (target.IsColonist ? 1.5f : 1f); // Don't eat people you like
+        }
+        static public float GetFodderWeight(Pawn pawn, Pawn target, bool DoColonySafetyCheck)
+        {
+            if(pawn.Map == null) return 0;
+            if(target.Map == null) return 0;
+
+            if (DoColonySafetyCheck && target.IsColonist && Rand.Chance(.5f)) return 0;
+            if (target.IsPrisonerInPrisonCell()) return 0;
+
+            if (target.IsAnimal()) return GetFodderWeightAnimal(pawn, target, DoColonySafetyCheck);
+            else if (target.IsHumanoid()) return GetFodderWeightHumanoid(pawn, target, DoColonySafetyCheck);
+            else return 0;
         }
 
         static public bool ShouldFriendlyTarget(Pawn pawn, Pawn target)
         {
-            if (pawn.Faction != null
-             && (target.Faction != null && pawn.Faction == target.Faction)
-               || ((target.Faction != null && target.Faction.AllyOrNeutralTo(pawn.Faction))
-               || (target.IsHumanoid() && target.GuestStatus != null)
-               || (!target.IsHumanoid() && pawn.Map.designationManager.DesignationOn(target, DesignationDefOf.Tame) != null)))
-                return true;
+            if(pawn.Faction == null) return false;
 
+            if(target.Faction == pawn.Faction) return true;
+            if(target?.Faction?.AllyOrNeutralTo(pawn.Faction) == true) return true;
+            if(target.IsHumanoid() && target.GuestStatus != null) return true;
+            if(!target.IsHumanoid() && pawn.Map.designationManager.DesignationOn(target, DesignationDefOf.Tame) != null) return true;
             return false;
         }
         static public bool IsInTargetMidsection(Pawn pawn, Pawn target, bool isLethal)
         {
-            if (target.IsActivePredator())
-            {
-                PawnData pawnData = target.PawnData(false);
-                if (pawnData != null)
-                {
-                    VoreTracker voreTracker = pawnData.VoreTracker;
-                    if (voreTracker != null)
-                        foreach (VoreTrackerRecord voreTrackerRecord in voreTracker.VoreTrackerRecords)
-                        {
-                            if (voreTrackerRecord.Prey == pawn
-                               && voreTrackerRecord.VoreGoal.IsLethal == isLethal
-                               && (voreTrackerRecord.CurrentVoreStage.def.partName.ToLower() == "stomach"
-                                || voreTrackerRecord.CurrentVoreStage.def.displayPartName.ToLower() == "intestines"
-                                || voreTrackerRecord.CurrentVoreStage.def.displayPartName.ToLower() == "womb"))
-                            {
-                                return true;
-                            }
+            var voreTracker = pawn.GetVoreTracker();
+            if (voreTracker == null) return false;
 
-                        }
-                }
-            }
-            return false;
+            if(!target.IsActivePredator()) return false;
+
+            return voreTracker.VoreTrackerRecords.Any(r =>
+            {
+                if (r.Prey != pawn) return false;
+                if (!r.VoreGoal.IsLethal) return false;
+                return MidsectionVoreStageDefs().Contains(r.CurrentVoreStage.def);
+            });
+        }
+        public static IEnumerable<VoreStageDef> MidsectionVoreStageDefs()
+        {
+            yield return VoreStageDefOfs.Stomach_Warmup;
+            yield return VoreStageDefOfs.Stomach_Warmup_Fast;
+            yield return VoreStageDefOfs.Stomach_Churn;
+            yield return VoreStageDefOfs.Stomach_SoftChurn;
+            yield return VoreStageDefOfs.Stomach_Drain;
+
+            yield return VoreStageDefOfs.Womb_ConvertLube;
+            yield return VoreStageDefOfs.Womb_DissolveLube;
+            yield return VoreStageDefOfs.Womb_MushLube;
+
+            yield return VoreStageDefOfs.Intestines_SoftProcess;
         }
 
         static public bool HasPreyIn(Pawn pawn, string organ)
         {
-            PawnData pawnData = pawn.PawnData(false) ?? null;
-            if (pawnData != null && pawn.IsActivePredator())
-            {
-                VoreTracker voreTracker = pawnData.VoreTracker;
-                if (voreTracker != null)
-                    foreach (VoreTrackerRecord voreTrackerRecord in voreTracker.VoreTrackerRecords)
-                        if (voreTrackerRecord.CurrentVoreStage.def.partName.ToLower() == organ.ToLower())
-                            return true;
-            }
-            return false;
+            var voreTracker = pawn.GetVoreTracker();
+            if (voreTracker == null) return false;
+
+            if (!pawn.IsActivePredator()) return false;
+
+            return voreTracker.VoreTrackerRecords.Any(r => r.CurrentVoreStage.def.partName.ToLower() == organ.ToLower());
         }
-        static public int GetPreyCount(Pawn pawn)
+        static public int GetLivePreyCount(Pawn pawn, int depth = 0)
         {
-            int count = 0;
-            PawnData pawnData = pawn.PawnData(false) ?? null;
-            if (pawnData != null && pawn.IsActivePredator())
+            if (depth == 10)
             {
-                VoreTracker voreTracker = pawnData.VoreTracker;
-                if (voreTracker != null)
-                    foreach (VoreTrackerRecord voreTrackerRecord in voreTracker.VoreTrackerRecords)
-                    {
-                        count += 1;
-                        if (!voreTrackerRecord.Prey.Dead && voreTrackerRecord.Prey.IsActivePredator())
-                            if (voreTrackerRecord.Prey.PawnData(false) != null)
-                                count += GetPreyCount(voreTrackerRecord.Prey);
-                    }
+                Log.Warning("Prey Size calculation reach max depth size");
+                return 0;
             }
-            return count;
+            var voreTracker = pawn.GetVoreTracker();
+            if (voreTracker == null) return 0;
+
+            if (!pawn.IsActivePredator()) return 0;
+
+            return tracker.VoreTrackerRecords.Sum(r =>
+            {
+                return 1 + GetLivePreyCount(pawn, depth + 1);
+            });
         }
-        static public float GetPreySize(Pawn pawn)
+        static public float GetPreySize(Pawn pawn, int depth = 0)
         {
-            float weight = 0;
-            PawnData pawnData = pawn.PawnData(false) ?? null;
-            if (pawnData != null && pawn.IsActivePredator())
-            {
-                VoreTracker voreTracker = pawnData.VoreTracker;
-                if (voreTracker != null)
-                    foreach (VoreTrackerRecord voreTrackerRecord in voreTracker.VoreTrackerRecords)
-                    {
-                        weight += voreTrackerRecord.Prey.BodySize;
-                        if (!voreTrackerRecord.Prey.Dead && voreTrackerRecord.Prey.IsActivePredator())
-                            if (voreTrackerRecord.Prey.PawnData(false) != null)
-                                weight += GetPreySize(voreTrackerRecord.Prey);
-                    }
+            if (depth == 10){
+                Log.Warning("Prey Size calculation reach max depth size");
+                return 0;
             }
-            return weight;
+            var voreTracker = pawn.GetVoreTracker();
+            if (voreTracker == null) return 0;
+            if (pawn.IsActivePredator()) return 0;
+            return voreTracker.VoreTrackerRecords.Sum(r => r.Prey.BodySize + GetPreySize(r.Prey, depth+1));
         }
 
         static public int GetHighestPreySkillLevel(Pawn pawn, SkillDef skill)
         {
-            try
-            {
-                int level = 0;
-                PawnData pawnData = pawn.PawnData(false) ?? null;
-                if (pawnData != null && pawn.IsActivePredator())
-                {
-                    VoreTracker voreTracker = pawnData.VoreTracker;
-                    if (voreTracker != null)
-                        foreach (VoreTrackerRecord voreTrackerRecord in voreTracker.VoreTrackerRecords)
-                        {
-                            if (voreTrackerRecord.Prey.skills?.GetSkill(skill) != null)
-                                level = Math.Max(level, voreTrackerRecord.Prey.skills.GetSkill(skill).levelInt);
-                        }
-                }
-                return level;
-            }
-            catch (Exception e)
-            {
-                Log.Warning("RV-2R: Something went wrong when trying to get " + pawn.LabelShort + "'s total prey count: " + e);
-                return 0;
-            }
+            var voreTracker = pawn.GetVoreTracker();
+            if (voreTracker == null) return 0;
+            if (pawn.IsActivePredator()) return 0;
+
+            return voreTracker.VoreTrackerRecords
+                .Select(r => r.Prey?.skills?.GetSkill(skill))
+                .Where(s => s != null)
+                .Select(s => s.levelInt)
+                .Max(l => l);
+
         }
 
         static public bool IsAttracted(Pawn pawnA, Pawn pawnB)
         {
-            if (pawnA.story != null && pawnB.story != null)
-            {
-                bool straight = pawnA.gender != pawnB.gender;
-                bool aGay = pawnA.story.traits.HasTrait(TraitDefOf.Gay);
-                bool bGay = pawnB.story.traits.HasTrait(TraitDefOf.Gay);
-                bool aBi = pawnA.story.traits.HasTrait(TraitDefOf.Bisexual);
-                bool bBi = pawnB.story.traits.HasTrait(TraitDefOf.Bisexual);
-                if (straight)
-                    if ((aBi || !aGay) && (bBi || !bGay))
-                        return true;
-
-               else
-                    if ((aBi || aGay) && (bBi || bGay))
-                        return true;
-            }
-
-            return pawnA.GetLoveCluster().Contains(pawnB);
-
+            return 
+                (
+                    RelationsUtility.AttractedToGender(pawnA, pawnB.gender) && RelationsUtility.AttractedToGender(pawnB, pawnA.gender)
+                )
+                || pawnA.GetLoveCluster().Contains(pawnB);
         }
 
         static public bool ShouldBandaid(Pawn pred, Pawn prey) // I'm working on it
         {
-            if (pred.genes != null && pred.genes.Xenotype != null)
+            if(!string.IsNullOrWhiteSpace(pred?.genes?.xenotypeName))
             {
-                if (pred.genes.xenotypeName == "basic android" || pred.genes.xenotypeName == "awakened android")
-                    return true;
+                if (XenotypeNamesForBandage().Contains(pred.genes.xenotypeName)) return true;
             }
-            if (prey.genes != null && prey.genes.Xenotype != null)
+            if (!string.IsNullOrWhiteSpace(prey?.genes?.xenotypeName))
             {
-                if (prey.genes.xenotypeName == "basic android" || prey.genes.xenotypeName == "awakened android")
-                    return true;
+                if (XenotypeNamesForBandage().Contains(prey.genes.xenotypeName)) return true;
             }
             return false;
+        }
+        private static IEnumerable<string> XenotypeNamesForBandage()
+        {
+            yield return "basic android";
+            yield return "awakened android";
         }
     }
 }

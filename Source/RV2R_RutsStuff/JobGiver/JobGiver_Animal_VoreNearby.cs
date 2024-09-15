@@ -55,7 +55,7 @@ namespace RV2R_RutsStuff
                             && !pawn3.IsForbidden(pawn)
                             && !GenAI.EnemyIsNear(pawn, radius)
                             && !RV2R_Utilities.IsBusy(pawn, pawn3)
-                            && !RV2R_Utilities.IsColonyHostile(pawn, pawn3)
+                            && !RV2R_Utilities.IsFreeHostileToColony(pawn, pawn3)
                             && pawn.CanVore(pawn3, out reason)
                             && (!RV2R_Utilities.IsSapient(pawn3) || Rand.Chance(RV2_Rut_Settings.rutsStuff.PlayVoreColonistBias));
                     }
