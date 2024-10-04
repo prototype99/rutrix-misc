@@ -1,5 +1,7 @@
+using DefOfs;
 using RimWorld;
 using UnityEngine;
+using Verse;
 
 namespace RV2R_RutsStuff
 {
@@ -9,30 +11,21 @@ namespace RV2R_RutsStuff
         {
             get
             {
-                float num = 1f;
-                if (this.def.defName == "RV2R_LoverPred" || this.def.defName == "RV2R_LoverPrey")
-                {
-                    if (LovePartnerRelationUtility.ExistingMostLikedLovePartner(this.pawn, false) != null)
-                        num = 0.05f * (float)this.pawn.relations.OpinionOf(LovePartnerRelationUtility.ExistingMostLikedLovePartner(this.pawn, false));
-                    return Mathf.Max(num, 1f);
-
-                }
-                if (this.def.defName == "RV2R_PetPred")
-                {
-                    if (this.pawn.relations.GetFirstDirectRelationPawn(RV2R_Common.PetPred) != null)
-                        num = 0.05f * (float)this.pawn.relations.OpinionOf(this.pawn.relations.GetFirstDirectRelationPawn(RV2R_Common.PetPred));
-                    return Mathf.Max(num, 1f);
-
-                }
-                if (this.def.defName == "RV2R_PetPrey")
-                {
-                    if (this.pawn.relations.GetFirstDirectRelationPawn(RV2R_Common.PetPrey) != null)
-                        num = 0.1f * (float)this.pawn.relations.OpinionOf(this.pawn.relations.GetFirstDirectRelationPawn(RV2R_Common.PetPrey));
-                    return Mathf.Max(num, 1f);
-
-                }
-                return 1f;
+                return Mathf.Max(1f, GetValue(this.def, this.pawn));
             }
+        }
+        public static float GetValue(ThoughtDef def, Pawn pawn)
+        {
+            if(def == VoreThoughtsDefOfs.RV2R_LoverPrey) 
+                return 0.05f * (float)pawn.relations.OpinionOf(LovePartnerRelationUtility.ExistingMostLikedLovePartner(pawn, false));
+            if(def == VoreThoughtsDefOfs.RV2R_LoverPred)
+                return 0.05f * (float)pawn.relations.OpinionOf(LovePartnerRelationUtility.ExistingMostLikedLovePartner(pawn, false));
+            if(def == VoreThoughtsDefOfs.RV2R_PetPred)
+                return 0.05f * (float)pawn.relations.OpinionOf(pawn.relations.GetFirstDirectRelationPawn(RV2R_Common.PetPred));
+            if(def == VoreThoughtsDefOfs.RV2R_PetPrey)
+                return 0.05f * (float)pawn.relations.OpinionOf(pawn.relations.GetFirstDirectRelationPawn(RV2R_Common.PetPrey));
+
+            return 1;
         }
     }
 }

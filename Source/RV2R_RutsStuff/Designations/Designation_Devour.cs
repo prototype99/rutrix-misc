@@ -38,25 +38,9 @@ namespace RV2R_RutsStuff
 
         public override AcceptanceReport CanDesignateCell(IntVec3 c)
         {
-            bool flag = !c.InBounds(base.Map);
-            AcceptanceReport acceptanceReport;
-            if (flag)
-            {
-                acceptanceReport = false;
-            }
-            else
-            {
-                bool flag2 = !this.EdiblesInCell(c).Any<Pawn>();
-                if (flag2)
-                {
-                    acceptanceReport = "RV2R_DesginateDevourErr".Translate();
-                }
-                else
-                {
-                    acceptanceReport = true;
-                }
-            }
-            return acceptanceReport;
+            if (!c.InBounds(base.Map)) return false;
+            if (this.EdiblesInCell(c).Any<Pawn>()) return true;
+            return "RV2R_DesginateDevourErr".Translate();
         }
 
         public override void DesignateSingleCell(IntVec3 loc)
@@ -69,48 +53,40 @@ namespace RV2R_RutsStuff
 
         public override AcceptanceReport CanDesignateThing(Thing t)
         {
-            bool flag = false;
+            var Pawn = t as Pawn;
+            if (Pawn == null) return false;
+            if (Pawn.IsMechanoid()) return false;
+            if (!IsInValidFaction(Pawn)) return false;
+            if (Pawn.IsPrisonerInPrisonCell()) return false;
+
             SettingsContainer_RutsStuff settings = Patch_RV2R_Settings.RV2_Rut_Settings.rutsStuff;
-            AcceptanceReport acceptanceReport = false;
-            if (t is Pawn)
+            var AllowColonistDesignation = Pawn.Faction == Faction.OfPlayer && settings.DevourColonistsFull;
+            if (!Pawn.Downed && !AllowColonistDesignation) return false;
+
+            if (Pawn.CanBeFatalPrey(out string _)) return true;
+            if (Pawn.Faction.HostileTo(Faction.OfPlayer) && (Pawn.IsHumanoid() || !settings.EndoCapture))
             {
-                Pawn pawn = t as Pawn;
-                bool factionFlag = pawn.Faction == null
-                                || pawn.Faction.HostileTo(Faction.OfPlayer)
-                               || (pawn.Faction != Faction.OfPlayer && settings.DevourFriendlies)
-                               || (pawn.Faction == Faction.OfPlayer && (settings.DevourColonists || settings.DevourColonistsFull));
-
-                flag = base.Map.designationManager.DesignationOn(pawn, this.Designation) == null
-                   && (pawn.Downed || (pawn.Faction == Faction.OfPlayer && settings.DevourColonistsFull))
-                   && !pawn.IsMechanoid()
-                   && !pawn.IsPrisonerInPrisonCell()
-                   && factionFlag;
-
-                if (!pawn.CanBeFatalPrey(out string _))
-                {
-                    if (pawn.Faction.HostileTo(Faction.OfPlayer) && (pawn.IsHumanoid() || !settings.EndoCapture))
-                    {
-                        flag = false;
-                        acceptanceReport = "RV2R_DesginateDevourErrHuman".Translate();
-                    }
-                    if (pawn.IsInsectoid() || !settings.InsectoidCapture)
-                    {
-                        flag = false;
-                        acceptanceReport = "RV2R_DesginateDevourErrScaria".Translate();
-                    }
-                    if (pawn.health.hediffSet.HasHediff(HediffDefOf.Scaria) || !settings.ScariaCapture)
-                    {
-                        flag = false;
-                        acceptanceReport = "RV2R_DesginateDevourErrInsect".Translate();
-                    }
-
-                }
+                return "RV2R_DesginateDevourErrHuman".Translate();
             }
-            if (flag)
+            if (Pawn.IsInsectoid() || !settings.InsectoidCapture)
             {
-                acceptanceReport = true;
+                return "RV2R_DesginateDevourErrScaria".Translate();
             }
-            return acceptanceReport;
+            if (Pawn.health.hediffSet.HasHediff(HediffDefOf.Scaria) || !settings.ScariaCapture)
+            {
+                return "RV2R_DesginateDevourErrInsect".Translate();
+            }
+            return true;
+        }
+        public bool IsInValidFaction(Pawn pawn)
+        {
+            if (pawn == null) return true;
+            if(pawn.Faction.HostileTo(Faction.OfPlayer)) return true;
+
+            SettingsContainer_RutsStuff settings = Patch_RV2R_Settings.RV2_Rut_Settings.rutsStuff;
+            if (settings.DevourFriendlies && pawn.Faction != Faction.OfPlayer) return true;
+            if((settings.DevourColonists || settings.DevourColonistsFull) && pawn.Faction == Faction.OfPlayer) return true;
+            return false;
         }
 
         public override void DesignateThing(Thing t)
@@ -128,23 +104,13 @@ namespace RV2R_RutsStuff
 
         private IEnumerable<Pawn> EdiblesInCell(IntVec3 c)
         {
-            bool flag = c.Fogged(base.Map);
-            if (flag)
-            {
-                yield break;
+            if(c.Fogged(base.Map)) yield break;
+            foreach(var pawns in c.GetThingList(base.Map)
+                .Where(t=>CanDesignateThing(t))
+                .Select(t=>t as Pawn).Where(p => p != null)
+            ) {
+                yield return pawns;
             }
-            List<Thing> thingList = c.GetThingList(base.Map);
-            int num;
-            for (int i = 0; i < thingList.Count; i = num + 1)
-            {
-                bool accepted = this.CanDesignateThing(thingList[i]).Accepted;
-                if (accepted)
-                {
-                    yield return (Pawn)thingList[i];
-                }
-                num = i;
-            }
-            yield break;
         }
 
         protected private List<Pawn> justDesignated = new List<Pawn>();

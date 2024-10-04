@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefOfs\VoreStageDefOfs.cs" />
+    <Compile Include="DefOfs\VoreThoughtsDefOfs.cs" />
     <Compile Include="Designations\Designation_Devour.cs" />
     <Compile Include="JobDriver\JobDriver_GutLovin.cs" />
     <Compile Include="JobGiver\JobGiver_DoGutLovin.cs" />
