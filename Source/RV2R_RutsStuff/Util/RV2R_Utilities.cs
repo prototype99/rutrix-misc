@@ -86,10 +86,13 @@ namespace RV2R_RutsStuff
             return false;
         }
 
-        private static float GetFodderWeightAnimal(Pawn pawn, Pawn target, bool DoColonySafetyCheck)
+        private static float GetFodderWeightAnimal(Pawn pawn, Pawn target, bool DoCheck)
         {
-            
-            if (DoColonySafetyCheck)
+            //"check" is just that; a pre-emptive check to see if a target is valid.
+            //We do a "check" run first to populate a list, then another to get odds.
+            //Would likly be improved via the method returning a dictionary or something.
+
+            if (DoCheck)
             {
                 var colonySpecies = target.Map.mapPawns.SpawnedColonyAnimals.FindAll(p => 
                     p.def == target.def 
@@ -137,7 +140,7 @@ namespace RV2R_RutsStuff
             if(!target.IsHumanoid() && pawn.Map.designationManager.DesignationOn(target, DesignationDefOf.Tame) != null) return true;
             return false;
         }
-        static public bool IsInTargetMidsection(Pawn prey, Pawn predator)
+        static public bool IsInTargetMidsection(Pawn prey, Pawn predator)// This is used for gutlovin'... maybe include tail? Damn that's kinky, huh
         {
             var voreTracker = prey.GetVoreTracker();
             if (voreTracker == null) return false;
@@ -226,7 +229,7 @@ namespace RV2R_RutsStuff
                 || pawnA.GetLoveCluster().Contains(pawnB);
         }
 
-        static public bool ShouldBandaid(Pawn pred, Pawn prey) // I'm working on it
+        static public bool ShouldBandaid(Pawn pred, Pawn prey) // I never figured it out. Best guess is the hediff transpilers VFE:A uses, but I don't know.
         {
             if(!string.IsNullOrWhiteSpace(pred?.genes?.xenotypeName))
             {

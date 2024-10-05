@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using Verse;
 
+// I never figured out how to get the designation to cancel on invalid pawns. Likely needed a pawn.tickRare patch. -- Rutrix
 namespace RV2R_RutsStuff
 {
     public class Designator_Devour : Designator

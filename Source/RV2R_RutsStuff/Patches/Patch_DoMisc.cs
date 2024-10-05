@@ -26,7 +26,11 @@ namespace RV2R_RutsStuff
             {
                 if (RV2_Rut_Settings.rutsStuff.EndoSicknessStrength > 0f)
                     HandleSickness(__instance);
-
+                if (RV2_Rut_Settings.rutsStuff.PreyCapacityAclimation > 0f && RV2R_Utilities.GetPreySize(__instance.Predator) / __instance.Predator.CalculateVoreCapacity() > RV2_Rut_Settings.rutsStuff.PreyCapacityAclimationLimit)
+                    Patch_DoMisc.HandleAcclimation(__instance);
+                // In case you're wondering why this wasn't working; I'm a fucking idiot.
+                // RV2R_Utilities.GetPreySize(__instance.Predator) -> - 1f <- / __instance.Predator.CalculateVoreCapacity() > rutsStuff.PreyCapacityAclimationLimit)
+                // And yes, I know pawnData would be smarter, faster and more robust. Read above.
                 if (RV2_Rut_Settings.rutsStuff.EndoPets > 0f
                  && __instance.CurrentVoreStage.PassedRareTicks >= Math.Floor(GenDate.TicksPerDay / 100 * RV2_Rut_Settings.rutsStuff.EndoPets)
                  && __instance.Prey.relations.GetDirectRelationsCount(RV2R_Common.PetPrey) == 0)
@@ -42,6 +46,9 @@ namespace RV2R_RutsStuff
                 if (RV2_Rut_Settings.rutsStuff.EndoRecruitment
                  && (__instance.Prey.IsPrisonerOfColony && __instance.Predator.IsColonistPlayerControlled))
                     HandleImprisoned(__instance);
+
+                if (RV2_Rut_Settings.rutsStuff.EndoOpinion && __instance.CurrentVoreStage.PassedRareTicks % 10 == 0)
+                    Patch_DoMisc.HandleOpinion(__instance);
 
                 if (__instance.Prey.needs.comfort != null)
                     if (__instance.Predator.QuirkManager(false) == null || !__instance.Predator.QuirkManager(false).HasValueModifier("VoreComfort"))
@@ -86,6 +93,14 @@ namespace RV2R_RutsStuff
                 return;
             }
 
+        }
+        private static void HandleAcclimation(VoreTrackerRecord record)
+        {
+            if (!record.Predator.health.hediffSet.HasHediff(RV2R_Common.CapacityAcclimation, false))
+                record.Predator.health.AddHediff(RV2R_Common.CapacityAcclimation, null, null, null);
+
+            float num = Math.Min(1f, RV2R_Utilities.GetPreySize(record.Predator) / record.Predator.CalculateVoreCapacity() / Patch_RV2R_Settings.RV2_Rut_Settings.rutsStuff.PreyCapacityAclimationLimit);
+            record.Predator.health.hediffSet.GetFirstHediffOfDef(RV2R_Common.CapacityAcclimation, false).Severity += Math.Max(0.0001f, 0.00025f * num * Patch_RV2R_Settings.RV2_Rut_Settings.rutsStuff.PreyCapacityAclimation);
         }
         private static void HandleSickness(VoreTrackerRecord record)
         {
@@ -207,6 +222,31 @@ namespace RV2R_RutsStuff
                     animal.training.SetWantedRecursive(TrainableDefOf.Obedience, true);
                 }
         }
+
+        private static void HandleOpinion(VoreTrackerRecord record)
+        {
+            if (record.Predator.needs.mood != null && record.Predator.needs.mood.thoughts != null)
+            {
+                Thought thought = ThoughtMaker.MakeThought(RV2R_Common.ActivePred_Normal);
+                if (record.Predator.QuirkManager(false) != null)
+                    if (record.Predator.QuirkManager(false).GetTotalSelectorModifier(VoreRole.Predator, ModifierOperation.Add) <= -2f)
+                        thought = ThoughtMaker.MakeThought(RV2R_Common.ActivePred_Reluctant);
+                    else if (record.Predator.QuirkManager(false).GetTotalSelectorModifier(VoreRole.Predator, ModifierOperation.Add) >= 2f)
+                        thought = ThoughtMaker.MakeThought(RV2R_Common.ActivePred_Vorny);
+                record.Predator.needs.mood.thoughts.memories.TryGainMemory(thought.def, record.Prey, null);
+            }
+            if (record.Prey.needs.mood != null && record.Prey.needs.mood.thoughts != null)
+            {
+                Thought thought2 = ThoughtMaker.MakeThought(RV2R_Common.ActivePrey_Normal);
+                if (record.Prey.QuirkManager(false) != null)
+                    if (record.Prey.QuirkManager(false).GetTotalSelectorModifier(VoreRole.Prey, ModifierOperation.Add) <= -2f)
+                        thought2 = ThoughtMaker.MakeThought(RV2R_Common.ActivePrey_Reluctant);
+                    else if (record.Prey.QuirkManager(false).GetTotalSelectorModifier(VoreRole.Prey, ModifierOperation.Add) >= 2f)
+                        thought2 = ThoughtMaker.MakeThought(RV2R_Common.ActivePrey_Vorny);
+                record.Prey.needs.mood.thoughts.memories.TryGainMemory(thought2.def, record.Predator, null);
+            }
+        }
+
         private static void HandleImprisoned(VoreTrackerRecord record)
         {
 #if v1_4
