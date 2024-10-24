@@ -179,7 +179,7 @@ namespace RV2R_RutsStuff
         }
         static public int GetLivePreyCount(Pawn pawn, int depth = 0)
         {
-            if (depth == 10)
+            if (depth == 100)
             {
                 Log.Warning("Prey Size calculation reach max depth size");
                 return 0;
@@ -191,7 +191,7 @@ namespace RV2R_RutsStuff
 
             return voreTracker.VoreTrackerRecords.Sum(r =>
             {
-                return 1 + GetLivePreyCount(pawn, depth + 1);
+                return 1 + GetLivePreyCount(r.Prey, depth + 1);
             });
         }
         static public float GetPreySize(Pawn pawn, int depth = 0)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-	<RimVore2.RV2StatDef ParentName="RV2_StatDefBase">
+	<StatDef>
 		<defName>RV2R_Encumberance</defName>
 		<label>Encumberance modifier</label>
 		<description>How strongly this pawn is affected by the weight of their prey.</description>
@@ -9,5 +9,5 @@
 			<li Class="RV2R_RutsStuff.StatPart_VoreMoving"/>
 			<li Class="RV2R_RutsStuff.StatPart_VoreMovementAclimation"/>
 		</parts>
-	</RimVore2.RV2StatDef>
+	</StatDef>
 </Defs>
