@@ -130,7 +130,7 @@ namespace RV2R_RutsStuff
             else return 0;
         }
 
-        static public bool ShouldFriendlyTarget(Pawn pawn, Pawn target)
+        static public bool IsOfFriendlyFaction(Pawn pawn, Pawn target)
         {
             if(pawn.Faction == null) return false;
 
