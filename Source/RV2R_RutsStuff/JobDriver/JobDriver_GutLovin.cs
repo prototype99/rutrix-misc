@@ -1,5 +1,6 @@
 using RimVore2;
 using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,225 +12,13 @@ namespace RV2R_RutsStuff
 {
     public class JobDriver_GutLovin : JobDriver
     {
-        private Building_Bed Bed
-        {
-            get
-            {
-                return (Building_Bed)(Thing)this.job.GetTarget(this.BedInd);
-            }
-        }
-
-        public override void ExposeData()
-        {
-            base.ExposeData();
-            Scribe_Values.Look<int>(ref this.ticksLeft, "ticksLeft", 0, false);
-        }
-
-        public override bool TryMakePreToilReservations(bool errorOnFailed)
-        {
-            if (this.Bed != null)
-                return this.pawn.Reserve(this.Bed, this.job, this.Bed.SleepingSlotsCount, 0, null, errorOnFailed);
-
-            return true;
-        }
-
-        public override bool CanBeginNowWhileLyingDown()
-        {
-            return Bed == null || JobInBedUtility.InBedOrRestSpotNow(this.pawn, this.job.GetTarget(this.BedInd));
-        }
-
-        protected override IEnumerable<Toil> MakeNewToils()
-        {
-            float predMod = 1f;
-            float preyMod = 0f;
-
-            List<Pawn> willingList = new List<Pawn>();
-            List<Pawn> unwillingList = new List<Pawn>();
-
-            QuirkManager quirkManager = this.pawn.QuirkManager(false);
-
-            predMod = quirkManager?.ModifyValue("Prey_Libido", predMod) ?? 0.66f;
-
-            RimVore2.PawnData pawnData = this.pawn.PawnData(false);
-            VoreTracker voreTracker = null;
-
-            if (pawnData != null
-             && pawnData.VoreTracker != null)
-                voreTracker = pawnData.VoreTracker;
-
-            RV2Log.Message("Predator " + this.pawn.ToString() + " starting gut lovin' ", "Gutlovin");
-            foreach (VoreTrackerRecord voreTrackerRecord in voreTracker.VoreTrackerRecords)
-                if (voreTrackerRecord.Prey.IsHumanoid() || (RV2_Rut_Settings.rutsStuff.GutLovinSapients && RV2R_Utilities.IsSapient(voreTrackerRecord.Prey)))
-                {
-                    float num = 1f;
-                    if (voreTrackerRecord.Prey.QuirkManager(false) != null && voreTrackerRecord.Prey.QuirkManager(false).HasValueModifier("Prey_Libido"))
-                        num = voreTrackerRecord.Prey.QuirkManager(false).ModifyValue("Prey_Libido", num);
-
-                    if (num <= .33f && voreTrackerRecord.Prey.relations.OpinionOf(pawn) < 0)
-                        unwillingList.Add(voreTrackerRecord.Prey);
-                    else
-                        willingList.Add(voreTrackerRecord.Prey);
-
-                    RV2Log.Message("Prey " + voreTrackerRecord.Prey.ToString() + " involved, willingness at " + num.ToString(), "Gutlovin");
-                    preyMod = Mathf.Max(preyMod, num);
-                }
-
-            if (Bed != null)
-            {
-                this.FailOnDespawnedOrNull(this.BedInd);
-                this.KeepLyingDown(this.BedInd);
-                yield return Toils_Bed.ClaimBedIfNonMedical(this.BedInd, TargetIndex.None);
-                yield return Toils_Bed.GotoBed(this.BedInd);
-            }
-            else
-            {
-                pawn.jobs.jobQueue.EnqueueFirst(JobMaker.MakeJob(JobDefOf.LayDown, pawn.Position));
-            }
-
-            this.ticksLeft = (int)(2000f * ((predMod + preyMod) / 2f) * Mathf.Clamp(Rand.Range(0.5f, 1.1f), 0.5f, 1.5f));
-            //RV2Log.Message("Gut lovin' lasts " + this.ticksLeft.ToString() + " ticks", "Gutlovin");
-
-            Toil toil = Toils_LayDown.LayDown(this.BedInd, Bed != null, false, false, false, PawnPosture.LayingOnGroundNormal);
-            toil.AddPreTickAction(delegate
-            {
-                this.ticksLeft--;
-                if (this.ticksLeft <= 0)
-                {
-                    this.ReadyForNextToil();
-                    return;
-                }
-                if (this.pawn.IsHashIntervalTick(100))
-                {
-                    FleckMaker.ThrowMetaIcon(this.pawn.Position, this.pawn.Map, FleckDefOf.Heart, 0.42f);
-                    if (this.pawn.needs.joy != null)
-                        this.pawn.needs.joy.CurLevel += 0.002f * predMod;
-                    if (pawnData.VoreTracker != null)
-                        foreach (VoreTrackerRecord voreTrackerRecord2 in voreTracker.VoreTrackerRecords)
-                        {
-                            if (voreTrackerRecord2.Prey.needs.joy != null)
-                            {
-                                float willingness = 1f;
-                                if (voreTrackerRecord2.Prey.QuirkManager(false) != null && voreTrackerRecord2.Prey.QuirkManager().HasValueModifier("Prey_Libido"))
-                                    willingness = quirkManager.ModifyValue("Prey_Libido", willingness);
-
-                                if (willingness > 0f)
-                                    voreTrackerRecord2.Prey.needs.joy.CurLevel += 0.015f * willingness;
-                            }
-                        }
-                }
-            });
-
-            toil.AddFinishAction(delegate
-            {
-                // Okay, so, to explain: The pred needs a mood boost, and an opinion boost for each prey.
-                // Since getting +120 mood from belly humping 10 prey is maybe a little much,
-                // we handle the mood boost and opinion boosts with seperate thoughts.
-
-                ThoughtDef predThought = RV2R_Common.PredLovin_Normal_Mood;
-                ThoughtDef predOpinion = RV2R_Common.PredLovin_Normal;
-                if (predMod > 1.5f)
-                {
-                    predThought = RV2R_Common.PredLovin_VeryGood_Mood;
-                    predOpinion = RV2R_Common.PredLovin_VeryGood;
-                }
-                else if (predMod >= 1f)
-                {
-                    predThought = RV2R_Common.PredLovin_Good_Mood;
-                    predOpinion = RV2R_Common.PredLovin_Good;
-                }
-                else if (predMod <= 0.5f)
-                {
-                    predThought = RV2R_Common.PreyLovin_Meh; // Meh contains no mood boosts, so doubling up does nothing
-                    predOpinion = RV2R_Common.PreyLovin_Meh;
-                }
-                Thought_Memory thought_Memory = (Thought_Memory)ThoughtMaker.MakeThought(predThought);
-                Thought_Memory thought_MemoryOpinion = (Thought_Memory)ThoughtMaker.MakeThought(predOpinion);
-
-                if (this.pawn.health != null && this.pawn.health.hediffSet != null)
-                {
-                    thought_Memory.moodOffset += (int)predMod;
-                    if (this.pawn.health.hediffSet.hediffs.Any((Hediff h) => h.def == HediffDefOf.LoveEnhancer))
-                        thought_Memory.moodPowerFactor = 1.5f;
-
-                }
-                this.pawn.needs.mood?.thoughts.memories.TryGainMemory(predThought, null, null);
-
-                this.pawn.mindState.canLovinTick = Find.TickManager.TicksGame + this.GenerateRandomMinTicksToNextLovin(this.pawn);
-                RV2Log.Message("Gave predator " + this.pawn.ToString() + " mood memory " + predThought.ToString(), "Gutlovin");
-
-                ThoughtDef preyThought = RV2R_Common.PreyLovin_Normal;
-                float preyLib = 1f;
-
-                foreach (VoreTrackerRecord voreTrackerRecord2 in voreTracker.VoreTrackerRecords)
-                {
-                    if (willingList.Contains(voreTrackerRecord2.Prey))
-                    {
-                        preyLib = 1f;
-                        preyLib = voreTrackerRecord2.Prey.QuirkManager(false)?.ModifyValue("Prey_Libido", preyLib) ?? 0.66f;
-                        preyThought = RV2R_Common.PreyLovin_Normal;
-                        if (preyLib > 0f)
-                            willingList.Add(voreTrackerRecord2.Prey);
-
-                        if (preyLib > 1.5f)
-                            preyThought = RV2R_Common.PreyLovin_VeryGood;
-                        else if (preyLib >= 1f)
-                            preyThought = RV2R_Common.PreyLovin_Good;
-                        else if (preyLib <= 0.0f)
-                            preyThought = null;
-                        else if (preyLib <= 0.5f)
-                            preyThought = RV2R_Common.PreyLovin_Meh;
-
-                        voreTrackerRecord2.Prey.mindState.canLovinTick = Find.TickManager.TicksGame + this.GenerateRandomMinTicksToNextLovin(voreTrackerRecord2.Prey);
-
-                        // You're welcome for the mental images this little bit may generate
-                        if (LovePartnerRelationUtility.ExistingLovePartner(voreTrackerRecord2.Prey, true) != null
-                         && willingList.Contains(LovePartnerRelationUtility.ExistingLovePartner(voreTrackerRecord2.Prey, true)))
-                            if (LovePartnerRelationUtility.ExistingLovePartner(voreTrackerRecord2.Prey, true).GetVoreRecord() != null)
-                                if (LovePartnerRelationUtility.ExistingLovePartner(voreTrackerRecord2.Prey, true).GetVoreRecord().Predator == voreTrackerRecord2.Predator
-                                  && LovePartnerRelationUtility.ExistingLovePartner(voreTrackerRecord2.Prey, true).GetVoreRecord().CurrentBodyPart == voreTrackerRecord2.CurrentBodyPart)
-                                    voreTrackerRecord2.Prey.needs.mood?.thoughts.memories.TryGainMemory(ThoughtDefOf.GotSomeLovin, pawn, null);
-                    }
-
-                    // For vore rape; only applied if no-one was willing
-                    if (unwillingList.Contains(voreTrackerRecord2.Prey) && willingList.NullOrEmpty<Pawn>())
-                        preyThought = RV2R_Common.PreyLovin_Bad;
-
-                    if (preyThought != null)
-                    {
-                        thought_Memory = (Thought_Memory)ThoughtMaker.MakeThought(preyThought);
-                        if (voreTrackerRecord2.Prey.needs.mood != null)
-                        {
-                            voreTrackerRecord2.Prey.needs.mood.thoughts.memories.TryGainMemory(thought_Memory, this.pawn);
-                            RV2Log.Message("Gave prey " + voreTrackerRecord2.Prey.ToString() + " memory " + thought_Memory.ToString(), "Gutlovin");
-                        }
-                        thought_MemoryOpinion = (Thought_Memory)ThoughtMaker.MakeThought(predOpinion);
-                        if (this.pawn.needs.mood != null)
-                        {
-                            this.pawn.needs.mood.thoughts.memories.TryGainMemory(thought_MemoryOpinion, voreTrackerRecord2.Prey);
-                            RV2Log.Message("Gave predator " + this.pawn.ToString() + " opinion memory " + thought_MemoryOpinion.ToString() + "for prey " + thought_MemoryOpinion.otherPawn.LabelShort, "Gutlovin");
-                        }
-                    }
-                }
-            });
-
-            toil.socialMode = RandomSocialMode.Off;
-            yield return toil;
-            yield break;
-        }
-
-        private int GenerateRandomMinTicksToNextLovin(Pawn pawn)
-        {
-            if (DebugSettings.alwaysDoLovin)
-                return 300;
-
-            float relAge = (pawn.ageTracker.AgeBiologicalYearsFloat / pawn.ageTracker.AdultMinAge);
-            float num = JobDriver_GutLovin.LovinIntervalHoursFromAgeCurve.Evaluate(relAge);
-            num = Rand.Gaussian(num, 0.3f);
-
-            return (int)(num * 2500f);
-        }
-
-        private int ticksLeft;
+        public const string PreyLibidoModifierName = "Prey_Libido";
+        public const float FallbackLibidoValue = .66f;
+        public const float BaseTicksLength = 2000f;
+        public const float RandTicksLengthRandMin = .5f;
+        public const float RandTicksLengthRandMax = 1.1f;
+        public const float PredJoyBase = 0.002f;
+        public const float PreyJobBase = .015f;
 
         private readonly TargetIndex BedInd = TargetIndex.A;
 
@@ -256,5 +45,324 @@ namespace RV2R_RutsStuff
                 true
             }
         };
+
+        private Building_Bed Bed
+        {
+            get
+            {
+                return (Building_Bed)(Thing)this.job.GetTarget(this.BedInd);
+            }
+        }
+        private bool HasBed => Bed != null;
+
+        private int ticksLeft;
+
+        public List<Pawn> WillingPrey;
+        public List<Pawn> UnwillingPrey;
+
+        public float PredMod = 0f;
+
+        
+
+        #region override
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look<int>(ref this.ticksLeft, "ticksLeft", 0, false);
+            Scribe_Collections.Look(ref this.WillingPrey, nameof(this.WillingPrey), LookMode.Reference);
+            Scribe_Collections.Look(ref this.UnwillingPrey, nameof(this.UnwillingPrey), LookMode.Reference);
+        }
+
+        public override bool TryMakePreToilReservations(bool errorOnFailed)
+        {
+            if (this.Bed == null) return true;
+            return this.pawn.Reserve(this.Bed, this.job, this.Bed.SleepingSlotsCount, 0, null, errorOnFailed);
+        }
+
+        public override bool CanBeginNowWhileLyingDown()
+        {
+            if (Bed == null) return true;
+            if (JobInBedUtility.InBedOrRestSpotNow(this.pawn, this.job.GetTarget(this.BedInd))) return true;
+
+            return false;
+        }
+
+        protected override IEnumerable<Toil> MakeNewToils()
+        {
+            VoreTracker voreTracker = this.pawn.PawnData(false)?.VoreTracker;
+            if (voreTracker == null)
+            {
+                RV2Log.Warning("Gutloving make new toils request when pawn lacked vore tracker", "Jobs");
+                yield break;
+            }
+            float minPreyMod = 0f;
+
+            QuirkManager quirkManager = this.pawn.QuirkManager(false);
+            PredMod = quirkManager?.ModifyValue(PreyLibidoModifierName, PredMod) ?? FallbackLibidoValue;
+
+            PrepareFromTrackers(voreTracker, ref minPreyMod);
+
+            var ticksLength = (int)(BaseTicksLength
+                * ((PredMod + minPreyMod) / 2f)
+                * Rand.Range(RandTicksLengthRandMin, RandTicksLengthRandMax));
+            this.ticksLeft = ticksLength;
+            RV2Log.Message($"Predator {pawn} starting gut lovin' ({PredMod}, {minPreyMod}, {WillingPrey.Count}, {UnwillingPrey.Count}, {ticksLength})", "Gutlovin");
+
+            if(Bed == null)
+            {
+                pawn.jobs.jobQueue.EnqueueFirst(JobMaker.MakeJob(JobDefOf.LayDown, pawn.Position));
+            } else
+            {
+                this.FailOnDespawnedOrNull(BedInd);
+                this.KeepLyingDown(BedInd);
+                yield return Toils_Bed.ClaimBedIfNonMedical(BedInd);
+                yield return Toils_Bed.GotoBed(BedInd);
+            }
+
+            Toil toil = Toils_LayDown.LayDown(BedInd, HasBed,
+                lookForOtherJobs: false,
+                canSleep: false,
+                gainRestAndHealth: false,
+                noBedLayingPosture: PawnPosture.LayingOnGroundNormal
+            );
+            toil.AddPreTickAction(() => PreTickAction());
+            toil.AddFinishAction(() => OnFinish());
+            toil.socialMode = RandomSocialMode.Off;
+            yield return toil;
+        }
+        #endregion
+
+        #region Prepare
+        private void PrepareFromTrackers(VoreTracker voreTracker, ref float preyMod)
+        {
+            WillingPrey = new List<Pawn>();
+            UnwillingPrey = new List<Pawn>();
+            if (voreTracker.VoreTrackerRecords.NullOrEmpty()) return;
+
+            foreach (var record in voreTracker.VoreTrackerRecords)
+            {
+                if (!IsValidPreyForLoving(record.Prey)) return;
+
+                float desire = GetDesireFor(record);
+
+                if (ShouldBeUnwilling(record, desire)) UnwillingPrey.Add(record.Prey);
+                else WillingPrey.Add(record.Prey);
+
+                preyMod = Mathf.Max(preyMod, desire);
+            }
+        }
+        private float GetDesireFor(VoreTrackerRecord record)
+        {
+            float desire = 1f;
+            var qm = record.Prey.QuirkManager(false);
+            if (qm?.HasValueModifier(PreyLibidoModifierName) == true)
+                desire = qm.ModifyValue(PreyLibidoModifierName, desire);
+
+            return desire;
+        }
+        private bool ShouldBeUnwilling(VoreTrackerRecord record, float desire)
+        {
+            if (desire > .33f) return false;
+            if (record.Prey.relations.OpinionOf(this.pawn) >= 0) return false;
+            return true;
+        }
+        private bool IsValidPreyForLoving(Pawn prey)
+        {
+            if (prey.IsHumanoid()) return true;
+
+            //Animal/pawnmorpher
+            if (!RV2_Rut_Settings.rutsStuff.GutLovinSapients) return false;
+            if (RV2R_Utilities.IsSapient(prey)) return true;
+
+            return false;
+        }
+        #endregion
+
+        #region PretickAction
+        private void PreTickAction()
+        {
+            this.ticksLeft--;
+
+            if (this.ticksLeft <= 0)
+            {
+                this.ReadyForNextToil();
+                return;
+            }
+            if (!this.pawn.IsHashIntervalTick(100)) return;
+
+            FleckMaker.ThrowMetaIcon(this.pawn.Position, this.pawn.Map, FleckDefOf.Heart);
+
+            if (this.pawn?.needs?.joy != null) this.pawn.needs.joy.CurLevel += PredJoyBase * PredMod;
+            var voreTracker = this.pawn.PawnData(false).VoreTracker;
+            voreTracker.VoreTrackerRecords.ForEach(record =>
+            {
+                ApplyPreTickActionToRecord(record);
+            });
+        }
+
+        private void ApplyPreTickActionToRecord(VoreTrackerRecord record)
+        {
+            if (record.Prey.needs?.joy == null) return;
+            var qm = record.Prey.QuirkManager(false);
+            float willingness = 1f;
+
+            if (qm?.HasValueModifier(PreyLibidoModifierName) == true) willingness = qm.ModifyValue(PreyLibidoModifierName, willingness);
+            if (willingness <= 0f) return;
+            record.Prey.needs.joy.CurLevel += PreyJobBase * willingness;
+        }
+        #endregion
+        #region OnFinished
+        private void OnFinish()
+        {
+            ApplyFinishPredThoughts(out var predOpinion);
+
+            UpdateLovingTickMindState(pawn);
+
+            pawn.GetVoreTracker().VoreTrackerRecords.ForEach(record =>
+            {
+                ApplyOnFinishToRecord(record, predOpinion);
+            });
+        }
+
+        private void ApplyFinishPredThoughts(out ThoughtDef predOpinion)
+        {
+            GetPredThoughts(out var predThought, out predOpinion);
+
+            Thought_Memory thought_Memory = ThoughtMaker.MakeThought(predThought) as Thought_Memory;
+            if (pawn.health?.hediffSet != null)
+            {
+                thought_Memory.moodOffset += (int)PredMod;
+                thought_Memory.moodPowerFactor = PawnLoveEnhancerFactor(pawn);
+            }
+            TryApplyMemory(this.pawn, thought_Memory);
+        }
+
+        private void ApplyOnFinishToRecord(VoreTrackerRecord record, ThoughtDef thought_MemoryOpinion)
+        {
+            var preyLib = 1f;
+            var thought = GetPreyThoughts(preyLib);
+
+            if (WillingPrey.Contains(record.Prey)) ApplyOnFinishToRecordWillingPrey(record, ref preyLib, ref thought);
+            else ApplyOnFinishedToRecordUnwillingPrey(record, ref preyLib, ref thought);
+
+            TryApplyMemory(record.Prey, thought, this.pawn);
+            TryApplyMemory(this.pawn, thought_MemoryOpinion, record.Prey);
+        }
+        private void ApplyOnFinishedToRecordUnwillingPrey(VoreTrackerRecord record, ref float preyLib, ref ThoughtDef thoughtDef)
+        {
+            //only applying this if there is NO willing prey, this is the rape condition I believe
+            if (WillingPrey.Any()) return;
+            if (!UnwillingPrey.Contains(record.Prey)) return;
+
+            thoughtDef = RV2R_Common.PreyLovin_Bad;
+        }
+        private void ApplyOnFinishToRecordWillingPrey(VoreTrackerRecord record, ref float preyLib, ref ThoughtDef thoughtDef)
+        {
+            preyLib = record.Prey.QuirkManager(false)?.ModifyValue(PreyLibidoModifierName, preyLib) ?? FallbackLibidoValue;
+            UpdateLovingTickMindState(record.Prey);
+
+            WillingPrey.ForEach(other =>
+            {
+                if (!ShouldApplyGotSomeLovingTo(record, other)) return;
+                TryApplyMemory(record.Prey, ThoughtDefOf.GotSomeLovin, other);
+            });
+        }
+
+        private bool ShouldApplyGotSomeLovingTo(VoreTrackerRecord record, Pawn other)
+        {
+            if (record.Prey == other) return false;
+            if (!LovePartnerRelationUtility.LovePartnerRelationExists(record.Prey, other)) return false;
+            var otherVoreRecord = other.GetVoreRecord();
+            if (otherVoreRecord.CurrentBodyPart != record.CurrentBodyPart) return false;
+            return true;
+        }
+        private void UpdateLovingTickMindState(Pawn pawn)
+        {
+            if (pawn.mindState == null) return;
+            pawn.mindState.canLovinTick = Find.TickManager.TicksGame + this.GenerateRandomMinTicksToNextLovin(pawn);
+        }
+        #endregion
+
+        #region LoveEnhancer
+        private float PawnLoveEnhancerFactor(Pawn pawn)
+        {
+            if (pawn?.health?.hediffSet?.hediffs?.Any(h => LoveEnhancerHediff().Contains(h.def)) == true) return 1.5f;
+
+            return 1.0f;
+        }
+        private IEnumerable<HediffDef> LoveEnhancerHediff()
+        {
+            yield return HediffDefOf.LoveEnhancer;
+        }
+        #endregion
+
+        #region Thought mappers
+        private ThoughtDef GetPreyThoughts(float preyLib)
+        {
+            ThoughtDef preyThought = RV2R_Common.PreyLovin_Normal;
+
+            if (preyLib > 1.5f)
+                preyThought = RV2R_Common.PreyLovin_VeryGood;
+            else if (preyLib >= 1f)
+                preyThought = RV2R_Common.PreyLovin_Good;
+            else if (preyLib <= 0.5f)
+                preyThought = RV2R_Common.PreyLovin_Meh;
+            else if (preyLib <= 0.0f)
+                preyThought = null;
+
+            return preyThought;
+        }
+        private void GetPredThoughts(out ThoughtDef predThought, out ThoughtDef predOpinion)
+        {
+            // Okay, so, to explain: The pred needs a mood boost, and an opinion boost for each prey.
+            // Since getting +120 mood from belly humping 10 prey is maybe a little much,
+            // we handle the mood boost and opinion boosts with seperate thoughts.
+            predThought = RV2R_Common.PredLovin_Normal_Mood;
+            predOpinion = RV2R_Common.PredLovin_Normal;
+            if (PredMod > 1.5f)
+            {
+                predThought = RV2R_Common.PredLovin_VeryGood_Mood;
+                predOpinion = RV2R_Common.PredLovin_VeryGood;
+            }
+            else if (PredMod >= 1f)
+            {
+                predThought = RV2R_Common.PredLovin_Good_Mood;
+                predOpinion = RV2R_Common.PredLovin_Good;
+            }
+            else if (PredMod <= 0.5f)
+            {
+                predThought = RV2R_Common.PreyLovin_Meh; // Meh contains no mood boosts, so doubling up does nothing
+                predOpinion = RV2R_Common.PreyLovin_Meh;
+            }
+        }
+        #endregion
+
+        #region util
+        private int GenerateRandomMinTicksToNextLovin(Pawn pawn)
+        {
+            if (DebugSettings.alwaysDoLovin)
+                return 300;
+
+            float relAge = (pawn.ageTracker.AgeBiologicalYearsFloat / pawn.ageTracker.AdultMinAge);
+            float num = JobDriver_GutLovin.LovinIntervalHoursFromAgeCurve.Evaluate(relAge);
+            num = Rand.Gaussian(num, 0.3f);
+
+            return (int)(num * 2500f);
+        }
+        private static void TryApplyMemory(Pawn Pawn, ThoughtDef def, Pawn otherPawn = null)
+        {
+            var memories = Pawn?.needs?.mood?.thoughts?.memories;
+            if (memories == null) return;
+            Thought_Memory memory = ThoughtMaker.MakeThought(def) as Thought_Memory;
+            if (memories == null) return;
+            memories.TryGainMemory(memory, otherPawn);
+        }
+        private static void TryApplyMemory(Pawn Pawn, Thought_Memory memory, Pawn otherPawn = null)
+        {
+            var memories = Pawn?.needs?.mood?.thoughts?.memories;
+            if (memories == null) return;
+            memories.TryGainMemory(memory, otherPawn);
+        }
+        #endregion
     }
 }
