@@ -13,6 +13,7 @@ namespace RV2R_RutsStuff
     public class JobDriver_GutLovin : JobDriver
     {
         public const string PreyLibidoModifierName = "Prey_Libido";
+        public const string PredatorLibidoModifierName = "Predator_Libido";
         public const float FallbackLibidoValue = .66f;
         public const float BaseTicksLength = 2000f;
         public const float RandTicksLengthRandMin = .5f;
@@ -98,7 +99,7 @@ namespace RV2R_RutsStuff
             float minPreyMod = 0f;
 
             QuirkManager quirkManager = this.pawn.QuirkManager(false);
-            PredMod = quirkManager?.ModifyValue(PreyLibidoModifierName, PredMod) ?? FallbackLibidoValue;
+            PredMod = quirkManager?.ModifyValue(PredatorLibidoModifierName, PredMod) ?? FallbackLibidoValue;
 
             PrepareFromTrackers(voreTracker, ref minPreyMod);
 

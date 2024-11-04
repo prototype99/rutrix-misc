@@ -73,7 +73,7 @@ namespace RV2R_RutsStuff
             return true;
         }
 
-        static public bool IsSapient(Pawn pawn)
+        static public bool IsSapient(this Pawn pawn)
         {
             if (pawn.IsHumanoid())
                 return true;
