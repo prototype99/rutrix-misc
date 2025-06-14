@@ -209,25 +209,6 @@ namespace RV2R_RutsStuff
         }
         private static void HandleImprisoned(VoreTrackerRecord record)
         {
-#if v1_4
-            if (!record.IsForced && record.Prey.guest.Recruitable && record.Prey.guest.resistance > 0f)
-                if (record.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.ReduceResistance
-                 || record.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.AttemptRecruit)
-                {
-                    float restistanceLower = Rand.Range(0.00f, 0.01f);
-                    if (record.Prey.guest.resistance - restistanceLower <= 0.0f)
-                    {
-                        TaggedString taggedString = "MessagePrisonerResistanceBroken".Translate(record.Prey.LabelShort, record.Predator.LabelShort, record.Predator.Named("WARDEN"), record.Prey.Named("PRISONER"));
-                        if (record.Prey.guest.interactionMode == PrisonerInteractionModeDefOf.AttemptRecruit)
-                        {
-                            taggedString += " " + "RV2R_RecruitAttemptsWillBegin".Translate(record.Predator);
-                        }
-                        Messages.Message(taggedString, record.Prey, MessageTypeDefOf.PositiveEvent, true);
-
-                    }
-                    record.Prey.guest.resistance = Math.Max(0.0f, record.Prey.guest.resistance -= Rand.Range(0.00f, 0.01f));
-                }
-#else
             if (!record.IsForced && record.Prey.guest.Recruitable && record.Prey.guest.resistance > 0f)
                 if (record.Prey.guest.ExclusiveInteractionMode == PrisonerInteractionModeDefOf.ReduceResistance
                  || record.Prey.guest.ExclusiveInteractionMode == PrisonerInteractionModeDefOf.AttemptRecruit)
@@ -245,7 +226,6 @@ namespace RV2R_RutsStuff
                     }
                     record.Prey.guest.resistance = Math.Max(0.0f, record.Prey.guest.resistance -= Rand.Range(0.00f, 0.01f));
                 }
-#endif
         }
     }
 }

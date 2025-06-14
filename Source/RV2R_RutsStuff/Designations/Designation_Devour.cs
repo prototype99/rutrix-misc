@@ -9,6 +9,8 @@ namespace RV2R_RutsStuff
 {
     public class Designator_Devour : Designator
     {
+
+#if v1_5
         public override int DraggableDimensions
         {
             get
@@ -16,7 +18,7 @@ namespace RV2R_RutsStuff
                 return 2;
             }
         }
-
+#endif
         protected override DesignationDef Designation
         {
             get

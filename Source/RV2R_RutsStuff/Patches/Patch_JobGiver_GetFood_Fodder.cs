@@ -117,15 +117,8 @@ namespace RV2R_RutsStuff
                     };
                     bool prisonCheck(Thing t)
                     {
-#if v1_4
                         Pawn target = (Pawn)t;
-                        return target.IsPrisonerInPrisonCell() && target.guest.interactionMode == RV2R_Common.Fodder
-                        ;
-#else
-                        Pawn target = (Pawn)t;
-                        return target.IsPrisonerInPrisonCell() && target.guest.ExclusiveInteractionMode == RV2R_Common.Fodder
-                        ;
-#endif
+                        return target.IsPrisonerInPrisonCell() && target.guest.ExclusiveInteractionMode == RV2R_Common.Fodder;
                     };
                     bool animalCheck(Thing t)
                     {
