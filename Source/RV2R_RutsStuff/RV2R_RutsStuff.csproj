@@ -66,15 +66,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Designations\Designation_Devour.cs" />
+    <Compile Include="Hediffs\Hediff_Acclimation.cs" />
     <Compile Include="JobDriver\JobDriver_GutLovin.cs" />
     <Compile Include="JobGiver\JobGiver_DoGutLovin.cs" />
     <Compile Include="JobGiver\JobGiver_Wildlife_ProposeVore.cs" />
     <Compile Include="Patches\Patch_BondAutoAccept.cs" />
     <Compile Include="Patches\Patch_CanGiveCommand.cs" />
+    <Compile Include="Patches\Patch_CapacityAcclimation.cs" />
     <Compile Include="Patches\Patch_CuragaVore.cs" />
     <Compile Include="Patches\Patch_FullBellyThought.cs" />
     <Compile Include="Patches\Patch_JobDriver_Lovin.cs" />
     <Compile Include="Patches\Patch_JobGiver_GetFood_Fodder.cs" />
+    <Compile Include="Patches\Patch_PawnCapacityUtility.cs" />
     <Compile Include="RV2R_Common.cs" />
     <Compile Include="Hediffs\Hediff_Encumberance.cs" />
     <Compile Include="Main.cs" />
@@ -93,6 +96,8 @@
     <Compile Include="Thoughts\ThoughtWorker_VoreRelation.cs" />
     <Compile Include="Thoughts\Thought_VoreRelation.cs" />
     <Compile Include="Util\RV2R_Utilities.cs" />
+    <Compile Include="Util\StatPart_VoreCapacityAcclimation.cs" />
+    <Compile Include="Vore\RollAction_IncreaseNeedLimited.cs" />
     <Compile Include="Vore\RollAction_ModHediff.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
