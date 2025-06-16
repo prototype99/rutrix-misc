@@ -4,3 +4,227 @@ Install the same way as the base mod. Ensure this mod isn't above in your load o
 
 This submod adds a tab to RV2 mod options, creativly labled "Rut's Stuff" - all options are in there.
 You can get details on mod options by hovering over options in game or in the Reatme.txt in the About folder.
+
+Originally made by Rutrix
+
+============== Original About Readme ===============
+
+
+	This submod adds a lot of miscellaneous additions to RimVore-2, most of which are configurable.
+
+	A new vore goal - Drain, which saps the prey's energy to feed the pred.
+			  It's perfectly safe, but recovering takes a while, and they'll likely pass out once released.
+
+	A new designation - Devour. Used in conjuction with the Predation trainable below, to give your animals the go-ahead that this raider's lunch.
+
+	Animals get 3 new trainables- 
+		Playful predation - 2 steps, low difficulty, no trainability required, no size requirements
+			Allows the animal to engage in vore on their own. They request to eat colonists, and just eat animals.
+			Disabling training also disables their ability to play pred.
+
+		Predation - 3 steps, moderate difficulty, intermediate trainability required, 0.45 size and greater
+			Allows the animal to vore those you designate to devour. The designation's in the orders tab, and be used on downed hostiles or wildlife/factionless.
+
+		Endo-rescue - 4 steps, moderatly high difficulty, intermediate trainability required, 0.45 size and greater
+			Allows the animal to heal-vore downed colonists and visitors.
+	
+	These trainables won't do much if the animal can't engage in the proper vore goals.
+	The mod Xenobionic Patcher can allow you to install vore enablers in your animals, among other things.
+		https://steamcommunity.com/sharedfiles/filedetails/?id=1911273785 
+	
+	
+
+	Here's each setting catagory, and what each setting does, in detail...
+
+	Encumbrance -
+		This submod replaces RV2's encumbrance system with one that takes into account relative sizes of predator and prey.
+
+		Size-based encumbrance scaling - Toggles encumbering predators by total size of prey or by total count. Prey-of-prey are included in both counts.
+
+		Encumbrance multiplier - Sets how heavy prey are. Setting to 0% effectivly disables all encumbrance.
+
+		Encumbrance limit - The maximum severity of the "weighed down" hediff. Can be used to prevent total incapacitation or to temporaraly free preds who gulp more than they can chew.
+
+		Visible "Weighed down" hediff - The "weighed down" hediff that applies the movement reduction can be made invisible, saving space in the health tab.
+						It will still affect pawns, and can always be seen by hoving over their Moving capacity in their health tab.
+						This just cleans up the health tab a bit - it can get crowded, in the mid-endgame.
+
+		Due to how the encumbrance scaling works, disabling size-based encumbrance scaling will not revert to RimVore-2's methods for encumbrance, instead using a method that aproximates it.
+		This can cause problems if, for instance, a pawn of yours has 15 muffalo stored in their stomach. RV2 only counts the first 4; this submod counts them all.
+		To revert, set encumbrance multiplier to 0% and remove Patches/Patch_Hediffs_Vore_CapmodRemoval.xml from this submod's Common folder(RV2_Misc/Common/Patches/Patch_Hediffs_Vore_CapmodRemoval.xml).
+
+	Acclimation -
+		Capacity acclimation - Allows predators stuffed to the brim to slowly gain more capacity for prey. Allows pawns to slowly and organicaly overcome small bodysizes or poor quirks, or to tackle larger prey.
+
+		Capacity acclimation limit - How full, as a percentage, a predator needs to be to gain vore capacity. Capacity gains are faster the fuller one is, with it slowing as a pred's "fullness percentage" falls to this number.
+
+		Moving acclimation - Allows predators encumbered by the weight of prey to slowly lose movement penalties. As moving reduction is based on hediff stages, changes can take some time to be noticable. 
+				     No effect if encumberance has been reverted.
+
+		Moving acclimation limit - How severe the "weighed down" hediff needs to be to gain moving acclimation. Slows the same way that capacity acclimation does.
+
+	Endo Stuff -
+		Endo sickness strength - "Endo sickness" is a mostly-harmless hediff that makes pawns loopy, but comfortably numb.
+					 It helps keep prey in a good mood and heightens healing and immunity speed, while nerfing endo storage indirectly and adding a bit of fun mental imagery.
+					 Every vore-tick (250 game ticks (about 3 seconds real time)), it will advance in severity for any prey that has been endo-vored.
+
+		Endo pacification - When endo sickness reaches 95% severity, pawns can no longer struggle. Hostile pawns are also made prisoners, and hostile animals are rendered factionless.
+
+		Age regression strength - Lets pawns regress in age while safely contained within a womb. Pawns lose age every vore-tick, with the setting being "every day, lose X days of age".
+					  Pawns won't revert past their biological adulthood; 18 years for humans, though nearly every species and race are adults at different ages.
+
+		Chronic regression - Age-regressing pawns can be cured of chronic conditions, like a bad back or even carcinomas. Only asthma is immune.
+				     The odds are low, rising as they get younger, and they need to be young enough before it can happen at all.
+
+		Relationship thoughts - Positive mood boosts for endophilicly holding lovers, bonded animals, or voraphilic pets. Occurs for both predator and prey.
+
+		Endo pets - Gives a predator and prey a special opinion-boosting relationship if they spend the set amount of days together in a single vore stage. Best(or rather, only) done with storage vore.
+			    Prey can only have their one pred, but preds can have multiple prey. They will be upset if something happens to their frendo.
+
+		Pets join - If a prey becomes a pet, they'll join your faction. Remember; vore is overpowered. Please show some restraint. Some, you don't have to show much.
+
+	Lovin' - 
+		Voraphile 3-ways - Gives some recreational need and a positive mood boost to prey contained within lovers while they're doing their thing.
+
+		Gut lovin' chance - Predators and prey that are romanticaly involved can opt to do some gut lovin' while resting. 
+				    The exact odds are based on age and quirks, with this setting being both a final multiplier and a hours-on-average modifier.
+				    Gut lovin' shares the normal cooldown that lovin' has, and some preds or prey consider it a turn-off.
+
+		Sapient creatures allowed - Lets anthing that can give informed consent get and give gut lovin'.
+					    You'll need a mod like Sentiant Animals or PawnMorpher for this to do anything.
+		
+		One-nom-stands - Allows predators without a lover to gut love prey.
+
+		Vorny flings - Allows predators to gut love even if their lover isn't involved.
+			       Has no other or negitive effects, but it can end up looking really awkward for the pred.
+
+		Allow non-con - Allows for psycopathic or low opinion predators to gut love prey that don't want it.
+			        Will absolutly destroy relationships.
+
+	Living meals -
+
+		Fodder chance - The odds that a colonist will decide to try to vore a prisoner marked as fodder, rather than getting normal food.
+				There's a little more to the odds than just that, such as distance, goal preference, relative sizes and if no regular food is available... 
+				... but at 100% colonists will almost always head to the prison for a meal.
+				This will dramaticaly increase the amount of auto-vore happening, for better or worse.
+
+		Named animals can fodder - Allows animals with a name to also eat fodder prisoners.
+					   Any animal can be named through their Training tab, and bonded animals are named automaticaly.
+					   Note that animals cannot be "unnamed".
+
+		Colony predators can fodder - Allows any animal in your colony that is a natural predator to eat fodder prisoners.
+
+		Colony animals can fodder - Allows any animal in your colony, period, to eat fodder prisoners.
+
+		Colony animals can fodder non-prisoners - Allows colony animals to eat non-prisoners as fodder. Does nothing if the options below it are disabled.
+
+		All auto-fodder options below have a base 50% chance to fail.
+		
+		Misc. fodder chance - The odds a non-prisoner will be chosen as fodder. Does nothing if the options below it are disabled.
+
+		Pen animals are fodder - Allows for any colony animal that is blocked by fencing to be fodder. Named animals and the last 4 of any species (2 males, 2 females) are always exempt.
+
+		Colony animals are fodder - Allows for any colony animal that is not a natural predator or is small to be fodder. Named animals and the last 4 of any species (2 males, 2 females) are always exempt.
+
+		Colony predators are fodder - Allows for any colony animal that is a natural predator to be fodder. Named animals and the last 4 of any species (2 males, 2 females) are always exempt.
+
+		Colony guests are fodder - Allows for guests of the colony to be fodder. Opinion influences the odds of being chosen, with low opinion giving higher chances. Will cause problems.
+
+		Colonists are fodder - Allows for your colonists to be fodder. Opinion influences the odds of being chosen, with low opinion giving higher chances. Will cause !!fun!!.
+
+	Capturing -
+		Endo capture - Hostiles that are in pain-shock or unconsious are captured if endo-vored. Works best with healing vore.
+
+		Capture insectoids - Hostile insects, like those spawned as infestation events, are removed from their faction if endo-captured, allowing you to tame them.
+
+		Scaria cure - Manhunting animals infected with scaria are cured when heal-vored, allowing you to safely tame them.
+
+		Endo recruitment - Slowly lowers prisoner resistance when they are willingly endo'ed. Requires the prisoner to be set to "reduce resistance" or "recruit".
+				   Does not affect the unwavering.
+
+
+		Your colony animals trained in predation will endo-capture if they can heal-vore, and cannot fatal-vore. This can be set up with their designations in the vore widget.
+		The designation will give specific warnings if your mod settings prevent fatal vore or endo-capture.
+
+
+		Devour-designate friendlies - Lets the Devour designator work on downed friendlies. These interactions are forced. Can cause problems.
+					      Animals will still heal if they can't fatal vore, so this could be used to prioritize a form of endo-rescue.
+
+		Devour-designate colonists - Lets the Devour designator work on downed colony members. Will cause problems.
+					     Animals will still heal if they can't fatal vore, so this could be used to prioritize a form of endo-rescue.
+
+		Devour-designate non-downed colonists - Lets the Devour designator work on colony members, at all times. Will cause !!fun!!.
+							Mostly a meme/"screw it, eat them" option. Animals will use random endo goals if fatal's disabled and the prey's not hurt.
+
+	Animal Vore -
+		Opportunistic healing - Allows your animals trained in Endo-Rescue to proactivly heal-vore wounded patients.
+					They'll wait for their wounds to be tended to first, or until they're about to bleed out.
+
+		Playful predation average hours - The hours-on-average an animal trained in playful predation will engage in vore. 24 means they will, for every 24 hours idle, do one nom.
+						  Note that this only counts time idle and awake. Animals following a master, forming a caravan or otherwise busy won't play-pred while doing so.
+
+		Playful predation modifier - A percentage on the hours-on-average, multiplied by the number of prey the animal has, added to their average hours.
+					     Lowers how often an animal will play-pred if they have multiple prey already.
+					     (eg: if average hours is 24 and mod is 50%; with 0 prey, 24 hours on average, with 1 prey, 36 hours on average, 2, 48 hours, ect.)
+
+		Playful preyism - Allows animals trained in Playful Predation to request to be prey as well.
+
+		Playful predation colonist chance - The odds that a (humanoid)colonist will be a valid target for play-predding. Odds are for each colonist in range, individualy.
+						    (eg: 2 colonists in range when the check is made; if set to 50%, they both have a 1/2 chance to be a potential play-pred target.)
+						    At 0%, the only animals that should request vore to your colonists should be Voraphile Bonds.
+
+		Indescriminate predation - Animals are only allowed to play-pred members of your colony. This option allows them to nom anyone and anything.
+					   Can lead to problems, like traders getting stuck on the map due to a endo-napped pawn or wild animals tearing down your doors because they got dumped out in the workshop.
+
+		Not-so-playful predation - Play predding is endo only. This option disables that.
+
+	Bonds -
+		Bonding is a base game mechanic, occuring rarly when animals and humanoids interact, or when an animal is near their master.
+		It's the "easyist" way to tame a thrumbo; down it, then rescue. Every tended wound has a chance to bond and tame.
+		Bonds provide a permanent mood boost and easier training, but both animal and master get upset if something happens to the other.
+
+		Endo bond chance - The chance, per vore-tick, for an animal and a humanoid involved in endo-vore to form a bond. Works on wild animals, and will tame them.
+				   Only animals that can at least be trained to Guard can bond.
+				   Bonds can't be removed, even by death, and bonded animals can go manhunter if their bond dies.
+
+		Predator bonding - Endo bonding will only work if the animal is prey, unless this setting is true.
+
+		Dom-bonding - Endo bonding will only work for non-forced vore, unless this setting is true.
+
+		Voraphile bonds - Makes bonded animals choose their bond for play predding more often, and makes bonds always accept vore proposals.
+
+	Wildlife Proposals -
+		These options can affect preformance, and add quite a bit of chaos.
+
+		Wild proposal rate - How often wildlife propose vore, based on at your maximum setting for vore proposal cooldowns.
+
+		Wild predators propose vore - Allows wild predators to propose vore.
+
+		Wild predators are switches - Allows wild predators to propose vore as prey.
+
+		Wild prey propose as prey - Lets wild non-predators propose to predator animals, as prey. Same cooldown applies.
+					    As animals normaly don't have any quirks beyond enablers, what goals they use are entirely random.
+
+		Propose as prey to colonists - Allows wild animals to propose as prey to your colonists and animals.
+					       Is very silly when a wild girros vanishes from your pen and now one of your devil sheep has a belly pet. 
+
+		Propose as pred to colonists - Allows wild animals to propose as predator to your colonists and animals.
+					       It's a proposal, so they can say no. Will make things very chaotic. 
+
+		Total vore limit - How much vore can be going on before limiting wild proposals. Even if the limit's hit, proposals can still happen, they'll just be much rarer.
+
+	Cheaty stuff - 
+		Passive opinions - Predators and their prey slowly gain opinion-boosting thoughts of each other.
+				   How much they gain is based on their willingness for the roll, ranging from +5 to +20.
+		
+		Prey recreation - Prey passivly gain recreation need while vored, as long as they don't have one of the negitive prey quirks.
+      				  They build up to 50% if willing, and 25% otherwise.
+
+		No bleed out - Caps the Bloodloss hediff to 90%. Prey can still be killed by it indirectly, due to it lowering consciousness. Great for healing vore.
+
+		Staunch bleeding - Lowers the bleeding rate of a prey's wounds gradualy while endo-vored. Does not tend wounds. Great for grapple-voring raiders.
+
+		No extreme temps - Caps both the heat stroke and hypothermia hediffs to 30%. Any stronger, and they start affecting consciousness, and inficting frostbite.
+
+		Curaga Vore - Triples the effectiveness of healing vore. Note that healing vore still won't tend wounds nearly as well as a good doctor with decent medicine... 
+			      ... but combo'ing tending with healing vore works great, and gives those fighting infection a fighting chance.
