@@ -16,14 +16,10 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D753B0D1-4C91-4D16-8E84-BA23A1B4F971}.base|Any CPU.ActiveCfg = base|Any CPU
 		{D753B0D1-4C91-4D16-8E84-BA23A1B4F971}.base|Any CPU.Build.0 = base|Any CPU
-		{D753B0D1-4C91-4D16-8E84-BA23A1B4F971}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D753B0D1-4C91-4D16-8E84-BA23A1B4F971}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D753B0D1-4C91-4D16-8E84-BA23A1B4F971}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D753B0D1-4C91-4D16-8E84-BA23A1B4F971}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D753B0D1-4C91-4D16-8E84-BA23A1B4F971}.v1_4|Any CPU.ActiveCfg = v1_4|Any CPU
-		{D753B0D1-4C91-4D16-8E84-BA23A1B4F971}.v1_4|Any CPU.Build.0 = v1_4|Any CPU
 		{D753B0D1-4C91-4D16-8E84-BA23A1B4F971}.v1_5|Any CPU.ActiveCfg = v1_5|Any CPU
 		{D753B0D1-4C91-4D16-8E84-BA23A1B4F971}.v1_5|Any CPU.Build.0 = v1_5|Any CPU
+		{D753B0D1-4C91-4D16-8E84-BA23A1B4F971}.Debug|Any CPU.ActiveCfg = v1_5|Any CPU
+		{D753B0D1-4C91-4D16-8E84-BA23A1B4F971}.Debug|Any CPU.Build.0 = v1_5|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

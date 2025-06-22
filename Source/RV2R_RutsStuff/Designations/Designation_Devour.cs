@@ -9,7 +9,7 @@ namespace RV2R_RutsStuff
 {
     public class Designator_Devour : Designator
     {
-        public override int DraggableDimensions
+        public int DraggableDimensions
         {
             get
             {
