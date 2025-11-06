@@ -47,13 +47,19 @@ namespace RV2R_RutsStuff
 
         static public bool IsSapient(Pawn pawn)
         {
+            // "cogito ergo sum"
+            if (pawn == null)
+                return false;
+            // Humanoid implies sapient
             if (pawn.IsHumanoid())
                 return true;
+            // Mechanoids are not sapient
             if (pawn.IsMechanoid())
                 return false;
             if (pawn.IsColonistPlayerControlled) // Sentiant Animals
                 return true;
-            if (pawn.needs.mood != null) // Pawnmorpher, Kyulen
+            // Some frameworks pawnmorpher or kyulen add mood needs to otherwise non-humanlike pawns -> treat as sapient if present
+            if (pawn.needs?.mood != null)
                 return true;
             return false;
         }
